@@ -3,6 +3,7 @@ package Fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,10 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Adapter.Product_adapter;
+import Adapter.Categori_adapter;
 import Config.BaseURL;
 import Model.Category_model;
-import Model.Product_model;
 import codecanyon.grocery.AppController;
 import codecanyon.grocery.MainActivity;
 import codecanyon.grocery.R;
@@ -47,21 +47,21 @@ public class CategoriFragment extends Fragment {
 
     private static String TAG = CategoriFragment.class.getSimpleName();
 
-    private RecyclerView rv_cat;
-    private TabLayout tab_cat;
+    private RecyclerView rv_items;
+    private boolean isSubcat = false;
 
     private List<Category_model> category_modelList = new ArrayList<>();
-    private List<String> cat_menu_id = new ArrayList<>();
+    private Categori_adapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categori, container, false);
+        setHasOptionsMenu(true);
 
-        tab_cat = (TabLayout) view.findViewById(R.id.tab_cat2);
-        rv_cat = (RecyclerView) view.findViewById(R.id.rv_subcategory2);
-        rv_cat.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv_items= (RecyclerView) view.findViewById(R.id.rv_subcategory2);
+        rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
         //setHasOptionsMenu(true);
         //return view;
         String getcat_id = getArguments().getString("cat_id");
@@ -74,35 +74,6 @@ public class CategoriFragment extends Fragment {
             makeGetCategoryRequest(getcat_id);
         }
 
-        tab_cat.setVisibility(View.GONE);
-        tab_cat.setSelectedTabIndicatorColor(getActivity().getResources().getColor(R.color.white));
-
-        tab_cat.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                String getcat_id = cat_menu_id.get(tab.getPosition());
-
-                if (ConnectivityReceiver.isConnected()) {
-                    makeGetCategoryRequest(getcat_id);
-                }
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                /*String getcat_id = cat_menu_id.get(tab.getPosition());
-                tab_cat.setSelectedTabIndicatorColor(getActivity().getResources().getColor(R.color.white));
-
-                if (ConnectivityReceiver.isConnected()) {
-                    makeGetProductRequest(getcat_id);
-                }*/
-            }
-        });
 
         return view;
     }
@@ -110,13 +81,18 @@ public class CategoriFragment extends Fragment {
     /**
      * Method to make json object request where json response starts wtih
      */
-    private void makeGetCategoryRequest(final String parent_id) {
+    private void makeGetCategoryRequest(String parent_id) {
 
         // Tag used to cancel the request
         String tag_json_obj = "json_category_req";
 
+        isSubcat = false;
+
         Map<String, String> params = new HashMap<String, String>();
-        params.put("parent", parent_id);
+        if (parent_id != null && parent_id != "") {
+            params.put("parent", parent_id);
+            isSubcat = true;
+        }
 
         CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
                 BaseURL.GET_CATEGORY_URL, params, new Response.Listener<JSONObject>() {
@@ -135,18 +111,9 @@ public class CategoriFragment extends Fragment {
 
                         category_modelList = gson.fromJson(response.getString("data"), listType);
 
-                        if (!category_modelList.isEmpty()) {
-                            tab_cat.setVisibility(View.VISIBLE);
-
-                            cat_menu_id.clear();
-                            for (int i = 0; i < category_modelList.size(); i++) {
-                                cat_menu_id.add(category_modelList.get(i).getId());
-                                tab_cat.addTab(tab_cat.newTab().setText(category_modelList.get(i).getTitle()));
-                            }
-                        } else {
-                            makeGetCategoryRequest(parent_id);
-                        }
-
+                        mAdapter = new Categori_adapter(category_modelList);
+                        rv_items.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
