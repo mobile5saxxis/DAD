@@ -3,6 +3,7 @@ package Fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ import codecanyon.grocery.MainActivity;
 import codecanyon.grocery.R;
 import util.ConnectivityReceiver;
 import util.CustomVolleyJsonRequest;
+import util.RecyclerTouchListener;
 
 /**
  * Created by Rajesh Dabhi on 22/6/2017.
@@ -64,16 +66,36 @@ public class CategoriFragment extends Fragment {
         rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
         //setHasOptionsMenu(true);
         //return view;
-        String getcat_id = getArguments().getString("cat_id");
-        String getcat_title = getArguments().getString("cat_title");
 
-        ((MainActivity) getActivity()).setTitle(getcat_title);
+        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.app_name));
 
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {
-            makeGetCategoryRequest(getcat_id);
+            makeGetCategoryRequest("");
         }
+        rv_items.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
 
+                String getid = category_modelList.get(position).getId();
+                String getcat_title = category_modelList.get(position).getTitle();
+
+                Bundle args = new Bundle();
+                Fragment fm = new Product_fragment();
+                args.putString("cat_id", getid);
+                args.putString("cat_title", getcat_title);
+                fm.setArguments(args);
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                        .addToBackStack(null).commit();
+
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
 
         return view;
     }
