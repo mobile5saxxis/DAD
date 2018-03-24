@@ -157,6 +157,12 @@
     <string name="house_no">House No.:\u0020</string>
     <string name="socity">Society:\u0020</string>
 
+
+
+    <!-- Catrgory_details -->
+    <string name="category_name">Category</string>
+    <string name="shop_category_name">Shop By Category</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

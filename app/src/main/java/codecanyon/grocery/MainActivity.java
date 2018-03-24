@@ -1,6 +1,5 @@
 package codecanyon.grocery;
 
-import android.support.v4.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,6 +15,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -36,10 +36,10 @@ import com.bumptech.glide.Glide;
 
 import Config.BaseURL;
 import Fragment.Cart_fragment;
+import Fragment.CategoriFragment;
 import Fragment.Edit_profile_fragment;
 import Fragment.Home_fragment;
-import Fragment.*;
-import Fragment.My_order_fragment;
+import Fragment.Search_fragment;
 import Fragment.Support_info_fragment;
 import fcm.MyFirebaseRegister;
 import util.ConnectivityReceiver;
@@ -460,9 +460,56 @@ public class MainActivity extends AppCompatActivity
         @Override
                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             int id = item.getItemId();
-            Fragment fm = null;
-            Bundle args = new Bundle();
-
+            /*Fragment fm = null;
+            Bundle args = new Bundle();*/
+//Converted the if else to switch
+                switch (id){
+                    case R.id.home:
+                        Fragment fm_home = new Home_fragment();
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.contentPanel, fm_home, "Home_fragment")
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                        break;
+                    case R.id.offers:
+                        Fragment fm_offers = new Support_info_fragment();
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.contentPanel,fm_offers , "Support_info_fragment")
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                        break;
+                    case R.id.categories:
+                        Fragment fm_categories = new CategoriFragment();
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.contentPanel,fm_categories , "Support_info_fragment")
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                        break;
+                    case R.id.search:
+                        Fragment fm_search = new Search_fragment();
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.contentPanel,fm_search , "Support_info_fragment")
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                        break;
+                        case R.id.cart:
+                            Fragment fm_cart = new Cart_fragment();
+                            fragmentManager = getSupportFragmentManager();
+                            fragmentManager.beginTransaction()
+                                    .replace(R.id.contentPanel, fm_cart, "Support_info_fragment")
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                    .commit();
+                            break;
+                    default:
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, new Home_fragment())
+                                .addToBackStack(null).commit();
+                }
+/*
             if (id == R.id.home) {
                 Fragment fm_home = new Home_fragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -470,7 +517,7 @@ public class MainActivity extends AppCompatActivity
                         .replace(R.id.contentPanel, fm_home, "Home_fragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-            /*} else if (id == R.id.nav_myorders) {
+            *//*} else if (id == R.id.nav_myorders) {
                 Fragment fm_orders = new My_order_fragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
@@ -483,20 +530,20 @@ public class MainActivity extends AppCompatActivity
                 fragmentManager.beginTransaction()
                         .replace(R.id.contentPanel,fm_profile , "Edit_profile_fragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();*/
+                        .commit();*//*
             } else if (id == R.id.categories) {
 
                Fragment fm_categories = new CategoriFragment();
-              /*  args.putString("url", BaseURL.GET_SUPPORT_URL);
+              *//*  args.putString("url", BaseURL.GET_SUPPORT_URL);
                 args.putString("title", getResources().getString(R.string.nav_support));
-                fm_categories.setArguments(args);*/
+                fm_categories.setArguments(args);*//*
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.contentPanel,fm_categories , "Support_info_fragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
 
-           /* } else if (id == R.id.nav_aboutus) {
+           *//* } else if (id == R.id.nav_aboutus) {
                 fm = new Support_info_fragment();
                 args.putString("url", BaseURL.GET_ABOUT_URL);
                 args.putString("title", getResources().getString(R.string.nav_about));
@@ -508,10 +555,10 @@ public class MainActivity extends AppCompatActivity
                 fm.setArguments(args);
             } else if (id == R.id.nav_review) {
                 reviewOnApp();
-            } *//*else if (id == R.id.nav_share) {
-            shareApp();*//* else if (id == R.id.nav_logout) {
+            } *//**//*else if (id == R.id.nav_share) {
+            shareApp();*//**//* else if (id == R.id.nav_logout) {
                 sessionManagement.logoutSession();
-                finish();*/
+                finish();*//*
             }else if(id == R.id.offers){
                 Fragment fm_offers = new Support_info_fragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -539,7 +586,7 @@ public class MainActivity extends AppCompatActivity
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
                         .addToBackStack(null).commit();
-            }
+            }*/
 
             return false;
         }

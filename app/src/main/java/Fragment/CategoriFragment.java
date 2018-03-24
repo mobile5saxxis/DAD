@@ -1,11 +1,9 @@
 package Fragment;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,7 +65,8 @@ public class CategoriFragment extends Fragment {
         //setHasOptionsMenu(true);
         //return view;
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.app_name));
+        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.category_name));
+        ((MainActivity) getActivity()).updateHeader();
 
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {
