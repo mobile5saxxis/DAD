@@ -42,6 +42,7 @@ import Fragment.Home_fragment;
 import Fragment.Search_fragment;
 import Fragment.Support_info_fragment;
 import fcm.MyFirebaseRegister;
+import util.BottomNavigationViewHelper;
 import util.ConnectivityReceiver;
 import util.DatabaseHandler;
 import util.Session_management;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.btm_navigation);
+        BottomNavigationViewHelper.removeShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         dbcart = new DatabaseHandler(this);
 

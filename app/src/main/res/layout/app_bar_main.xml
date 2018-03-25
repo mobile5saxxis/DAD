@@ -48,9 +48,12 @@
                         android:textColor="@color/black"
                         android:hint="@string/search_msg"
                         android:textColorHint="@color/dark_gray"
-                        android:drawableLeft="@drawable/image11"
+                        android:tint="@color/black"
                         android:gravity="left"
-                        android:inputType="text">
+                        android:inputType="text"
+                        android:drawableLeft="@drawable/ic_search"
+                        android:drawableRight="@drawable/ic_action_mic"
+                        android:drawableTint="@color/dark_gray">
                     </EditText>
 
                 </LinearLayout>

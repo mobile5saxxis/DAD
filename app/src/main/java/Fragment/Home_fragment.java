@@ -299,7 +299,6 @@ public class Home_fragment extends Fragment {
         MenuItem check = menu.findItem(R.id.action_change_password);
         check.setVisible(false);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
