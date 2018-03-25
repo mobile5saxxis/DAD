@@ -39,15 +39,18 @@
                     android:gravity="center|right">
 
                     <EditText
-                        android:id="@+id/editMobileNo"
+                        android:id="@+id/search_navbar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="10dp"
                         android:background="@drawable/login_edittext"
                         android:ems="10"
-                        android:hint="search for products"
+                        android:textColor="@color/black"
+                        android:hint="@string/search_msg"
+                        android:textColorHint="@color/dark_gray"
                         android:drawableLeft="@drawable/image11"
-                        android:gravity="left" >
+                        android:gravity="left"
+                        android:inputType="text">
                     </EditText>
 
                 </LinearLayout>

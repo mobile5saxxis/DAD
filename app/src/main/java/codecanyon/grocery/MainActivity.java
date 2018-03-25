@@ -253,7 +253,6 @@ public class MainActivity extends AppCompatActivity
         final MenuItem item = menu.findItem(R.id.action_cart);
         MenuItem c_password = menu.findItem(R.id.action_change_password);
         MenuItem search = menu.findItem(R.id.action_search);
-
         item.setVisible(true);
         c_password.setVisible(false);
         search.setVisible(false);
@@ -340,6 +339,11 @@ public class MainActivity extends AppCompatActivity
             shareApp();*/ else if (id == R.id.nav_logout) {
             sessionManagement.logoutSession();
             finish();
+        }else if (id == R.id.nav_category){
+            fm = new CategoriFragment();
+            args.putString("url", BaseURL.GET_CATEGORY_URL);
+            args.putString("title", getResources().getString(R.string.nav_category));
+            fm.setArguments(args);
         }
 
         if (fm != null) {
@@ -484,7 +488,7 @@ public class MainActivity extends AppCompatActivity
                         Fragment fm_categories = new CategoriFragment();
                          fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction()
-                                .replace(R.id.contentPanel,fm_categories , "Support_info_fragment")
+                                .replace(R.id.contentPanel,fm_categories , "CategoriFragment")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
                         break;
@@ -492,7 +496,7 @@ public class MainActivity extends AppCompatActivity
                         Fragment fm_search = new Search_fragment();
                         fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction()
-                                .replace(R.id.contentPanel,fm_search , "Support_info_fragment")
+                                .replace(R.id.contentPanel,fm_search , "Search_fragment")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
                         break;
@@ -500,7 +504,7 @@ public class MainActivity extends AppCompatActivity
                             Fragment fm_cart = new Cart_fragment();
                             fragmentManager = getSupportFragmentManager();
                             fragmentManager.beginTransaction()
-                                    .replace(R.id.contentPanel, fm_cart, "Support_info_fragment")
+                                    .replace(R.id.contentPanel, fm_cart, "Cart_fragment")
                                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                     .commit();
                             break;

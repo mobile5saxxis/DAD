@@ -10,6 +10,21 @@
             android:id="@+id/nav_recipe"
             android:icon="@drawable/recipe_menu"
             android:title="Recipes" />-->
+
+        <item
+            android:title="Shop By Category"
+            android:id="@+id/nav_category"
+            android:icon="@drawable/ic_action_category">
+            <!--<menu>
+                <item
+                    android:id="@+id/nav_fruits"
+                    android:title="@string/nav_fruits"/>
+                <item
+                    android:id="@+id/FoodGrains"
+                    android:title="@string/nav_foodgrain"/>
+            </menu>-->
+
+        </item>
         <item android:title="@string/nav_user" android:id="@+id/nav_user">
             <menu>
                 <item

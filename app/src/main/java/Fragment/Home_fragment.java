@@ -1,7 +1,7 @@
 package Fragment;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.NoConnectionError;
@@ -58,6 +59,7 @@ public class Home_fragment extends Fragment {
 
     private SliderLayout imgSlider;
     private RecyclerView rv_items;
+    private EditText search_nav_home;
     //private RelativeLayout rl_view_all;
 
     private List<Category_model> category_modelList = new ArrayList<>();
@@ -81,7 +83,7 @@ public class Home_fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         setHasOptionsMenu(true);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.app_name));
+        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.tv_home_appname));
         ((MainActivity) getActivity()).updateHeader();
 
         // handle the touch event if true
@@ -103,6 +105,7 @@ public class Home_fragment extends Fragment {
 
         imgSlider = (SliderLayout) view.findViewById(R.id.home_img_slider);
         rv_items = (RecyclerView) view.findViewById(R.id.rv_home);
+        search_nav_home = (EditText) view.findViewById(R.id.search_navbar);
         //rl_view_all = (RelativeLayout) view.findViewById(R.id.rl_home_view_allcat);
 
         rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
@@ -142,6 +145,22 @@ public class Home_fragment extends Fragment {
 
             }
         }));
+
+        /*search_nav_home.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    Search_fragment search_fragment = new Search_fragment();
+                   FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.contentPanel,search_fragment , "Support_info_fragment")
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                }
+
+                return false;
+            }
+        });*/
 
         return view;
     }
@@ -276,6 +295,7 @@ public class Home_fragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem search = menu.findItem(R.id.action_search);
         search.setVisible(true);
+        //MenuItem search_navhome = menu.findItem(R.id.search_navbar);
         MenuItem check = menu.findItem(R.id.action_change_password);
         check.setVisible(false);
     }
@@ -292,5 +312,6 @@ public class Home_fragment extends Fragment {
         }
         return false;
     }
+
 
 }

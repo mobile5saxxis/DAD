@@ -10,8 +10,9 @@
 
     <string name="nav_terms">Terms &amp; Conditions</string>
 
-    <!-- string.xml -->
+    <!--nav string.xml -->
     <string name="nav_home">Home</string>
+    <string name="nav_category">Shop By Category</string>
     <string name="nav_user">User</string>
     <string name="nav_order">My Orders</string>
     <string name="nav_profile">My Profile</string>
@@ -20,6 +21,8 @@
     <string name="nav_review">Review Us</string>
     <string name="nav_share">Share with Friends</string>
     <string name="nav_logout">Logout</string>
+    <string name="nav_fruits">Fruits &amp; Vegetables</string>
+    <string name="nav_foodgrain">FoodGrains, Oil &amp; Masala</string>
 
     <!-- activity_login.xml -->
     <string name="et_login_phone_hint">Mobile Number (Required)</string>
@@ -63,7 +66,8 @@
 
     <!-- fragment_home.xml -->
     <string name="tv_home_cat">Products</string>
-    <string name="tv_home_view">View all ></string>
+    <string name="tv_home_view">View all </string>
+    <string name="tv_home_appname"> DAD </string>
 
     <!-- row_product_rv.xml -->
     <string name="tv_pro_add">Add</string>
