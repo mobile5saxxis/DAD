@@ -167,6 +167,10 @@
     <string name="category_name">Category</string>
     <string name="shop_category_name">Shop By Category</string>
 
+    <!-- Catrgory_details -->
+    <string name="offer_name">Offers</string>
+    <string name="this_weeks_offers">This Week Offers</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

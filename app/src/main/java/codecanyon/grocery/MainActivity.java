@@ -36,6 +36,7 @@ import com.bumptech.glide.Glide;
 
 import Config.BaseURL;
 import Fragment.Cart_fragment;
+import Fragment.Offers_fragment;
 import Fragment.CategoriFragment;
 import Fragment.Edit_profile_fragment;
 import Fragment.Home_fragment;
@@ -479,10 +480,10 @@ public class MainActivity extends AppCompatActivity
                                 .commit();
                         break;
                     case R.id.offers:
-                        Fragment fm_offers = new Support_info_fragment();
+                        Fragment fm_offers = new Offers_fragment();
                         fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction()
-                                .replace(R.id.contentPanel,fm_offers , "Support_info_fragment")
+                                .replace(R.id.contentPanel,fm_offers , "Offers_fragment")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
                         break;

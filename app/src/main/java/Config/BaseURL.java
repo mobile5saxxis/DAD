@@ -55,6 +55,8 @@ public class BaseURL {
 
     public static String GET_CATEGORY_URL = BASE_URL + "index.php/api/get_categories";
 
+    public static String GET_OFFERS_URL = BASE_URL + "index.php/api/offer_product?oid=1";
+
     public static String GET_PRODUCT_URL = BASE_URL + "index.php/api/get_products";
 
     public static String GET_ABOUT_URL = BASE_URL + "index.php/api/aboutus";
