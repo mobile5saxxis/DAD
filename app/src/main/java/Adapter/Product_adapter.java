@@ -2,6 +2,7 @@ package Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,6 +26,7 @@ import java.util.List;
 import Config.BaseURL;
 import Model.Product_model;
 import codecanyon.grocery.MainActivity;
+import codecanyon.grocery.ProductDetailsActivity;
 import codecanyon.grocery.R;
 import util.DatabaseHandler;
 
@@ -131,11 +133,14 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
             } else if (id == R.id.iv_subcat_img) {
                 showImage(modelList.get(position).getProduct_image());
             } else if (id == R.id.card_view) {
-                showProductDetail(modelList.get(position).getProduct_image(),
+                /*showProductDetail(modelList.get(position).getProduct_image(),
                         modelList.get(position).getTitle(),
                         modelList.get(position).getProduct_description(),
                         modelList.get(position).getProduct_name(),
-                        position, tv_contetiy.getText().toString(), modelList.get(position).getPrice(), modelList.get(position).getUnit());
+                        position, tv_contetiy.getText().toString(), modelList.get(position).getPrice(), modelList.get(position).getUnit());*/
+
+                Intent intent = new Intent(context, ProductDetailsActivity.class);
+                context.startActivity(intent);
             }
 
         }
@@ -144,6 +149,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
     public Product_adapter(List<Product_model> modelList, Context context) {
         this.modelList = modelList;
         this.mFilteredList = modelList;
+        this.context = context;
 
         dbcart = new DatabaseHandler(context);
     }

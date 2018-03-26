@@ -1,4 +1,4 @@
-package Fragment;
+package Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ public class ProductDetails_fragment extends Fragment {
 
 
 
-   public ProductDetails_fragment(){
+    public ProductDetails_fragment(){
 
     }
 
@@ -39,6 +39,6 @@ public class ProductDetails_fragment extends Fragment {
         TextView tv_detail = (TextView) view.findViewById(R.id.tv_product_detail);
         final TextView tv_contetiy = (TextView) view.findViewById(R.id.tv_subcat_contetiy);
         final TextView tv_add = (TextView) view.findViewById(R.id.tv_subcat_add);
-return null;
+        return null;
     }
 }

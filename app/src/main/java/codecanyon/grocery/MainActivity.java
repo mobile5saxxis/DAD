@@ -35,13 +35,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import Config.BaseURL;
-import Fragment.Cart_fragment;
-import Fragment.Offers_fragment;
-import Fragment.CategoriFragment;
-import Fragment.Edit_profile_fragment;
-import Fragment.Home_fragment;
-import Fragment.Search_fragment;
-import Fragment.Support_info_fragment;
+import Fragments.Cart_fragment;
+import Fragments.Offers_fragment;
+import Fragments.CategoriFragment;
+import Fragments.Edit_profile_fragment;
+import Fragments.Home_fragment;
+import Fragments.Search_fragment;
+import Fragments.Support_info_fragment;
 import fcm.MyFirebaseRegister;
 import util.BottomNavigationViewHelper;
 import util.ConnectivityReceiver;
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     private ImageView iv_profile;
 
     private DatabaseHandler dbcart;
+    ImageView logo;
 
     private Session_management sessionManagement;
 
@@ -71,6 +72,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        ImageView logo= (ImageView) findViewById(R.id.home_logo);
+        Glide
+                .with(this)
+                .load(R.drawable.homelogo)
+                .centerCrop()
+                .fitCenter()
+                .into(logo);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.btm_navigation);
         BottomNavigationViewHelper.removeShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -256,7 +264,7 @@ public class MainActivity extends AppCompatActivity
         final MenuItem item = menu.findItem(R.id.action_cart);
         MenuItem c_password = menu.findItem(R.id.action_change_password);
         MenuItem search = menu.findItem(R.id.action_search);
-        item.setVisible(true);
+        item.setVisible(false);
         c_password.setVisible(false);
         search.setVisible(false);
 

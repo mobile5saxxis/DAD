@@ -144,6 +144,8 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="description">Description:</string>
+    <string name="health">Health Benifits:</string>
+    <string name="how_to_use">How To Use:</string>
 
     <!-- row_delivery_time.xml -->
     <string name="tv_deli_socity">Society:</string>
@@ -162,12 +164,11 @@
     <string name="socity">Society:\u0020</string>
 
 
-
     <!-- Catrgory_details -->
     <string name="category_name">Category</string>
     <string name="shop_category_name">Shop By Category</string>
 
-    <!-- Catrgory_details -->
+    <!-- offer_details -->
     <string name="offer_name">Offers</string>
     <string name="this_weeks_offers">This Week Offers</string>
     <string name="popular_brands">Popular Brands</string>

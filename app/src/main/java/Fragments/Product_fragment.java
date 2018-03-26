@@ -1,4 +1,4 @@
-package Fragment;
+package Fragments;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;

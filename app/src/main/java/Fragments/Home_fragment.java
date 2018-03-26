@@ -1,14 +1,18 @@
-package Fragment;
-
+package Fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.NoConnectionError;
@@ -35,10 +39,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Adapter.Offer_adapter;
+import Adapter.Home_adapter;
 import Config.BaseURL;
-import Model.Brands_list_model;
-import Model.Offers_model;
+import Model.Category_model;
 import codecanyon.grocery.AppController;
 import codecanyon.grocery.MainActivity;
 import codecanyon.grocery.R;
@@ -47,23 +50,24 @@ import util.CustomVolleyJsonRequest;
 import util.RecyclerTouchListener;
 
 /**
- * Created by srikarn on 26-03-2018.
+ * Created by Rajesh Dabhi on 22/6/2017.
  */
 
-public class Offers_fragment extends Fragment {
+public class Home_fragment extends Fragment {
 
-    private static String TAG = Offers_fragment.class.getSimpleName();
+    private static String TAG = Home_fragment.class.getSimpleName();
 
     private SliderLayout imgSlider;
     private RecyclerView rv_items;
+    private EditText search_nav_home;
+    //private RelativeLayout rl_view_all;
+
+    private List<Category_model> category_modelList = new ArrayList<>();
+    private Home_adapter adapter;
+
     private boolean isSubcat = false;
 
-    private List<Offers_model> offers_modelList = new ArrayList<>();
-    private List<Brands_list_model> brands_list_models = new ArrayList<>();
-    private Offer_adapter mAdapter;
-
-
-    public Offers_fragment(){
+    public Home_fragment() {
         // Required empty public constructor
     }
 
@@ -71,38 +75,59 @@ public class Offers_fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_offers, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         setHasOptionsMenu(true);
 
-        imgSlider = (SliderLayout) view.findViewById(R.id.offers_img_slider);
-        rv_items= (RecyclerView) view.findViewById(R.id.offers_recyclerview);
-        rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
-        //setHasOptionsMenu(true);
-        //return view;
+        //((MainActivity) getActivity()).setTitle(getResources().getString(R.string.tv_home_appname));
+        ((MainActivity) getActivity()).updateHeader();
 
+        // handle the touch event if true
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // check user can press back button or not
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+
+                    ((MainActivity) getActivity()).finish();
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        imgSlider = (SliderLayout) view.findViewById(R.id.home_img_slider);
+        rv_items = (RecyclerView) view.findViewById(R.id.rv_home);
+        search_nav_home = (EditText) view.findViewById(R.id.search_navbar);
+        //rl_view_all = (RelativeLayout) view.findViewById(R.id.rl_home_view_allcat);
+
+        rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
+
+        // initialize a SliderLayout
         imgSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         imgSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         imgSlider.setCustomAnimation(new DescriptionAnimation());
         imgSlider.setDuration(4000);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.offer_name));
-        ((MainActivity) getActivity()).updateHeader();
-
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {
             makeGetSliderRequest();
-            makeGetOfferRequest("");
+            makeGetCategoryRequest("");
         }
+
         rv_items.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
-                String getid = offers_modelList.get(position).getProduct_id();
-                String getcat_title = offers_modelList.get(position).getProduct_name();
+                String getid = category_modelList.get(position).getId();
+                String getcat_title = category_modelList.get(position).getTitle();
 
                 Bundle args = new Bundle();
                 Fragment fm = new Product_fragment();
@@ -121,16 +146,31 @@ public class Offers_fragment extends Fragment {
             }
         }));
 
+        /*search_nav_home.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    Search_fragment search_fragment = new Search_fragment();
+                   FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.contentPanel,search_fragment , "Support_info_fragment")
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                }
+
+                return false;
+            }
+        });*/
+
         return view;
     }
-
 
     /**
      * Method to make json array request where json response starts wtih {
      */
     private void makeGetSliderRequest() {
 
-        JsonArrayRequest req = new JsonArrayRequest(BaseURL.GET_BRAND_LIST_URL,
+        JsonArrayRequest req = new JsonArrayRequest(BaseURL.GET_SLIDER_URL,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -149,8 +189,8 @@ public class Offers_fragment extends Fragment {
                                         .get(i);
 
                                 HashMap<String, String> url_maps = new HashMap<String, String>();
-                                url_maps.put("name", jsonObject.getString("name"));
-                                url_maps.put("image", BaseURL.IMG_Brand_URL + jsonObject.getString("image"));
+                                url_maps.put("slider_title", jsonObject.getString("slider_title"));
+                                url_maps.put("slider_image", BaseURL.IMG_SLIDER_URL + jsonObject.getString("slider_image"));
 
                                 listarray.add(url_maps);
                                 Log.v("slider_data", String.valueOf(listarray.get(0)));
@@ -160,14 +200,14 @@ public class Offers_fragment extends Fragment {
                                 TextSliderView textSliderView = new TextSliderView(getActivity());
                                 // initialize a SliderLayout
                                 textSliderView
-                                        .description(name.get("name"))
-                                        .image(name.get("image"))
+                                        .description(name.get("slider_title"))
+                                        .image(name.get("slider_image"))
                                         .setScaleType(BaseSliderView.ScaleType.Fit);
 
                                 //add your extra information
                                 textSliderView.bundle(new Bundle());
                                 textSliderView.getBundle()
-                                        .putString("extra", name.get("name"));
+                                        .putString("extra", name.get("slider_title"));
 
                                 imgSlider.addSlider(textSliderView);
                             }
@@ -194,15 +234,13 @@ public class Offers_fragment extends Fragment {
 
     }
 
-
-
     /**
-     * Method to make json object request where json response starts wtih
+     * Method to make json object request where json response starts wtih {
      */
-    private void makeGetOfferRequest(String parent_id) {
+    private void makeGetCategoryRequest(String parent_id) {
 
         // Tag used to cancel the request
-        String tag_json_obj = "json_offer_req";
+        String tag_json_obj = "json_category_req";
 
         isSubcat = false;
 
@@ -213,7 +251,7 @@ public class Offers_fragment extends Fragment {
         }
 
         CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
-                BaseURL.GET_OFFERS_URL, params, new Response.Listener<JSONObject>() {
+                BaseURL.GET_CATEGORY_URL, params, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -224,14 +262,14 @@ public class Offers_fragment extends Fragment {
                     if (status) {
 
                         Gson gson = new Gson();
-                        Type listType = new TypeToken<List<Offers_model>>() {
+                        Type listType = new TypeToken<List<Category_model>>() {
                         }.getType();
 
-                        offers_modelList = gson.fromJson(response.getString("data"), listType);
+                        category_modelList = gson.fromJson(response.getString("data"), listType);
 
-                        mAdapter = new Offer_adapter(offers_modelList);
-                        rv_items.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
+                        adapter = new Home_adapter(category_modelList);
+                        rv_items.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -251,5 +289,29 @@ public class Offers_fragment extends Fragment {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // TODO Add your menu entries here
+        super.onCreateOptionsMenu(menu, inflater);
+       /* MenuItem search = menu.findItem(R.id.action_search);
+        search.setVisible(true);*/
+        //MenuItem search_navhome = menu.findItem(R.id.search_navbar);
+        MenuItem check = menu.findItem(R.id.action_change_password);
+        check.setVisible(false);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+          /*  case R.id.action_search:
+                Fragment fm = new Search_fragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                        .addToBackStack(null).commit();
+                return false;*/
+        }
+        return false;
+    }
+
 
 }

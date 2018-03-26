@@ -1,7 +1,9 @@
-package Fragment;
+package Fragments;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,17 +17,19 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Adapter.Home_adapter;
-import Adapter.View_time_adapter;
+import Adapter.Categori_adapter;
 import Config.BaseURL;
 import Model.Category_model;
 import codecanyon.grocery.AppController;
@@ -34,68 +38,55 @@ import codecanyon.grocery.R;
 import util.ConnectivityReceiver;
 import util.CustomVolleyJsonRequest;
 import util.RecyclerTouchListener;
-import util.Session_management;
 
 /**
- * Created by Rajesh Dabhi on 3/7/2017.
+ * Created by Rajesh Dabhi on 22/6/2017.
  */
 
-public class View_time_fragment extends Fragment {
+public class CategoriFragment extends Fragment {
 
-    private static String TAG = View_time_fragment.class.getSimpleName();
+    private static String TAG = CategoriFragment.class.getSimpleName();
 
-    private RecyclerView rv_time;
+    private RecyclerView rv_items;
+    private boolean isSubcat = false;
 
-    private List<String> time_list = new ArrayList<>();
     private List<Category_model> category_modelList = new ArrayList<>();
-    private Home_adapter adapter;
-
-    private String getdate;
-
-    private Session_management sessionManagement;
-
-    public View_time_fragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private Categori_adapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_time_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_categori, container, false);
+        setHasOptionsMenu(true);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.delivery_time));
+        rv_items= (RecyclerView) view.findViewById(R.id.rv_subcategory2);
+        rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        //setHasOptionsMenu(true);
+        //return view;
 
-        sessionManagement = new Session_management(getActivity());
-
-        rv_time = (RecyclerView) view.findViewById(R.id.rv_times);
-        rv_time.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        getdate = getArguments().getString("date");
+        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.category_name));
+        ((MainActivity) getActivity()).updateHeader();
 
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {
-            makeGetTimeRequest(getdate);
-        } else {
-            ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
+            makeGetCategoryRequest("");
         }
-
-        rv_time.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_time, new RecyclerTouchListener.OnItemClickListener() {
+        rv_items.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
-                String gettime = time_list.get(position);
+                String getid = category_modelList.get(position).getId();
+                String getcat_title = category_modelList.get(position).getTitle();
 
-                sessionManagement.cleardatetime();
-
-                sessionManagement.creatdatetime(getdate,gettime);
-
-                ((MainActivity) getActivity()).onBackPressed();
+                Bundle args = new Bundle();
+                Fragment fm = new Product_fragment();
+                args.putString("cat_id", getid);
+                args.putString("cat_title", getcat_title);
+                fm.setArguments(args);
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                        .addToBackStack(null).commit();
 
             }
 
@@ -109,18 +100,23 @@ public class View_time_fragment extends Fragment {
     }
 
     /**
-     * Method to make json object request where json response starts wtih {
+     * Method to make json object request where json response starts wtih
      */
-    private void makeGetTimeRequest(String date) {
+    private void makeGetCategoryRequest(String parent_id) {
 
         // Tag used to cancel the request
-        String tag_json_obj = "json_time_req";
+        String tag_json_obj = "json_category_req";
+
+        isSubcat = false;
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("date",date);
+        if (parent_id != null && parent_id != "") {
+            params.put("parent", parent_id);
+            isSubcat = true;
+        }
 
         CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
-                BaseURL.GET_TIME_SLOT_URL, params, new Response.Listener<JSONObject>() {
+                BaseURL.GET_CATEGORY_URL, params, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -130,14 +126,15 @@ public class View_time_fragment extends Fragment {
                     Boolean status = response.getBoolean("responce");
                     if (status) {
 
-                        for(int i=0;i<response.getJSONArray("times").length();i++) {
-                            time_list.add(""+response.getJSONArray("times").get(i));
-                        }
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<Category_model>>() {
+                        }.getType();
 
-                        View_time_adapter adapter = new View_time_adapter(time_list);
-                        rv_time.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
+                        category_modelList = gson.fromJson(response.getString("data"), listType);
 
+                        mAdapter = new Categori_adapter(category_modelList);
+                        rv_items.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -159,3 +156,5 @@ public class View_time_fragment extends Fragment {
     }
 
 }
+
+

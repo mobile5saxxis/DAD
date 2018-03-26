@@ -1,11 +1,9 @@
 package Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import Config.BaseURL;
-import Fragment. Add_delivery_address_fragment;
+import Fragments. Add_delivery_address_fragment;
 import Model.Delivery_address_model;
 import codecanyon.grocery.AppController;
 import codecanyon.grocery.R;
