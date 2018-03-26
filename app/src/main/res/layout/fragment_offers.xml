@@ -13,18 +13,53 @@
          android:background="@color/colorPrimary"
          app:tabTextColor="@color/white"
          app:tabSelectedTextColor="@color/white" />-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/this_weeks_offers"
-        android:textColor="@color/black"
+        android:textColor="@color/colorPrimary"
+        android:gravity="center"
         android:textSize="@dimen/space_18"
         android:padding="@dimen/space_6"
-        android:background="@color/gray"/>
+        android:background="@color/white"/>
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/offers_recyclerview"/>
 
+            <TextView
+                android:id="@+id/Brands_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/popular_brands"
+                android:gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/space_18"
+                android:padding="@dimen/space_6"
+                android:background="@color/white"/>
+
+
+            <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/offers_img_slider"
+        android:layout_width="match_parent"
+        android:layout_height="130dp" />
+
+    <com.daimajia.slider.library.Indicators.PagerIndicator
+        android:id="@+id/custom_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

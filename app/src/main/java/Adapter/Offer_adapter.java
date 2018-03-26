@@ -34,7 +34,7 @@ public class Offer_adapter extends RecyclerView.Adapter<Offer_adapter.ViewHolder
     @Override
     public Offer_adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_categori_rv, parent, false);
+                .inflate(R.layout.row_offers_rv, parent, false);
 
         context = parent.getContext();
         return new Offer_adapter.ViewHolder(itemView);
@@ -68,8 +68,8 @@ public class Offer_adapter extends RecyclerView.Adapter<Offer_adapter.ViewHolder
 
         public ViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.tv_caterogi_title);
-            image = (ImageView) view.findViewById(R.id.iv_categori);
+            title = (TextView) view.findViewById(R.id.tv_offer_title);
+            image = (ImageView) view.findViewById(R.id.iv_offer);
         }
     }
 }

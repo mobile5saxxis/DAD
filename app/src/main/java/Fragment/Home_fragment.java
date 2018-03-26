@@ -193,6 +193,7 @@ public class Home_fragment extends Fragment {
                                 url_maps.put("slider_image", BaseURL.IMG_SLIDER_URL + jsonObject.getString("slider_image"));
 
                                 listarray.add(url_maps);
+                                Log.v("slider_data", String.valueOf(listarray.get(0)));
                             }
 
                             for (HashMap<String, String> name : listarray) {

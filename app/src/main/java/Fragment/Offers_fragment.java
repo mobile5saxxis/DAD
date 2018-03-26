@@ -17,9 +17,15 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +37,7 @@ import java.util.Map;
 
 import Adapter.Offer_adapter;
 import Config.BaseURL;
+import Model.Brands_list_model;
 import Model.Offers_model;
 import codecanyon.grocery.AppController;
 import codecanyon.grocery.MainActivity;
@@ -47,12 +54,23 @@ public class Offers_fragment extends Fragment {
 
     private static String TAG = Offers_fragment.class.getSimpleName();
 
+    private SliderLayout imgSlider;
     private RecyclerView rv_items;
     private boolean isSubcat = false;
 
     private List<Offers_model> offers_modelList = new ArrayList<>();
+    private List<Brands_list_model> brands_list_models = new ArrayList<>();
     private Offer_adapter mAdapter;
 
+
+    public Offers_fragment(){
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,16 +78,23 @@ public class Offers_fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_offers, container, false);
         setHasOptionsMenu(true);
 
+        imgSlider = (SliderLayout) view.findViewById(R.id.offers_img_slider);
         rv_items= (RecyclerView) view.findViewById(R.id.offers_recyclerview);
         rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
         //setHasOptionsMenu(true);
         //return view;
+
+        imgSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        imgSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        imgSlider.setCustomAnimation(new DescriptionAnimation());
+        imgSlider.setDuration(4000);
 
         ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.offer_name));
         ((MainActivity) getActivity()).updateHeader();
 
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {
+            makeGetSliderRequest();
             makeGetOfferRequest("");
         }
         rv_items.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
@@ -98,6 +123,78 @@ public class Offers_fragment extends Fragment {
 
         return view;
     }
+
+
+    /**
+     * Method to make json array request where json response starts wtih {
+     */
+    private void makeGetSliderRequest() {
+
+        JsonArrayRequest req = new JsonArrayRequest(BaseURL.GET_BRAND_LIST_URL,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+
+                        try {
+                            // Parsing json array response
+                            // loop through each json object
+
+                            // arraylist list variable for store data;
+                            ArrayList<HashMap<String, String>> listarray = new ArrayList<>();
+
+                            for (int i = 0; i < response.length(); i++) {
+
+                                JSONObject jsonObject = (JSONObject) response
+                                        .get(i);
+
+                                HashMap<String, String> url_maps = new HashMap<String, String>();
+                                url_maps.put("name", jsonObject.getString("name"));
+                                url_maps.put("image", BaseURL.IMG_Brand_URL + jsonObject.getString("image"));
+
+                                listarray.add(url_maps);
+                                Log.v("slider_data", String.valueOf(listarray.get(0)));
+                            }
+
+                            for (HashMap<String, String> name : listarray) {
+                                TextSliderView textSliderView = new TextSliderView(getActivity());
+                                // initialize a SliderLayout
+                                textSliderView
+                                        .description(name.get("name"))
+                                        .image(name.get("image"))
+                                        .setScaleType(BaseSliderView.ScaleType.Fit);
+
+                                //add your extra information
+                                textSliderView.bundle(new Bundle());
+                                textSliderView.getBundle()
+                                        .putString("extra", name.get("name"));
+
+                                imgSlider.addSlider(textSliderView);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+
+    }
+
+
 
     /**
      * Method to make json object request where json response starts wtih

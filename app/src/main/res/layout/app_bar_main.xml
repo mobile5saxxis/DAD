@@ -51,6 +51,8 @@
                         android:tint="@color/black"
                         android:gravity="left"
                         android:inputType="text"
+                        android:imeOptions="actionSearch"
+                        android:maxLines="1"
                         android:drawableLeft="@drawable/ic_search"
                         android:drawableRight="@drawable/ic_action_mic"
                         android:drawableTint="@color/dark_gray">

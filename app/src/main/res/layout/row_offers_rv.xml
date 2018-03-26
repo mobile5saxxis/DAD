@@ -21,7 +21,7 @@
 
 
         <ImageView
-            android:id="@+id/iv_categori"
+            android:id="@+id/iv_offer"
             android:layout_width="0dp"
             android:layout_height="110dp"
             android:adjustViewBounds="true"
@@ -37,12 +37,12 @@
             android:background="#88676767"
             android:orientation="vertical"
             android:padding="@dimen/space_2"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_categori"
-            app:layout_constraintLeft_toLeftOf="@+id/iv_categori"
-            app:layout_constraintRight_toRightOf="@+id/iv_categori">
+            app:layout_constraintBottom_toBottomOf="@+id/iv_offer"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_offer"
+            app:layout_constraintRight_toRightOf="@+id/iv_offer">
 
             <TextView
-                android:id="@+id/tv_caterogi_title"
+                android:id="@+id/tv_offer_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"

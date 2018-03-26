@@ -170,6 +170,7 @@
     <!-- Catrgory_details -->
     <string name="offer_name">Offers</string>
     <string name="this_weeks_offers">This Week Offers</string>
+    <string name="popular_brands">Popular Brands</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

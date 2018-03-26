@@ -130,6 +130,8 @@
             android:layout_toLeftOf="@+id/linearLayout"
             android:layout_toStartOf="@+id/linearLayout"
             android:text="TextView" />
+
+
     </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
