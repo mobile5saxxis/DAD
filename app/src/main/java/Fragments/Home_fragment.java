@@ -1,7 +1,9 @@
 package Fragments;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NoConnectionError;
@@ -59,8 +62,8 @@ public class Home_fragment extends Fragment {
 
     private SliderLayout imgSlider;
     private RecyclerView rv_items;
-    private EditText search_nav_home;
     //private RelativeLayout rl_view_all;
+    TextView searchbar_nav;
 
     private List<Category_model> category_modelList = new ArrayList<>();
     private Home_adapter adapter;
@@ -82,6 +85,8 @@ public class Home_fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         setHasOptionsMenu(true);
+
+
 
         //((MainActivity) getActivity()).setTitle(getResources().getString(R.string.tv_home_appname));
         ((MainActivity) getActivity()).updateHeader();
@@ -105,8 +110,8 @@ public class Home_fragment extends Fragment {
 
         imgSlider = (SliderLayout) view.findViewById(R.id.home_img_slider);
         rv_items = (RecyclerView) view.findViewById(R.id.rv_home);
-        search_nav_home = (EditText) view.findViewById(R.id.search_navbar);
         //rl_view_all = (RelativeLayout) view.findViewById(R.id.rl_home_view_allcat);
+        searchbar_nav = (TextView) view.findViewById(R.id.search_navbar);
 
         rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
 
@@ -122,13 +127,24 @@ public class Home_fragment extends Fragment {
             makeGetCategoryRequest("");
         }
 
+        searchbar_nav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fm_search = new Search_fragment();
+               FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.contentPanel,fm_search , "Search_fragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+            }
+        });
+
         rv_items.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
                 String getid = category_modelList.get(position).getId();
                 String getcat_title = category_modelList.get(position).getTitle();
-
                 Bundle args = new Bundle();
                 Fragment fm = new Product_fragment();
                 args.putString("cat_id", getid);
@@ -137,6 +153,7 @@ public class Home_fragment extends Fragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
                         .addToBackStack(null).commit();
+
 
             }
 

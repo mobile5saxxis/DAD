@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+<shape >
     <gradient
         android:startColor="#ffffff"
         android:centerColor="#ffffff"
@@ -14,3 +16,8 @@
         android:top="5dp" />
     <corners android:radius="50dp" />
 </shape>
+    </item>
+</selector>
+
+
+       <!-- //xmlns:android="http://schemas.android.com/apk/res/android"-->

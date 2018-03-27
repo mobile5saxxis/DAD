@@ -1,15 +1,20 @@
 package Fragments;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NoConnectionError;
@@ -72,6 +77,9 @@ public class Search_fragment extends Fragment {
         ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.search));
 
        et_search = (EditText) view.findViewById(R.id.et_search);
+       et_search.requestFocus();
+        InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
        // et_search = (EditText) view.findViewById(R.id.search_navbar);
        btn_search = (Button) view.findViewById(R.id.btn_search);
         rv_search = (RecyclerView) view.findViewById(R.id.rv_search);
@@ -92,6 +100,16 @@ public class Search_fragment extends Fragment {
                     }
                 }
 
+            }
+        });
+        et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    makeGetProductRequest(et_search.getText().toString());
+                    return true;
+                }
+                return false;
             }
         });
 

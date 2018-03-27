@@ -1,13 +1,22 @@
 package Fragments;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.NoConnectionError;
@@ -48,7 +57,6 @@ public class Product_fragment extends Fragment {
 
     private RecyclerView rv_cat;
     private TabLayout tab_cat;
-
     private List<Category_model> category_modelList = new ArrayList<>();
     private List<String> cat_menu_id = new ArrayList<>();
 
@@ -65,16 +73,27 @@ public class Product_fragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ActionBar actionBar=((MainActivity)context).getSupportActionBar();
+        View actionView = actionBar.getCustomView();
+        //LinearLayout searchParent = (LinearLayout) actionView.findViewById(R.id.search_parentll);
+        //searchParent.setVisibility(View.GONE);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product, container, false);
-        //setHasOptionsMenu(true);
+        /*Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         tab_cat = (TabLayout) view.findViewById(R.id.tab_cat);
         rv_cat = (RecyclerView) view.findViewById(R.id.rv_subcategory);
         rv_cat.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         String getcat_id = getArguments().getString("cat_id");
         String getcat_title = getArguments().getString("cat_title");
 
@@ -117,7 +136,14 @@ public class Product_fragment extends Fragment {
 
         return view;
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                getActivity().onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
     /**
      * Method to make json object request where json response starts wtih {
      */

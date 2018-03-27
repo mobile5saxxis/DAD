@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity
     private DatabaseHandler dbcart;
     ImageView logo;
 
+
+
     private Session_management sessionManagement;
 
     private Menu nav_menu;
@@ -73,10 +76,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         ImageView logo= (ImageView) findViewById(R.id.home_logo);
-        Glide
-                .with(this)
+        Glide.with(this)
                 .load(R.drawable.homelogo)
-                .centerCrop()
                 .fitCenter()
                 .into(logo);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.btm_navigation);
@@ -262,12 +263,12 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
 
         final MenuItem item = menu.findItem(R.id.action_cart);
+        final MenuItem search_nav = menu.findItem(R.id.search_navbar);
         MenuItem c_password = menu.findItem(R.id.action_change_password);
         MenuItem search = menu.findItem(R.id.action_search);
         item.setVisible(false);
         c_password.setVisible(false);
         search.setVisible(false);
-
         View count = item.getActionView();
         count.setOnClickListener(new View.OnClickListener() {
 
@@ -486,6 +487,7 @@ public class MainActivity extends AppCompatActivity
                                 .replace(R.id.contentPanel, fm_home, "Home_fragment")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
+
                         break;
                     case R.id.offers:
                         Fragment fm_offers = new Offers_fragment();
@@ -494,6 +496,7 @@ public class MainActivity extends AppCompatActivity
                                 .replace(R.id.contentPanel,fm_offers , "Offers_fragment")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
+
                         break;
                     case R.id.categories:
                         Fragment fm_categories = new CategoriFragment();
@@ -502,6 +505,7 @@ public class MainActivity extends AppCompatActivity
                                 .replace(R.id.contentPanel,fm_categories , "CategoriFragment")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
+
                         break;
                     case R.id.search:
                         Fragment fm_search = new Search_fragment();
@@ -510,6 +514,7 @@ public class MainActivity extends AppCompatActivity
                                 .replace(R.id.contentPanel,fm_search , "Search_fragment")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
+
                         break;
                         case R.id.cart:
                             Fragment fm_cart = new Cart_fragment();

@@ -22,7 +22,7 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" >
 
-        <!--<ExpandableListView
+       <!-- <ExpandableListView
             android:id="@+id/navigationmenu"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

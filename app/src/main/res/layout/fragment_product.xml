@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-
     <android.support.design.widget.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,6 +14,15 @@
         android:background="@color/colorPrimary"
         app:tabTextColor="@color/white"
         app:tabSelectedTextColor="@color/white" />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/products"
+        android:textColor="@color/black"
+        android:textSize="@dimen/space_18"
+        android:padding="@dimen/space_6"
+        android:background="@color/gray"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
