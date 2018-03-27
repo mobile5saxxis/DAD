@@ -32,7 +32,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:ems="10"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:hint="@string/search_msg"
                 android:imeOptions="actionSearch"
                 android:inputType="text"

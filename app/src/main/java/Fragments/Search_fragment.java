@@ -78,7 +78,7 @@ public class Search_fragment extends Fragment {
 
        et_search = (EditText) view.findViewById(R.id.et_search);
        et_search.requestFocus();
-        InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        final InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
        // et_search = (EditText) view.findViewById(R.id.search_navbar);
        btn_search = (Button) view.findViewById(R.id.btn_search);
@@ -107,6 +107,7 @@ public class Search_fragment extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     makeGetProductRequest(et_search.getText().toString());
+                    imgr.hideSoftInputFromWindow(et_search.getWindowToken(), 0);
                     return true;
                 }
                 return false;

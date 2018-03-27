@@ -44,7 +44,7 @@
                         android:ems="10"
                         android:hint="@string/search_msg"
                         android:inputType="text"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_search"
                         android:drawableRight="@drawable/ic_action_mic"
                         android:drawableTint="@color/dark_gray"/>
