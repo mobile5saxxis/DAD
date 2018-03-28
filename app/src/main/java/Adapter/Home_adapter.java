@@ -16,6 +16,8 @@ import java.util.List;
 import Config.BaseURL;
 import Model.Category_model;
 import codecanyon.grocery.R;
+import com.google.ads.AdRequest;
+
 
 /**
  * Created by Rajesh Dabhi on 22/6/2017.

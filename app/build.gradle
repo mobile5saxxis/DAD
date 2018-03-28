@@ -48,6 +48,7 @@ dependencies {
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:27.1.0'
+    compile 'com.google.android.gms:play-services-ads:10.0.1'
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

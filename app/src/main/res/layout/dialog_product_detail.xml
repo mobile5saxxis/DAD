@@ -28,6 +28,8 @@
         android:textSize="14sp"
         android:layout_gravity="center"
         tools:text="100grms"/>
+
+
     <TextView
         android:id="@+id/price"
         android:layout_width="wrap_content"

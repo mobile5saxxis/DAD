@@ -74,17 +74,17 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
         public void onClick(View view) {
             int id = view.getId();
             int position = getAdapterPosition();
-
+            //int qty = Integer.valueOf(tv_contetiy.getText().toString());
             if (id == R.id.iv_subcat_plus) {
 
-                int qty = Integer.valueOf(tv_contetiy.getText().toString());
+              int  qty = Integer.valueOf(tv_contetiy.getText().toString());
                 qty = qty + 1;
 
                 tv_contetiy.setText(String.valueOf(qty));
 
             } else if (id == R.id.iv_subcat_minus) {
 
-                int qty = 0;
+              int   qty = 0;
                 if (!tv_contetiy.getText().toString().equalsIgnoreCase(""))
                     qty = Integer.valueOf(tv_contetiy.getText().toString());
 
@@ -133,13 +133,16 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
             } else if (id == R.id.iv_subcat_img) {
                 showImage(modelList.get(position).getProduct_image());
             } else if (id == R.id.card_view) {
-                /*showProductDetail(modelList.get(position).getProduct_image(),
+               /* showProductDetail(modelList.get(position).getProduct_image(),
                         modelList.get(position).getTitle(),
                         modelList.get(position).getProduct_description(),
                         modelList.get(position).getProduct_name(),
                         position, tv_contetiy.getText().toString(), modelList.get(position).getPrice(), modelList.get(position).getUnit());*/
 
                 Intent intent = new Intent(context, ProductDetailsActivity.class);
+                intent.putExtra("position", position);
+                intent.putExtra("selectedProduct", modelList.get(position));
+               // intent.putExtra("qty", qty);
                 context.startActivity(intent);
             }
 

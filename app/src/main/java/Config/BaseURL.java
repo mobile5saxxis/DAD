@@ -53,6 +53,9 @@ public class BaseURL {
     public static String IMG_PROFILE_URL = BASE_URL + "uploads/profile/";
 
 
+
+    public static String GET_ADDS_URL = BASE_URL + "index.php/api/adds";
+
     public static String GET_SLIDER_URL = BASE_URL + "index.php/api/get_sliders";
 
     public static String GET_BRAND_LIST_URL = BASE_URL + "index.php/api/get_brands";

@@ -29,6 +29,8 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -65,6 +67,9 @@ public class Home_fragment extends Fragment {
     //private RelativeLayout rl_view_all;
     TextView searchbar_nav;
 
+
+
+
     private List<Category_model> category_modelList = new ArrayList<>();
     private Home_adapter adapter;
 
@@ -85,6 +90,10 @@ public class Home_fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         setHasOptionsMenu(true);
+
+       /* AdView mAdView = (AdView) view.findViewById(R.id.adView_home);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);*/
 
 
 
@@ -306,6 +315,68 @@ public class Home_fragment extends Fragment {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
     }
+
+
+
+
+
+
+
+    private void makeAddRequest(String parent_id) {
+
+        // Tag used to cancel the request
+        String tag_json_obj = "json_adds_req";
+
+        isSubcat = false;
+
+        Map<String, String> params = new HashMap<String, String>();
+        if (parent_id != null && parent_id != "") {
+            params.put("parent", parent_id);
+            isSubcat = true;
+        }
+
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                BaseURL.GET_ADDS_URL, params, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    Boolean status = response.getBoolean("responce");
+                    if (status) {
+
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<Category_model>>() {
+                        }.getType();
+
+                        category_modelList = gson.fromJson(response.getString("data"), listType);
+
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+
+
+
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
