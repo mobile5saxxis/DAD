@@ -44,6 +44,8 @@ public class BaseURL {
 
     public static String IMG_SLIDER_URL = BASE_URL + "uploads/sliders/";
 
+    public static String ADD_IMAGE_URL1 = BASE_URL + "uploads/adds/";
+
     public static String IMG_Brand_URL = BASE_URL + "uploads/brands/";
 
     public static String IMG_CATEGORY_URL = BASE_URL + "uploads/category/";

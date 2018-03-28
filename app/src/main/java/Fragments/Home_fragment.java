@@ -1,5 +1,5 @@
 package Fragments;
-import android.app.Activity;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,12 +26,12 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.bumptech.glide.Glide;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -54,6 +55,8 @@ import util.ConnectivityReceiver;
 import util.CustomVolleyJsonRequest;
 import util.RecyclerTouchListener;
 
+import static Config.BaseURL.ADD_IMAGE_URL1;
+
 /**
  * Created by Rajesh Dabhi on 22/6/2017.
  */
@@ -66,6 +69,8 @@ public class Home_fragment extends Fragment {
     private RecyclerView rv_items;
     //private RelativeLayout rl_view_all;
     TextView searchbar_nav;
+    ImageView addImage1;
+    ImageView addImage2;
 
 
 
@@ -121,6 +126,8 @@ public class Home_fragment extends Fragment {
         rv_items = (RecyclerView) view.findViewById(R.id.rv_home);
         //rl_view_all = (RelativeLayout) view.findViewById(R.id.rl_home_view_allcat);
         searchbar_nav = (TextView) view.findViewById(R.id.search_navbar);
+        addImage1 = (ImageView) view.findViewById(R.id.add_image1);
+        addImage2 = (ImageView) view.findViewById(R.id.add_image2);
 
         rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
 
@@ -129,6 +136,18 @@ public class Home_fragment extends Fragment {
         imgSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         imgSlider.setCustomAnimation(new DescriptionAnimation());
         imgSlider.setDuration(4000);
+
+
+        Log.v("AddImage", ADD_IMAGE_URL1 + "011.png");
+        Glide.with(this)
+                .load(ADD_IMAGE_URL1 + "011.png")
+                .fitCenter()
+                .into(addImage2);
+
+        Glide.with(this)
+                .load(ADD_IMAGE_URL1 + "imgpsh_fullsize.png")
+                .fitCenter()
+                .into(addImage1);
 
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {
