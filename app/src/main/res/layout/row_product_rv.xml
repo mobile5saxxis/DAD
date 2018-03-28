@@ -9,7 +9,8 @@
     android:layout_height="wrap_content"
     app:cardElevation="@dimen/space_5"
     app:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="4dp">
+    card_view:cardCornerRadius="4dp"
+    android:background="@color/white">
 
 
     <android.support.constraint.ConstraintLayout
