@@ -168,7 +168,7 @@
     <!-- Catrgory_details -->
     <string name="category_name">Category</string>
     <string name="shop_category_name">Shop By Category</string>
-
+    <string name="KNewArrivals">New arrivals</string>
     <!-- Product_details -->
     <string name="product_name">Products</string>
     <string name="products">Products</string>

@@ -1,11 +1,14 @@
 package Fragments;
 
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,8 +48,10 @@ import java.util.List;
 import java.util.Map;
 
 import Adapter.Home_adapter;
+import Adapter.Product_adapter;
 import Config.BaseURL;
 import Model.Category_model;
+import Model.Product_model;
 import codecanyon.grocery.AppController;
 import codecanyon.grocery.MainActivity;
 import codecanyon.grocery.R;
@@ -62,8 +68,10 @@ import static Config.BaseURL.ADD_IMAGE_URL1;
 public class Home_fragment extends Fragment {
 
     private static String TAG = Home_fragment.class.getSimpleName();
+    private static final float INITIAL_ITEMS_COUNT = 3.5F;
 
     private SliderLayout imgSlider;
+    private LinearLayout mCarouselContainer;
     private RecyclerView rv_items;
     //private RelativeLayout rl_view_all;
     TextView searchbar_nav;
@@ -93,6 +101,7 @@ public class Home_fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         setHasOptionsMenu(true);
+
 
        /* AdView mAdView = (AdView) view.findViewById(R.id.adView_home);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -127,13 +136,24 @@ public class Home_fragment extends Fragment {
         addImage1 = (ImageView) view.findViewById(R.id.add_image1);
         addImage2 = (ImageView) view.findViewById(R.id.add_image2);
 
-        rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
+     /*   LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        //rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        rv_items.setLayoutManager(layoutManager);*/
 
+      //  rv_items.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
+        rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
         // initialize a SliderLayout
         imgSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         imgSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         imgSlider.setCustomAnimation(new DescriptionAnimation());
         imgSlider.setDuration(4000);
+
+
+
+
+
+
 
 
         Log.v("AddImage", ADD_IMAGE_URL1 + "011.png");
@@ -333,62 +353,6 @@ public class Home_fragment extends Fragment {
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
     }
 
-
-
-
-
-
-
-    private void makeAddRequest(String parent_id) {
-
-        // Tag used to cancel the request
-        String tag_json_obj = "json_adds_req";
-
-        isSubcat = false;
-
-        Map<String, String> params = new HashMap<String, String>();
-        if (parent_id != null && parent_id != "") {
-            params.put("parent", parent_id);
-            isSubcat = true;
-        }
-
-        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
-                BaseURL.GET_ADDS_URL, params, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.d(TAG, response.toString());
-
-                try {
-                    Boolean status = response.getBoolean("responce");
-                    if (status) {
-
-                        Gson gson = new Gson();
-                        Type listType = new TypeToken<List<Category_model>>() {
-                        }.getType();
-
-                        category_modelList = gson.fromJson(response.getString("data"), listType);
-
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
-    }
 
 
 

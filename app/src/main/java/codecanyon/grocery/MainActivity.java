@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -24,10 +26,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +59,8 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
-    private TextView totalBudgetCount, tv_name, tv_number, tv_register;
+    private TextView totalBudgetCount, tv_number;
+    ImageButton tv_name, tv_register;
     private ImageView iv_profile;
 
     private DatabaseHandler dbcart;
@@ -76,12 +81,16 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         ImageView logo= (ImageView) findViewById(R.id.home_logo);
         Glide.with(this)
-                .load(R.drawable.homelogo)
+                .load(R.drawable.homelogonew)
                 .fitCenter()
                 .into(logo);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.btm_navigation);
         BottomNavigationViewHelper.removeShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+
+
         dbcart = new DatabaseHandler(this);
 
         checkConnection();
@@ -98,9 +107,21 @@ public class MainActivity extends AppCompatActivity
         nav_menu = navigationView.getMenu();
         View header = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
         iv_profile = (ImageView) header.findViewById(R.id.iv_header_img);
-        tv_name = (TextView) header.findViewById(R.id.tv_header_name);
-        tv_register = (TextView) header.findViewById(R.id.tv_header_Register);
+        tv_name = (ImageButton) header.findViewById(R.id.tv_header_name);
+        tv_register = (ImageButton) header.findViewById(R.id.tv_header_Register);
         tv_number = (TextView) header.findViewById(R.id.tv_header_moblie);
+
+        BottomNavigationMenuView bottomNavigationMenuView =
+                (BottomNavigationMenuView) navigation.getChildAt(0);
+        View v = bottomNavigationMenuView.getChildAt(4);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) v;
+
+        View badge = LayoutInflater.from(this)
+                .inflate(R.layout.menu_cart_layout, bottomNavigationMenuView, false);
+        totalBudgetCount = (TextView) badge.findViewById(R.id.actionbar_notifcation_textview);
+
+        totalBudgetCount.setText("" + dbcart.getCartCount());
+        itemView.addView(badge);
 
         iv_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,7 +230,7 @@ public class MainActivity extends AppCompatActivity
                     .placeholder(R.drawable.logo)
                     .crossFade()
                     .into(iv_profile);
-            tv_name.setText(getname);
+           // tv_name.setText(getname);
             tv_number.setText(getemail);
         }
     }
@@ -222,7 +243,6 @@ public class MainActivity extends AppCompatActivity
             nav_menu.findItem(R.id.nav_user).setVisible(true);
         } else {
             tv_number.setVisibility(View.GONE);
-            tv_name.setText(getResources().getString(R.string.btn_login));
             tv_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -231,7 +251,6 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
-            tv_register.setText(getResources().getString(R.string.btn_register));
             tv_register.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -278,7 +297,7 @@ public class MainActivity extends AppCompatActivity
         item.setVisible(false);
         c_password.setVisible(false);
         search.setVisible(false);
-        View count = item.getActionView();
+        /*View count = item.getActionView();
         count.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -288,7 +307,7 @@ public class MainActivity extends AppCompatActivity
         });
         totalBudgetCount = (TextView) count.findViewById(R.id.actionbar_notifcation_textview);
 
-        totalBudgetCount.setText("" + dbcart.getCartCount());
+        totalBudgetCount.setText("" + dbcart.getCartCount());*/
 
         return true;
     }
@@ -532,6 +551,8 @@ public class MainActivity extends AppCompatActivity
                                     .replace(R.id.contentPanel, fm_cart, "Cart_fragment")
                                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                     .commit();
+
+
                             break;
                     default:
                         fragmentManager = getSupportFragmentManager();

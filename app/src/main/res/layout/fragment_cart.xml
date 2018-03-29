@@ -90,16 +90,15 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_cart_checkout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:drawableEnd="@mipmap/ic_next"
-            android:drawableRight="@mipmap/ic_next"
-            android:padding="@dimen/space_5"
-            android:text="@string/tv_cart_checkout"
-            android:textColor="@color/white" />
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"
+            android:background="@color/colorPrimary"
+            android:src="@drawable/checkout"/>
 
     </LinearLayout>
 

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +54,7 @@ public class Cart_fragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView rv_cart;
     private TextView tv_clear, tv_total, tv_item;
-    private Button btn_checkout;
+    private ImageButton btn_checkout;
 
     private DatabaseHandler db;
 
@@ -82,7 +83,7 @@ public class Cart_fragment extends Fragment implements View.OnClickListener {
         tv_clear = (TextView) view.findViewById(R.id.tv_cart_clear);
         tv_total = (TextView) view.findViewById(R.id.tv_cart_total);
         tv_item = (TextView) view.findViewById(R.id.tv_cart_item);
-        btn_checkout = (Button) view.findViewById(R.id.btn_cart_checkout);
+        btn_checkout = (ImageButton) view.findViewById(R.id.btn_cart_checkout);
         rv_cart = (RecyclerView) view.findViewById(R.id.rv_cart);
         rv_cart.setLayoutManager(new LinearLayoutManager(getActivity()));
 

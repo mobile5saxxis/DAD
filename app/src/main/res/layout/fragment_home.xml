@@ -115,6 +115,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="10dp"
+                android:background="@color/lite_gray">
+            </View>
+            <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v4.view.ViewPager>
 
         </LinearLayout>
 

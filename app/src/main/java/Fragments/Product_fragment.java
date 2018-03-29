@@ -170,6 +170,7 @@ public class Product_fragment extends Fragment {
                         Type listType = new TypeToken<List<Product_model>>() {
                         }.getType();
 
+                        /*JSONObject data = response.getJSONObject("data");*/
                         product_modelList = gson.fromJson(response.getString("data"), listType);
 
                         adapter_product = new Product_adapter(product_modelList, getActivity());

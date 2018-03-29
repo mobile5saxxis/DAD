@@ -10,14 +10,14 @@
         android:title="offers" />
     <item
         android:id="@+id/categories"
-        android:icon="@drawable/image3"
+        android:icon="@drawable/ic_category"
         android:title="categories" />
   <item
       android:id="@+id/search"
-      android:icon="@drawable/image11"
+      android:icon="@drawable/ic_search"
       android:title="search" />
   <item
       android:id="@+id/cart"
-      android:icon="@drawable/image4"
+      android:icon="@drawable/ic_cart"
       android:title="cart" />
 </menu>
