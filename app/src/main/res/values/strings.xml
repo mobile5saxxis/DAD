@@ -29,6 +29,7 @@
     <string name="tv_login_email">Email (Required)</string>
     <string name="tv_login_password">Password (Required)</string>
     <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
     <string name="btn_send">Send</string>
     <string name="tv_login_note">Before continue with application you must verify your mobile number. Our system will sent you OTP code on registered mobile number</string>
 

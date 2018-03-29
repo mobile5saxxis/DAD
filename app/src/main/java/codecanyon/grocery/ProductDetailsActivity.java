@@ -1,21 +1,16 @@
 package codecanyon.grocery;
 
-import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.bumptech.glide.Glide;
 
@@ -24,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import Config.BaseURL;
-import Fragments.Cart_fragment;
 import Fragments.Products_about_fragment;
 import Model.Product_model;
 import util.DatabaseHandler;
@@ -43,7 +37,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.masterViewPager);
         mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance(),"About");
-        mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance(),"Health Benifits");
+        mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance(),"Health Benefits");
         mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance()," How To Use");
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(0);

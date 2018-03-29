@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +30,6 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -144,10 +142,10 @@ public class Home_fragment extends Fragment {
                 .fitCenter()
                 .into(addImage2);
 
-        Glide.with(this)
+        /*Glide.with(this)
                 .load(ADD_IMAGE_URL1 + "imgpsh_fullsize.png")
                 .fitCenter()
-                .into(addImage1);
+                .into(addImage1);*/
 
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {

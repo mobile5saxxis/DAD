@@ -18,7 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/shop_category_name"
-        android:textColor="@color/black"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
         android:textSize="@dimen/space_18"
         android:padding="@dimen/space_6"
         android:background="@color/gray"/>

@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DAD.iml" filepath="$PROJECT_DIR$/DAD.iml" />
+      <module fileurl="file://C:\Users\Srikar\Documents\GitHub\delivaryatdoor\DAD.iml" filepath="C:\Users\Srikar\Documents\GitHub\delivaryatdoor\DAD.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/delivaryatdoor.iml" filepath="$PROJECT_DIR$/delivaryatdoor.iml" />
       <module fileurl="file://D:\Android\DAD\delivaryatdoor.iml" filepath="D:\Android\DAD\delivaryatdoor.iml" />
     </modules>
   </component>

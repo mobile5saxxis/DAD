@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -192,9 +191,10 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
         }
 
         Double items = Double.parseDouble(dbcart.getInCartItemQty(mList.getProduct_id()));
-        Double price = Double.parseDouble(mList.getPrice());
+       // Double price = Double.parseDouble(mList.getPrice());
+       // Log.v("price", mList.getPrice());
 
-        holder.tv_total.setText("" + price * items);
+        //holder.tv_total.setText("" + price * items);
 
     }
 

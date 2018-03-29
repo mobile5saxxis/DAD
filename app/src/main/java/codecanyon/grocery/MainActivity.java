@@ -28,7 +28,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,10 +36,10 @@ import com.bumptech.glide.Glide;
 
 import Config.BaseURL;
 import Fragments.Cart_fragment;
-import Fragments.Offers_fragment;
 import Fragments.CategoriFragment;
 import Fragments.Edit_profile_fragment;
 import Fragments.Home_fragment;
+import Fragments.Offers_fragment;
 import Fragments.Search_fragment;
 import Fragments.Support_info_fragment;
 import fcm.MyFirebaseRegister;
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
-    private TextView totalBudgetCount, tv_name, tv_number;
+    private TextView totalBudgetCount, tv_name, tv_number, tv_register;
     private ImageView iv_profile;
 
     private DatabaseHandler dbcart;
@@ -100,6 +99,7 @@ public class MainActivity extends AppCompatActivity
         View header = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
         iv_profile = (ImageView) header.findViewById(R.id.iv_header_img);
         tv_name = (TextView) header.findViewById(R.id.tv_header_name);
+        tv_register = (TextView) header.findViewById(R.id.tv_header_Register);
         tv_number = (TextView) header.findViewById(R.id.tv_header_moblie);
 
         iv_profile.setOnClickListener(new View.OnClickListener() {
@@ -227,6 +227,15 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            tv_register.setText(getResources().getString(R.string.btn_register));
+            tv_register.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(MainActivity.this, RegisterActivity.class);
                     startActivity(i);
                 }
             });
@@ -474,7 +483,7 @@ public class MainActivity extends AppCompatActivity
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
-               public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+               public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
             int id = item.getItemId();
             /*Fragment fm = null;
             Bundle args = new Bundle();*/
