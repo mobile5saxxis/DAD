@@ -1,8 +1,10 @@
 package Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -52,6 +54,16 @@ public class CategoriFragment extends Fragment {
 
     private List<Category_model> category_modelList = new ArrayList<>();
     private Categori_adapter mAdapter;
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ActionBar actionBar=((MainActivity)context).getSupportActionBar();
+        View actionView = actionBar.getCustomView();
+        //LinearLayout searchParent = (LinearLayout) actionView.findViewById(R.id.search_parentll);
+        //searchParent.setVisibility(View.GONE);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -43,6 +43,8 @@ import Fragments.Cart_fragment;
 import Fragments.CategoriFragment;
 import Fragments.Edit_profile_fragment;
 import Fragments.Home_fragment;
+import Fragments.My_order_detail_fragment;
+import Fragments.My_order_fragment;
 import Fragments.Offers_fragment;
 import Fragments.Search_fragment;
 import Fragments.Support_info_fragment;
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         ImageView logo= (ImageView) findViewById(R.id.home_logo);
         Glide.with(this)
-                .load(R.drawable.homelogonew)
+                .load(R.drawable.navhomelogo)
                 .fitCenter()
                 .into(logo);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.btm_navigation);
@@ -357,7 +359,15 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.offers) {
 
 
-        } else if (id == R.id.nav_myprofile) {
+        } else if (id == R.id.nav_myorders) {
+
+            Fragment fm_home = new My_order_fragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contentPanel, fm_home, "Home_fragment")
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .commit();
+        }else if (id == R.id.nav_myprofile) {
             fm = new Edit_profile_fragment();
         } else if (id == R.id.nav_support) {
 

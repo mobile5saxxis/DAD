@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,12 +36,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Adapter.OfferFragment_adapter;
 import Adapter.Offer_adapter;
 import Config.BaseURL;
 import Model.Brands_list_model;
 import Model.Offers_model;
 import codecanyon.grocery.AppController;
 import codecanyon.grocery.MainActivity;
+import codecanyon.grocery.OffersDetailsActivity;
 import codecanyon.grocery.R;
 import util.ConnectivityReceiver;
 import util.CustomVolleyJsonRequest;
@@ -58,8 +61,7 @@ public class Offers_fragment extends Fragment {
     private boolean isSubcat = false;
 
     private List<Offers_model> offers_modelList = new ArrayList<>();
-    private List<Brands_list_model> brands_list_models = new ArrayList<>();
-    private Offer_adapter mAdapter;
+    private OfferFragment_adapter mAdapter;
 
 
     public Offers_fragment(){
@@ -78,7 +80,7 @@ public class Offers_fragment extends Fragment {
         setHasOptionsMenu(true);
 
         rv_items= (RecyclerView) view.findViewById(R.id.offers_recyclerview);
-        rv_items.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
         //setHasOptionsMenu(true);
         //return view;
 
@@ -89,6 +91,25 @@ public class Offers_fragment extends Fragment {
         if (ConnectivityReceiver.isConnected()) {
             makeGetOfferRequest("");
         }
+        rv_items.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                String getid = offers_modelList.get(position).getProduct_id();
+                String getcat_title = offers_modelList.get(position).getProduct_name();
+
+                Intent intent = new Intent(getActivity(), OffersDetailsActivity.class);
+                intent.putExtra("position", position);
+                intent.putExtra("selectedProduct", offers_modelList.get(position));
+                getActivity().startActivity(intent);
+
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
         return view;
     }
 
@@ -126,7 +147,7 @@ public class Offers_fragment extends Fragment {
 
                         offers_modelList = gson.fromJson(response.getString("data"), listType);
 
-                        mAdapter = new Offer_adapter(offers_modelList, getActivity());
+                        mAdapter = new OfferFragment_adapter(offers_modelList);
                         rv_items.setAdapter(mAdapter);
                         mAdapter.notifyDataSetChanged();
                     }
