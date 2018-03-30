@@ -47,9 +47,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Adapter.BestProductAdapter;
 import Adapter.Home_adapter;
 import Adapter.Product_adapter;
 import Config.BaseURL;
+import Model.BestProducts_model;
 import Model.Category_model;
 import Model.Product_model;
 import codecanyon.grocery.AppController;
@@ -71,8 +73,8 @@ public class Home_fragment extends Fragment {
     private static final float INITIAL_ITEMS_COUNT = 3.5F;
 
     private SliderLayout imgSlider;
-    private LinearLayout mCarouselContainer;
     private RecyclerView rv_items;
+    private RecyclerView rv_items_bestproducts;
     //private RelativeLayout rl_view_all;
     TextView searchbar_nav;
     ImageView addImage1;
@@ -82,7 +84,9 @@ public class Home_fragment extends Fragment {
 
 
     private List<Category_model> category_modelList = new ArrayList<>();
+    private List<BestProducts_model> bestProducts_modelList = new ArrayList<>();
     private Home_adapter adapter;
+    private BestProductAdapter bestProductAdapter;
 
     private boolean isSubcat = false;
 
@@ -131,6 +135,7 @@ public class Home_fragment extends Fragment {
 
         imgSlider = (SliderLayout) view.findViewById(R.id.home_img_slider);
         rv_items = (RecyclerView) view.findViewById(R.id.rv_home);
+        rv_items_bestproducts = (RecyclerView) view.findViewById(R.id.rv_bestproducts);
         //rl_view_all = (RelativeLayout) view.findViewById(R.id.rl_home_view_allcat);
         searchbar_nav = (TextView) view.findViewById(R.id.search_navbar);
         addImage1 = (ImageView) view.findViewById(R.id.add_image1);
@@ -143,6 +148,7 @@ public class Home_fragment extends Fragment {
 
       //  rv_items.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
         rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        rv_items_bestproducts.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
         // initialize a SliderLayout
         imgSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         imgSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
@@ -162,15 +168,16 @@ public class Home_fragment extends Fragment {
                 .fitCenter()
                 .into(addImage2);
 
-        /*Glide.with(this)
+        Glide.with(this)
                 .load(ADD_IMAGE_URL1 + "imgpsh_fullsize.png")
                 .fitCenter()
-                .into(addImage1);*/
+                .into(addImage1);
 
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {
             makeGetSliderRequest();
             makeGetCategoryRequest("");
+            makeGetBestProductsRequest("");
         }
 
         searchbar_nav.setOnClickListener(new View.OnClickListener() {
@@ -354,7 +361,58 @@ public class Home_fragment extends Fragment {
     }
 
 
+    private void makeGetBestProductsRequest(String parent_id) {
 
+        // Tag used to cancel the request
+        String tag_json_obj = "json_bestproducts_req";
+
+        isSubcat = false;
+
+        Map<String, String> params = new HashMap<String, String>();
+        if (parent_id != null && parent_id != "") {
+            params.put("parent", parent_id);
+            isSubcat = true;
+        }
+
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                BaseURL.GET_BEST_PRODUCTS, params, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    Boolean status = response.getBoolean("responce");
+                    if (status) {
+
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<BestProducts_model>>() {
+                        }.getType();
+
+                        bestProducts_modelList = gson.fromJson(response.getString("data"), listType);
+
+                        bestProductAdapter = new BestProductAdapter(bestProducts_modelList, getActivity());
+                        rv_items_bestproducts.setAdapter(bestProductAdapter);
+                        bestProductAdapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
 
 
 
