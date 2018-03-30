@@ -241,6 +241,8 @@ public class MainActivity extends AppCompatActivity
             tv_number.setVisibility(View.VISIBLE);
             nav_menu.findItem(R.id.nav_logout).setVisible(true);
             nav_menu.findItem(R.id.nav_user).setVisible(true);
+            tv_name.setVisibility(View.GONE);
+            tv_register.setVisibility(View.GONE);
         } else {
             tv_number.setVisibility(View.GONE);
             tv_name.setOnClickListener(new View.OnClickListener() {
