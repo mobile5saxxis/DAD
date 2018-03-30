@@ -49,10 +49,15 @@ import java.util.Map;
 
 import Adapter.BestProductAdapter;
 import Adapter.Home_adapter;
+import Adapter.Offer_adapter;
+import Adapter.PopularBrands_Adapter;
 import Adapter.Product_adapter;
 import Config.BaseURL;
 import Model.BestProducts_model;
+import Model.Brands_list_model;
 import Model.Category_model;
+import Model.Offers_model;
+import Model.PopularBrands_Model;
 import Model.Product_model;
 import codecanyon.grocery.AppController;
 import codecanyon.grocery.MainActivity;
@@ -75,6 +80,8 @@ public class Home_fragment extends Fragment {
     private SliderLayout imgSlider;
     private RecyclerView rv_items;
     private RecyclerView rv_items_bestproducts;
+    private RecyclerView rv_items_popularbrands;
+    private RecyclerView rv_items_offers;
     //private RelativeLayout rl_view_all;
     TextView searchbar_nav;
     ImageView addImage1;
@@ -85,8 +92,14 @@ public class Home_fragment extends Fragment {
 
     private List<Category_model> category_modelList = new ArrayList<>();
     private List<BestProducts_model> bestProducts_modelList = new ArrayList<>();
+    private List<PopularBrands_Model> popularBrands_modelList = new ArrayList<>();
+    private List<Offers_model> offers_modelList = new ArrayList<>();
+
     private Home_adapter adapter;
     private BestProductAdapter bestProductAdapter;
+    private PopularBrands_Adapter popularBrandsAdapter;
+    private Offer_adapter offerAdapter;
+
 
     private boolean isSubcat = false;
 
@@ -136,6 +149,9 @@ public class Home_fragment extends Fragment {
         imgSlider = (SliderLayout) view.findViewById(R.id.home_img_slider);
         rv_items = (RecyclerView) view.findViewById(R.id.rv_home);
         rv_items_bestproducts = (RecyclerView) view.findViewById(R.id.rv_bestproducts);
+        rv_items_popularbrands = (RecyclerView) view.findViewById(R.id.rv_popularbrands);
+        rv_items_offers = (RecyclerView) view.findViewById(R.id.rv_offers);
+
         //rl_view_all = (RelativeLayout) view.findViewById(R.id.rl_home_view_allcat);
         searchbar_nav = (TextView) view.findViewById(R.id.search_navbar);
         addImage1 = (ImageView) view.findViewById(R.id.add_image1);
@@ -149,6 +165,8 @@ public class Home_fragment extends Fragment {
       //  rv_items.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
         rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
         rv_items_bestproducts.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
+        rv_items_popularbrands.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
+        rv_items_offers.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
         // initialize a SliderLayout
         imgSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         imgSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
@@ -178,6 +196,8 @@ public class Home_fragment extends Fragment {
             makeGetSliderRequest();
             makeGetCategoryRequest("");
             makeGetBestProductsRequest("");
+            makeGetPopularBrandRequest("");
+            makeGetOfferRequest("");
         }
 
         searchbar_nav.setOnClickListener(new View.OnClickListener() {
@@ -394,6 +414,115 @@ public class Home_fragment extends Fragment {
                         bestProductAdapter = new BestProductAdapter(bestProducts_modelList, getActivity());
                         rv_items_bestproducts.setAdapter(bestProductAdapter);
                         bestProductAdapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+
+
+
+    private void makeGetPopularBrandRequest(String parent_id) {
+
+        // Tag used to cancel the request
+        String tag_json_obj = "json_popularbrands_req";
+
+        isSubcat = false;
+
+        Map<String, String> params = new HashMap<String, String>();
+        if (parent_id != null && parent_id != "") {
+            params.put("parent", parent_id);
+            isSubcat = true;
+        }
+
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                BaseURL.GET_BRAND_LIST_URL, params, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    Boolean status = response.getBoolean("responce");
+                    if (status) {
+
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<PopularBrands_Model>>() {
+                        }.getType();
+
+                        popularBrands_modelList = gson.fromJson(response.getString("data"), listType);
+
+                        popularBrandsAdapter = new PopularBrands_Adapter(popularBrands_modelList);
+                        rv_items_popularbrands.setAdapter(popularBrandsAdapter);
+                        popularBrandsAdapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+
+
+    private void makeGetOfferRequest(String parent_id) {
+
+        // Tag used to cancel the request
+        String tag_json_obj = "json_offer_req";
+
+        isSubcat = false;
+
+        Map<String, String> params = new HashMap<String, String>();
+        if (parent_id != null && parent_id != "") {
+            params.put("parent", parent_id);
+            isSubcat = true;
+        }
+
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                BaseURL.GET_OFFERS_URL, params, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    Boolean status = response.getBoolean("responce");
+                    if (status) {
+
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<Offers_model>>() {
+                        }.getType();
+
+                        offers_modelList = gson.fromJson(response.getString("data"), listType);
+
+                        offerAdapter = new Offer_adapter(offers_modelList, getActivity());
+                        rv_items_offers.setAdapter(offerAdapter);
+                        offerAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
