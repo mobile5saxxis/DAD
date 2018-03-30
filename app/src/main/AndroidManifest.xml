@@ -55,6 +55,7 @@
             android:name=".ForgotActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ProductDetailsActivity"></activity>
+        <activity android:name=".OffersDetailsActivity"></activity>
         <activity android:name=".BestProductsDetails"></activity>
     </application>
 

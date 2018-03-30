@@ -1,10 +1,13 @@
 package Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by srikarn on 26-03-2018.
  */
 
-public class Offers_model {
+public class Offers_model implements Parcelable {
 
     String product_id;
     String product_name;
@@ -24,6 +27,38 @@ public class Offers_model {
     String increament;
     String createddate;
 
+
+    protected Offers_model(Parcel in) {
+        product_id = in.readString();
+        product_name = in.readString();
+        brand = in.readString();
+        product_description = in.readString();
+        specifications = in.readString();
+        how_to_use = in.readString();
+        product_image = in.readString();
+        category_id = in.readString();
+        in_stock = in.readString();
+        best_seller = in.readString();
+        offer = in.readString();
+        price = in.readString();
+        unit_value = in.readString();
+        unit = in.readString();
+        quantity_per_user = in.readString();
+        increament = in.readString();
+        createddate = in.readString();
+    }
+
+    public static final Creator<Offers_model> CREATOR = new Creator<Offers_model>() {
+        @Override
+        public Offers_model createFromParcel(Parcel in) {
+            return new Offers_model(in);
+        }
+
+        @Override
+        public Offers_model[] newArray(int size) {
+            return new Offers_model[size];
+        }
+    };
 
     public String getProduct_id(){
         return product_id;
@@ -164,4 +199,29 @@ public class Offers_model {
         this.createddate = createddate;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(product_id);
+        dest.writeString(product_name);
+        dest.writeString(brand);
+        dest.writeString(product_description);
+        dest.writeString(specifications);
+        dest.writeString(how_to_use);
+        dest.writeString(product_image);
+        dest.writeString(category_id);
+        dest.writeString(in_stock);
+        dest.writeString(best_seller);
+        dest.writeString(offer);
+        dest.writeString(price);
+        dest.writeString(unit_value);
+        dest.writeString(unit);
+        dest.writeString(quantity_per_user);
+        dest.writeString(increament);
+        dest.writeString(createddate);
+    }
 }

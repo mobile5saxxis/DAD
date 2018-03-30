@@ -114,10 +114,10 @@ public class BestProductAdapter extends RecyclerView.Adapter<BestProductAdapter.
 
                     if (dbcart.isInCart(map.get("product_id"))) {
                         dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
-                        button.setText(context.getResources().getString(R.string.tv_pro_add));
+                        button.setText(context.getResources().getString(R.string.tv_pro_update));
                     } else {
                         dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
-                        button.setText(context.getResources().getString(R.string.tv_pro_add));
+                        button.setText(context.getResources().getString(R.string.tv_pro_update));
                     }
                 }else {
                     dbcart.removeItemFromCart(map.get("product_id"));
