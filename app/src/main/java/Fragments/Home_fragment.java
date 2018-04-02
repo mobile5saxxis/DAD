@@ -241,9 +241,13 @@ public class Home_fragment extends Fragment {
             public void onItemClick(View view, int position) {
 
                 String getid = popularBrands_modelList.get(position).getId();
+                String gettitle = "Flipkart";
+                Boolean isCategory = false;
                 Bundle args = new Bundle();
                 Fragment fm = new Product_fragment();
                 args.putString("cat_id", getid);
+                args.putString("cat_title", gettitle);
+                args.putBoolean("isCategory", isCategory);
                 fm.setArguments(args);
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
