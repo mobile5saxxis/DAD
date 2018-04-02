@@ -364,7 +364,7 @@ public class MainActivity extends AppCompatActivity
             Fragment fm_home = new My_order_fragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.contentPanel, fm_home, "Home_fragment")
+                    .replace(R.id.contentPanel, fm_home, "My_order_fragment")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .commit();
         }else if (id == R.id.nav_myprofile) {

@@ -20,6 +20,8 @@ import java.util.List;
 
 import Config.BaseURL;
 import Fragments.Products_about_fragment;
+import Fragments.Products_healthbenefits_fragment;
+import Fragments.Products_howtouse_fragment;
 import Model.BestProducts_model;
 import Model.Product_model;
 import util.DatabaseHandler;
@@ -42,12 +44,7 @@ public class BestProductsDetails extends AppCompatActivity {
         setContentView(R.layout.activity_product_details);
         mSectionsPagerAdapter = new BestProductsDetails.SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.masterViewPager);
-        mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance(),"About");
-        mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance(),"Health Benefits");
-        mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance()," How To Use");
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(0);
-        mViewPager.setCurrentItem(0);
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -60,6 +57,15 @@ public class BestProductsDetails extends AppCompatActivity {
         int qty = Integer.parseInt(getqty);*/
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
+
+
+        mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance(product.getProduct_description()),"About");
+        mSectionsPagerAdapter.addFragment(Products_healthbenefits_fragment.newInstance(product.getProduct_description()),"Health Benefits");
+        mSectionsPagerAdapter.addFragment(Products_howtouse_fragment.newInstance(product.getHow_to_use())," How To Use");
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(0);
+        mViewPager.setCurrentItem(0);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.getTabAt(0).select();
 
@@ -97,7 +103,7 @@ public class BestProductsDetails extends AppCompatActivity {
         //tv_contetiy.setText(qty);
         tv_name.setText(detail);
         tv_quantity.setText(quantity);
-        tv_detail.setText(description);
+        //tv_detail.setText(description);
         tv_price.setText("RS");
         tv_price.append(" " + price);
 

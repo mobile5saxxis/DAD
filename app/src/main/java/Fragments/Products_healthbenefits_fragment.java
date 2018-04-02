@@ -1,10 +1,8 @@
 package Fragments;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +11,15 @@ import android.widget.TextView;
 import codecanyon.grocery.R;
 
 /**
- * Created by srikarn on 26-03-2018.
+ * Created by srikarn on 02-04-2018.
  */
 
-public class Products_about_fragment extends Fragment {
+public class Products_healthbenefits_fragment extends Fragment {
 
     String mDescription;
 
-    public static Products_about_fragment newInstance(String  description) {
-        Products_about_fragment fragment = new Products_about_fragment();
+    public static Products_healthbenefits_fragment newInstance(String  description) {
+        Products_healthbenefits_fragment fragment = new Products_healthbenefits_fragment();
         Bundle args = new Bundle();
         args.putString("description", description);
         //args.putInt(ARG_COLUMN_COUNT, columnCount);
@@ -41,14 +39,12 @@ public class Products_about_fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_product_about, container, false);
+        View layout = inflater.inflate(R.layout.fragment_product_healthbenifits, container, false);
 
-        TextView about = (TextView) layout.findViewById(R.id.aboutdescription);
+        TextView about = (TextView) layout.findViewById(R.id.healthbenefits);
         about.setText(mDescription);
 
         return layout;
     }
-
-
 
 }

@@ -2,15 +2,41 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/textView11"
+    <ScrollView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/space_10"
+        android:layout_marginBottom="15dp">
+    <TextView
+        android:id="@+id/titlehowtouse"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tv_product_detail_title"
         android:layout_marginTop="@dimen/space_8"
+        android:textColor="@color/black"
         android:layout_toLeftOf="@+id/linearLayout"
         android:layout_toStartOf="@+id/linearLayout"
         android:text="@string/how_to_use" />
+    <TextView
+        android:id="@+id/howtouse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_product_detail_title"
+        android:layout_marginTop="@dimen/space_5"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/black"
+        android:layout_toLeftOf="@+id/linearLayout"
+        android:layout_toStartOf="@+id/linearLayout"
+        android:text="@string/how_to_use" />
+    </LinearLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

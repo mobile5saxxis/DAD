@@ -20,6 +20,11 @@ public class Product_model implements Parcelable {
     String unit;
     String increament;
     String title;
+    String brand;
+    String specifications;
+    String how_to_use;
+    String stock;
+
 
     protected Product_model(Parcel in) {
         product_id = in.readString();
@@ -33,6 +38,10 @@ public class Product_model implements Parcelable {
         unit = in.readString();
         increament = in.readString();
         title = in.readString();
+        brand = in.readString();
+        specifications = in.readString();
+        how_to_use = in.readString();
+        stock = in.readString();
     }
 
     public static final Creator<Product_model> CREATOR = new Creator<Product_model>() {
@@ -92,6 +101,21 @@ public class Product_model implements Parcelable {
         return title;
     }
 
+
+    public String getBrand() {
+        return brand;
+    }
+    public String getSpecifications() {
+        return specifications;
+    }
+    public String getHow_to_use() {
+        return how_to_use;
+    }
+    public String getStock() {
+        return stock;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -110,5 +134,9 @@ public class Product_model implements Parcelable {
         dest.writeString(unit);
         dest.writeString(increament);
         dest.writeString(title);
+        dest.writeString(brand);
+        dest.writeString(specifications);
+        dest.writeString(how_to_use);
+        dest.writeString(stock);
     }
 }

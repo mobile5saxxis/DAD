@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,7 +20,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import Config.BaseURL;
+import Fragments.My_order_fragment;
 import Fragments.Products_about_fragment;
+import Fragments.Products_healthbenefits_fragment;
+import Fragments.Products_howtouse_fragment;
+import Fragments.Support_info_fragment;
 import Model.Product_model;
 import util.DatabaseHandler;
 
@@ -36,12 +41,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_details);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.masterViewPager);
-        mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance(),"About");
-        mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance(),"Health Benefits");
-        mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance()," How To Use");
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(0);
-        mViewPager.setCurrentItem(0);
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -53,7 +53,20 @@ public class ProductDetailsActivity extends AppCompatActivity {
 /*        String getqty = bundle.getString("qty");
         int qty = Integer.parseInt(getqty);*/
 
+
+
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
+
+
+        mSectionsPagerAdapter.addFragment(Products_about_fragment.newInstance(product.getProduct_description()),"About");
+        mSectionsPagerAdapter.addFragment(Products_healthbenefits_fragment.newInstance(product.getProduct_description()),"Health Benefits");
+        mSectionsPagerAdapter.addFragment(Products_howtouse_fragment.newInstance(product.getHow_to_use())," How To Use");
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(0);
+        mViewPager.setCurrentItem(0);
+
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.getTabAt(0).select();
 
@@ -91,9 +104,24 @@ public class ProductDetailsActivity extends AppCompatActivity {
         //tv_contetiy.setText(qty);
         tv_name.setText(detail);
         tv_quantity.setText(quantity);
-        tv_detail.setText(description);
+        //tv_detail.setText(description);
         tv_price.setText("RS");
         tv_price.append(" " + price);
+
+        /*Bundle aboutBundle = new Bundle();
+        aboutBundle.putString(description,"Discription");
+        Fragment fm_home = new My_order_fragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.contentPanel, fm_home, "Home_fragment")
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit();*/
+
+      /* Fragment fm = new Products_about_fragment();
+       Bundle args = new Bundle();
+       args.putString("description", description);
+       fm.setArguments(args);*/
+
 
         Glide.with(context)
                 .load(BaseURL.IMG_PRODUCT_URL + image)

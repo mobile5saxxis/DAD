@@ -18,7 +18,7 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/products"
+        android:text="@string/noofitems"
         android:textColor="@color/black"
         android:textSize="@dimen/space_18"
         android:padding="@dimen/space_6"

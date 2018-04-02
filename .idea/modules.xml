@@ -4,8 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DAD.iml" filepath="$PROJECT_DIR$/DAD.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/delivaryatdoor.iml" filepath="$PROJECT_DIR$/delivaryatdoor.iml" />
-      <module fileurl="file://D:/Android/DAD/delivaryatdoor.iml" filepath="D:/Android/DAD/delivaryatdoor.iml" />
+      <module fileurl="file://D:\Android\DAD\delivaryatdoor.iml" filepath="D:\Android\DAD\delivaryatdoor.iml" />
     </modules>
   </component>
 </project>
