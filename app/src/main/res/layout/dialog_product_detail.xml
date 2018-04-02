@@ -119,7 +119,7 @@
             android:layout_marginTop="@dimen/space_8"
             android:layout_toLeftOf="@+id/linearLayout"
             android:layout_toStartOf="@+id/linearLayout"
-            android:text="@string/description" />
+            android:text="@string/total_amount" />
 
         <TextView
             android:id="@+id/tv_product_detail"

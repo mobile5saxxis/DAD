@@ -236,6 +236,28 @@ public class Home_fragment extends Fragment {
             }
         }));
 
+        rv_items_popularbrands.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                String getid = popularBrands_modelList.get(position).getId();
+                Bundle args = new Bundle();
+                Fragment fm = new Product_fragment();
+                args.putString("cat_id", getid);
+                fm.setArguments(args);
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                        .addToBackStack(null).commit();
+
+
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
+
         /*search_nav_home.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {

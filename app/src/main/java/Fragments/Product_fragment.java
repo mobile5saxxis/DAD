@@ -74,10 +74,19 @@ public class Product_fragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(adapter_product != null){
+            adapter_product.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -303,6 +312,5 @@ public class Product_fragment extends Fragment {
             }
         });
     }*/
-
 
 }

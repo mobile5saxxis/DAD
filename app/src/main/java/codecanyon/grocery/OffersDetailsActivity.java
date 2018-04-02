@@ -52,6 +52,7 @@ public class OffersDetailsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         int position = bundle.getInt("position");
         product = bundle.getParcelable("selectedProduct");
+        String getqty = bundle.getString("total");
 /*        String getqty = bundle.getString("qty");
         int qty = Integer.parseInt(getqty);*/
 
@@ -73,14 +74,14 @@ public class OffersDetailsActivity extends AppCompatActivity {
                 product.getProduct_name(),
                 product.getProduct_description(),
                 product.getProduct_name(),
-                position , product.getPrice(), product.getUnit());
+                position ,getqty, product.getPrice(), product.getUnit());
 
     }
 
 
 
 
-    private void showProductDetail(String image, String title, String description, String detail, final int position, String price, String quantity) {// showProductDetail(product.getProduct_image(),
+    private void showProductDetail(String image, String title, String description, String detail, final int position, String total, String price, String quantity) {// showProductDetail(product.getProduct_image(),
        /* product.getTitle(),
                 product.getProduct_description(),
                 product.getProduct_name(),
@@ -94,7 +95,7 @@ public class OffersDetailsActivity extends AppCompatActivity {
         TextView tv_name = (TextView) findViewById(R.id.product_name);
         TextView tv_quantity = (TextView) findViewById(R.id.quantity);
         TextView tv_price = (TextView) findViewById(R.id.price);
-        TextView tv_detail = (TextView) findViewById(R.id.tv_product_detail);
+        final TextView tv_detail = (TextView) findViewById(R.id.tv_product_detail);
         final TextView tv_contetiy = (TextView) findViewById(R.id.tv_subcat_contetiy);
         final TextView tv_add = (TextView) findViewById(R.id.tv_subcat_add);
 
@@ -103,7 +104,7 @@ public class OffersDetailsActivity extends AppCompatActivity {
         //tv_contetiy.setText(qty);
         tv_name.setText(detail);
         tv_quantity.setText(quantity);
-        //tv_detail.setText(description);
+        tv_detail.setText(total);
         tv_price.setText("RS");
         tv_price.append(" " + price);
 
@@ -157,6 +158,8 @@ public class OffersDetailsActivity extends AppCompatActivity {
 
                 Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
                 Double price = Double.parseDouble(map.get("price"));
+
+                tv_detail.setText("" + price * items);
 
                 //((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
 
