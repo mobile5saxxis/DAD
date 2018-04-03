@@ -173,7 +173,7 @@
     <!-- Product_details -->
     <string name="product_name">Products</string>
     <string name="products">Products</string>
-    <string name="noofitems">Total No of Items</string>
+    <string name="numberofitms">No of Items:</string>
 
     <!-- offer_details -->
     <string name="offer_name">Offers</string>

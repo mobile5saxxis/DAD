@@ -6,11 +6,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <ImageView
+    <com.daimajia.slider.library.SliderLayout
         android:id="@+id/iv_product_detail_img"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        app:srcCompat="@drawable/logonew" />
+        android:layout_height="200dp" />
     <TextView
         android:id="@+id/product_name"
         android:layout_width="wrap_content"
@@ -19,7 +18,7 @@
         android:textSize="20sp"
         android:layout_alignBottom="@id/iv_product_detail_img"
         android:layout_gravity="center"
-        tools:text="Profuctname"/>
+        tools:text="Productname"/>
     <TextView
         android:id="@+id/quantity"
         android:layout_width="wrap_content"

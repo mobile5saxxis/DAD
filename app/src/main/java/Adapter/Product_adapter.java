@@ -258,7 +258,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
         ImageView iv_image = (ImageView) dialog.findViewById(R.id.iv_dialog_img);
 
         Glide.with(context)
-                .load(BaseURL.IMG_PRODUCT_URL + image)
+                .load(BaseURL.IMG_PRODUCT_URL + image.split(",")[0])
                 .centerCrop()
                 .placeholder(R.drawable.logonew)
                 .crossFade()

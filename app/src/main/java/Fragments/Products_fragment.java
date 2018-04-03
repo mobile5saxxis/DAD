@@ -40,6 +40,7 @@ import Model.Product_model;
 import codecanyon.grocery.AppController;
 import codecanyon.grocery.MainActivity;
 import codecanyon.grocery.R;
+import util.ConnectivityReceiver;
 import util.CustomVolleyJsonRequest;
 
 /**
@@ -110,6 +111,10 @@ public class Products_fragment extends Fragment {
 
         ((MainActivity) getActivity()).setTitle(getcat_title);
 
+        if (ConnectivityReceiver.isConnected()) {
+            makeGetProductRequest(getcat_id, isCatogery);
+        }
+
         return view;
     }
 
@@ -148,7 +153,6 @@ public class Products_fragment extends Fragment {
                                 }
                             }
                         }
-
 
 
                         adapter_product = new Product_adapter(brandlist, getActivity());

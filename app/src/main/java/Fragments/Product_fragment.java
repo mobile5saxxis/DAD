@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NoConnectionError;
@@ -58,6 +59,7 @@ public class Product_fragment extends Fragment {
 
     private RecyclerView rv_cat;
     private TabLayout tab_cat;
+    TextView noofitems;
     private List<Category_model> category_modelList = new ArrayList<>();
     private List<String> cat_menu_id = new ArrayList<>();
 
@@ -109,6 +111,7 @@ public class Product_fragment extends Fragment {
 
         tab_cat = (TabLayout) view.findViewById(R.id.tab_cat);
         rv_cat = (RecyclerView) view.findViewById(R.id.rv_subcategory);
+        noofitems = (TextView) view.findViewById(R.id.noofitemsqty);
         rv_cat.setLayoutManager(new LinearLayoutManager(getActivity()));
         String getcat_id = getArguments().getString("cat_id");
         String getcat_title = getArguments().getString("cat_title");
@@ -127,7 +130,7 @@ public class Product_fragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 String getcat_id = cat_menu_id.get(tab.getPosition());
-
+                tab_cat.setVisibility(View.GONE);
                 if (ConnectivityReceiver.isConnected()) {
                     makeGetProductRequest(getcat_id);
                 }
@@ -149,6 +152,7 @@ public class Product_fragment extends Fragment {
                 }*/
             }
         });
+
 
         return view;
     }
@@ -192,6 +196,9 @@ public class Product_fragment extends Fragment {
                         adapter_product = new Product_adapter(product_modelList, getActivity());
                         rv_cat.setAdapter(adapter_product);
                         adapter_product.notifyDataSetChanged();
+
+
+                        noofitems.setText(Integer.toString(adapter_product.getItemCount()));
 
                         if (getActivity() != null) {
                             if (product_modelList.isEmpty()) {

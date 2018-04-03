@@ -111,6 +111,23 @@ public class Home_fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(adapter != null){
+            adapter.notifyDataSetChanged();
+        }
+        if(bestProductAdapter != null){
+            bestProductAdapter.notifyDataSetChanged();
+        }
+        if(popularBrandsAdapter != null){
+            popularBrandsAdapter.notifyDataSetChanged();
+        }
+        if(offerAdapter != null){
+            offerAdapter.notifyDataSetChanged();
+        }
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

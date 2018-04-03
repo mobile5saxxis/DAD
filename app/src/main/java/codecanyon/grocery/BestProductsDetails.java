@@ -13,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +41,7 @@ public class BestProductsDetails extends AppCompatActivity {
     private BestProducts_model product;
     private Context context;
     private DatabaseHandler dbcart;
+    private SliderLayout imgSlider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +92,8 @@ public class BestProductsDetails extends AppCompatActivity {
                 position, tv_contetiy.getText().toString());*/
 
 
-        ImageView iv_image = (ImageView) findViewById(R.id.iv_product_detail_img);
+       // ImageView iv_image = (ImageView) findViewById(R.id.iv_product_detail_img);
+        imgSlider = (SliderLayout) findViewById(R.id.iv_product_detail_img);
         ImageView iv_minus = (ImageView) findViewById(R.id.iv_subcat_minus);
         ImageView iv_plus = (ImageView) findViewById(R.id.iv_subcat_plus);
         TextView tv_title = (TextView) findViewById(R.id.tv_product_detail_title);
@@ -98,6 +104,28 @@ public class BestProductsDetails extends AppCompatActivity {
         final TextView tv_contetiy = (TextView) findViewById(R.id.tv_subcat_contetiy);
         final TextView tv_add = (TextView) findViewById(R.id.tv_subcat_add);
 
+
+        imgSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        imgSlider.stopAutoCycle();
+
+
+        String [] imageurls = image.split(",");
+        for(int i =0; i< imageurls.length; i++){
+            DefaultSliderView textSliderView = new DefaultSliderView(context);
+            if(imageurls[i] == ""){
+                textSliderView
+                        .image(R.drawable.logonew)
+                        .setScaleType(BaseSliderView.ScaleType.FitCenterCrop);
+                imgSlider.addSlider(textSliderView);
+            } else {
+                // initialize a SliderLayout
+                textSliderView
+                        .image(BaseURL.IMG_PRODUCT_URL + imageurls[i])
+                        .setScaleType(BaseSliderView.ScaleType.FitCenterCrop);
+                imgSlider.addSlider(textSliderView);
+            }
+        }
+
         tv_title.setText(title);
         tv_detail.setText(detail);
         //tv_contetiy.setText(qty);
@@ -107,12 +135,12 @@ public class BestProductsDetails extends AppCompatActivity {
         tv_price.setText("RS");
         tv_price.append(" " + price);
 
-        Glide.with(context)
+       /* Glide.with(context)
                 .load(BaseURL.IMG_PRODUCT_URL + image)
                 .placeholder(R.drawable.logonew)
                 .fitCenter()
                 .crossFade()
-                .into(iv_image);
+                .into(iv_image);*/
 
         if (dbcart.isInCart(product.getProduct_id())) {
             tv_add.setText(context.getResources().getString(R.string.tv_pro_update));

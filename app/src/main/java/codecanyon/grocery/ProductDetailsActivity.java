@@ -9,11 +9,28 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.NoConnectionError;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.bumptech.glide.Glide;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,14 +43,17 @@ import Fragments.Products_healthbenefits_fragment;
 import Fragments.Products_howtouse_fragment;
 import Fragments.Support_info_fragment;
 import Model.Product_model;
+import util.ConnectivityReceiver;
 import util.DatabaseHandler;
 
 public class ProductDetailsActivity extends AppCompatActivity {
+    private static final String TAG = ProductDetailsActivity.class.getSimpleName();
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private Product_model product;
     private Context context;
     private DatabaseHandler dbcart;
+    private SliderLayout imgSlider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +109,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 position, tv_contetiy.getText().toString());*/
 
 
-        ImageView iv_image = (ImageView) findViewById(R.id.iv_product_detail_img);
+        //ImageView iv_image = (ImageView) findViewById(R.id.iv_product_detail_img);
+        imgSlider = (SliderLayout) findViewById(R.id.iv_product_detail_img);
         ImageView iv_minus = (ImageView) findViewById(R.id.iv_subcat_minus);
         ImageView iv_plus = (ImageView) findViewById(R.id.iv_subcat_plus);
         TextView tv_title = (TextView) findViewById(R.id.tv_product_detail_title);
@@ -99,6 +120,28 @@ public class ProductDetailsActivity extends AppCompatActivity {
         final TextView tv_detail = (TextView) findViewById(R.id.tv_product_detail);
         final TextView tv_contetiy = (TextView) findViewById(R.id.tv_subcat_contetiy);
         final TextView tv_add = (TextView) findViewById(R.id.tv_subcat_add);
+
+        imgSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        imgSlider.stopAutoCycle();
+
+
+String [] imageurls = image.split(",");
+       for(int i =0; i< imageurls.length; i++){
+           DefaultSliderView textSliderView = new DefaultSliderView(context);
+           if(imageurls[i] == ""){
+               textSliderView
+                       .image(R.drawable.logonew)
+                       .setScaleType(BaseSliderView.ScaleType.FitCenterCrop);
+               imgSlider.addSlider(textSliderView);
+           } else {
+               // initialize a SliderLayout
+               textSliderView
+                       .image(BaseURL.IMG_PRODUCT_URL + imageurls[i])
+                       .setScaleType(BaseSliderView.ScaleType.FitCenterCrop);
+               imgSlider.addSlider(textSliderView);
+           }
+       }
+
 
         tv_title.setText(title);
         tv_detail.setText(detail);
@@ -113,12 +156,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
         Double priceoftotal = Double.parseDouble(product.getPrice());
         tv_detail.setText("" + priceoftotal * items);*/
 
-        Glide.with(context)
+        /*Glide.with(context)
                 .load(BaseURL.IMG_PRODUCT_URL + image)
                 .placeholder(R.drawable.logonew)
                 .fitCenter()
                 .crossFade()
-                .into(iv_image);
+                .into(iv_image);*/
 
         if (dbcart.isInCart(product.getProduct_id())) {
             tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
@@ -242,5 +285,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        imgSlider.stopAutoCycle();
     }
 }
