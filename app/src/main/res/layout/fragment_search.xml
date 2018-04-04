@@ -29,7 +29,25 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:background="@color/white">
-
+                    <AutoCompleteTextView
+                        android:id="@+id/et_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:textColor="@color/black"
+                        android:background="@drawable/xml_textbox_bg"
+                        android:textSize="16dp"
+                        android:imeOptions="actionSearch"
+                        android:ems="10"
+                        android:hint="@string/search_msg"
+                        android:inputType="text"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_search"
+                        android:drawableRight="@drawable/ic_action_mic"
+                        android:drawableTint="@color/dark_gray" />
+<!--
                     <EditText
                         android:id="@+id/et_search"
                         android:layout_width="match_parent"
@@ -47,7 +65,7 @@
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_search"
                         android:drawableRight="@drawable/ic_action_mic"
-                        android:drawableTint="@color/dark_gray"/>
+                        android:drawableTint="@color/dark_gray"/>-->
 
                     <Button
                         android:id="@+id/btn_search"
