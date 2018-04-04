@@ -25,12 +25,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +40,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import Adapter.ExpandableListAdapter;
 import Config.BaseURL;
 import Fragments.Cart_fragment;
 import Fragments.CategoriFragment;
@@ -46,8 +53,10 @@ import Fragments.Home_fragment;
 import Fragments.My_order_detail_fragment;
 import Fragments.My_order_fragment;
 import Fragments.Offers_fragment;
+import Fragments.Product_fragment;
 import Fragments.Search_fragment;
 import Fragments.Support_info_fragment;
+import Model.Category_model;
 import fcm.MyFirebaseRegister;
 import util.BottomNavigationViewHelper;
 import util.ConnectivityReceiver;
@@ -62,17 +71,28 @@ public class MainActivity extends AppCompatActivity
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     private TextView totalBudgetCount, tv_number;
+    private List<Category_model> category_modelList = new ArrayList<>();
     ImageButton tv_name, tv_register;
     private ImageView iv_profile;
 
     private DatabaseHandler dbcart;
     ImageView logo;
 
-
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expListView;
+    List<String> listDataHeader;
+    HashMap<String, List<String>> listDataChild;
 
     private Session_management sessionManagement;
 
     private Menu nav_menu;
+    private final String android_image_urls[] = {
+            "R.drawable.ic_nav_home",
+            "R.drawable.ic_action_category",
+            "R.drawable.ic_nav_order",
+            "R.drawable.ic_nav_profile",
+            "R.drawable.ic_nav_support",
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +110,216 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationViewHelper.removeShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+
+        expListView = (ExpandableListView) findViewById(R.id.navigationmenu);
+
+        /*DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int width = metrics.widthPixels;
+
+        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            expListView.setIndicatorBounds(width - GetDipsFromPixel(80), width - GetDipsFromPixel(30));
+
+        } else {
+            expListView.setIndicatorBoundsRelative(width - GetDipsFromPixel(80), width - GetDipsFromPixel(30));
+
+        }*/
+
+        // preparing list data
+        prepareListData();
+
+        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+
+        // setting list adapter
+        expListView.setAdapter(listAdapter);
+
+
+        // Listview Group click listener
+        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v,
+                                        int groupPosition, long id) {
+                // Toast.makeText(getApplicationContext(),
+                // "Group Clicked " + listDataHeader.get(groupPosition),
+                // Toast.LENGTH_SHORT).show();
+                Bundle args = new Bundle();
+                switch(groupPosition){
+                    case 0:  Fragment fm_home = new Home_fragment();
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.contentPanel, fm_home, "Home_fragment")
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                        return true;
+
+
+                    case 1: return  false;
+
+                    case 2:
+                        Fragment fm_order = new My_order_fragment();
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.contentPanel, fm_order, "My_order_fragment")
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                        return true;
+
+                    case 3:
+                        Fragment fm = new Edit_profile_fragment();
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                        return true;
+
+                    case 4:
+                        fm = new Support_info_fragment();
+                        args.putString("url", BaseURL.GET_SUPPORT_URL);
+                        args.putString("title", getResources().getString(R.string.nav_support));
+                        fm.setArguments(args);
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                        return true;
+
+                    case 5:
+                        fm = new Support_info_fragment();
+                        args.putString("url", BaseURL.GET_ABOUT_URL);
+                        args.putString("title", getResources().getString(R.string.nav_about));
+                        fm.setArguments(args);
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                        return true;
+                    case 6:
+                        fm = new Support_info_fragment();
+                        args.putString("url", BaseURL.GET_TERMS_URL);
+                        args.putString("title", getResources().getString(R.string.nav_terms));
+                        fm.setArguments(args);
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                        return true;
+
+                    case 7:
+                        reviewOnApp();
+                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                        return true;
+                }
+return false;
+            }
+        });
+
+        // Listview on child click listener
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                /*Toast.makeText(
+                        getApplicationContext(),
+                        listDataHeader.get(groupPosition)
+                                + " : "
+                                + listDataChild.get(
+                                listDataHeader.get(groupPosition)).get(
+                                childPosition), Toast.LENGTH_SHORT)
+                        .show();*/
+
+               /* String getid = category_modelList.get(childPosition).getId();
+                String getcat_title = category_modelList.get(childPosition).getTitle();
+
+                switch (childPosition){
+                    case 0: Bundle args = new Bundle();
+                        Fragment fm = new Product_fragment();
+                        args.putString("cat_id", getid);
+                        args.putString("cat_title", getcat_title);
+                        fm.setArguments(args);
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                    case 1:  args = new Bundle();
+                         fm = new Product_fragment();
+                        args.putString("cat_id", getid);
+                        args.putString("cat_title", getcat_title);
+                        fm.setArguments(args);
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                    case 2:  args = new Bundle();
+                         fm = new Product_fragment();
+                        args.putString("cat_id", getid);
+                        args.putString("cat_title", getcat_title);
+                        fm.setArguments(args);
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                    case 3:  args = new Bundle();
+                         fm = new Product_fragment();
+                        args.putString("cat_id", getid);
+                        args.putString("cat_title", getcat_title);
+                        fm.setArguments(args);
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                    case 4:  args = new Bundle();
+                         fm = new Product_fragment();
+                        args.putString("cat_id", getid);
+                        args.putString("cat_title", getcat_title);
+                        fm.setArguments(args);
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                    case 5:  args = new Bundle();
+                         fm = new Product_fragment();
+                        args.putString("cat_id", getid);
+                        args.putString("cat_title", getcat_title);
+                        fm.setArguments(args);
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                    case 6:  args = new Bundle();
+                         fm = new Product_fragment();
+                        args.putString("cat_id", getid);
+                        args.putString("cat_title", getcat_title);
+                        fm.setArguments(args);
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                    case 7:  args = new Bundle();
+                         fm = new Product_fragment();
+                        args.putString("cat_id", getid);
+                        args.putString("cat_title", getcat_title);
+                        fm.setArguments(args);
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                    case 8:  args = new Bundle();
+                         fm = new Product_fragment();
+                        args.putString("cat_id", getid);
+                        args.putString("cat_title", getcat_title);
+                        fm.setArguments(args);
+                         fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+                }
+                */
+
+                return false;
+            }
+        });
 
 
 
@@ -221,6 +451,44 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+  /*  public int GetDipsFromPixel(float pixels)
+    {
+        // Get the screen's density scale
+        final float scale = getResources().getDisplayMetrics().density;
+        // Convert the dps to pixels, based on density scale
+        return (int) (pixels * scale + 0.5f);
+    }*/
+
+    private void prepareListData() {
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
+
+        // Adding child data
+        listDataHeader.add("Home");
+        listDataHeader.add("Shop By Catrgory");
+        listDataHeader.add("My Order");
+        listDataHeader.add("My Profile");
+        listDataHeader.add("Support");
+        listDataHeader.add("About Us");
+        listDataHeader.add("Terms");
+        listDataHeader.add("Review");
+
+        // Adding child data
+        List<String> category = new ArrayList<String>();
+        category.add("Fruits & Vegetables");
+        category.add("Foodgrains, Oil & Masala");
+        category.add("Bakery, Cakes & Dairy");
+        category.add("Beverages");
+        category.add("Branded Foods");
+        category.add("Beauty & Hygiene");
+        category.add("Eggs, Meat & Fish");
+        category.add("Patanjali");
+
+
+        listDataChild.put(listDataHeader.get(1), category); // Header, Child data
+
+    }
+    
     public void updateHeader() {
         if (sessionManagement.isLoggedIn()) {
             String getname = sessionManagement.getUserDetails().get(BaseURL.KEY_NAME);
