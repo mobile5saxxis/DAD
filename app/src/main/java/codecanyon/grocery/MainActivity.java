@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
-        expListView = (ExpandableListView) findViewById(R.id.navigationmenu);
+        //expListView = (ExpandableListView) findViewById(R.id.navigationmenu);
 
         /*DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
