@@ -1,3 +1,4 @@
+/*
 package Fragments;
 
 import android.content.Context;
@@ -43,9 +44,11 @@ import codecanyon.grocery.R;
 import util.ConnectivityReceiver;
 import util.CustomVolleyJsonRequest;
 
+*/
 /**
  * Created by srikarn on 02-04-2018.
- */
+ *//*
+
 
 public class Products_fragment extends Fragment {
 
@@ -97,10 +100,12 @@ public class Products_fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product, container, false);
-        /*Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        */
+/*Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);*//*
+
 
         tab_cat = (TabLayout) view.findViewById(R.id.tab_cat);
         rv_cat = (RecyclerView) view.findViewById(R.id.rv_subcategory);
@@ -143,7 +148,9 @@ public class Products_fragment extends Fragment {
                         Type listType = new TypeToken<List<Product_model>>() {
                         }.getType();
 
-                        /*JSONObject data = response.getJSONObject("data");*/
+                        */
+/*JSONObject data = response.getJSONObject("data");*//*
+
                         product_modelList = gson.fromJson(response.getString("data"), listType);
 
                         if(!isCatogery){
@@ -190,3 +197,4 @@ public class Products_fragment extends Fragment {
 
 }
 
+*/

@@ -41,10 +41,6 @@
             app:layout_constraintRight_toLeftOf="@+id/iv_subcat_minus"
             app:layout_constraintTop_toTopOf="@+id/iv_subcat_img">
 
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
             <TextView
                 android:id="@+id/tv_subcat_title"
                 android:layout_width="wrap_content"
@@ -54,6 +50,10 @@
                 android:text="TextView"
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp" />
+            <Spinner
+                android:id="@+id/tv_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tv_subcat_price"

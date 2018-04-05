@@ -2,22 +2,16 @@ package Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +50,7 @@ import util.CustomVolleyJsonRequest;
 public class Product_fragment extends Fragment {
 
     private static String TAG = Product_fragment.class.getSimpleName();
+
 
     private RecyclerView rv_cat;
     private TabLayout tab_cat;
@@ -190,8 +185,11 @@ public class Product_fragment extends Fragment {
                         Type listType = new TypeToken<List<Product_model>>() {
                         }.getType();
 
+
                         /*JSONObject data = response.getJSONObject("data");*/
                         product_modelList = gson.fromJson(response.getString("data"), listType);
+                        /*product_dropdown_modelList = gson.fromJson(response.getString("data"), listType2);*/
+
 
                         adapter_product = new Product_adapter(product_modelList, getActivity());
                         rv_cat.setAdapter(adapter_product);
@@ -319,5 +317,7 @@ public class Product_fragment extends Fragment {
             }
         });
     }*/
+
+
 
 }

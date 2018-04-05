@@ -11,10 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -37,14 +41,21 @@ import util.DatabaseHandler;
 public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyViewHolder>
         implements Filterable {
 
+
+    private static String TAG = Product_adapter.class.getSimpleName();
+
+
     private List<Product_model> modelList;
     private List<Product_model> mFilteredList;
     private Context context;
     private DatabaseHandler dbcart;
+    String [] list_product;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView tv_title, tv_price, tv_total, tv_contetiy, tv_add;
         public ImageView iv_logo, iv_plus, iv_minus, iv_remove;
+        public Spinner iv_spinner;
 
         public MyViewHolder(View view) {
             super(view);
@@ -57,6 +68,21 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
             iv_plus = (ImageView) view.findViewById(R.id.iv_subcat_plus);
             iv_minus = (ImageView) view.findViewById(R.id.iv_subcat_minus);
             iv_remove = (ImageView) view.findViewById(R.id.iv_subcat_remove);
+            iv_spinner = (Spinner) view.findViewById(R.id.tv_spinner);
+
+/*
+            modelList.get(getAdapterPosition()).getQuantity() + "-" + modelList.get(getAdapterPosition()).getPrice_val()
+*/
+
+           /* String drop1= modelList.get(getAdapterPosition()).getQuantity() + "-" + modelList.get(getAdapterPosition()).getPrice_val();
+            String drop2= modelList.get(getAdapterPosition()).getQuantity() + "-" + modelList.get(getAdapterPosition()).getPrice_val();
+            String drop3= modelList.get(getAdapterPosition()).getQuantity() + "-" + modelList.get(getAdapterPosition()).getPrice_val();
+           // String [] list_product ={"1kg", "2Kg", "3kg"};
+            String [] list_product ={drop1,drop2, drop3};
+            ArrayAdapter<String>adapter = new ArrayAdapter<String>(context,
+                    android.R.layout.simple_spinner_item,list_product);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            iv_spinner.setAdapter(adapter);*/
 
             iv_remove.setVisibility(View.GONE);
 
@@ -68,16 +94,25 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
             CardView cardView = (CardView) view.findViewById(R.id.card_view);
             cardView.setOnClickListener(this);
 
+
         }
 
         @Override
         public void onClick(View view) {
             int id = view.getId();
             int position = getAdapterPosition();
+
+
             //int qty = Integer.valueOf(tv_contetiy.getText().toString());
             if (id == R.id.iv_subcat_plus) {
 
               int  qty = Integer.valueOf(tv_contetiy.getText().toString());
+                qty = qty + 1;
+
+                tv_contetiy.setText(String.valueOf(qty));
+
+            }else if(id == R.id.tv_spinner){
+                int  qty = Integer.valueOf(tv_contetiy.getText().toString());
                 qty = qty + 1;
 
                 tv_contetiy.setText(String.valueOf(qty));
@@ -147,6 +182,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
             }
 
         }
+
     }
 
 
@@ -169,8 +205,8 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(Product_adapter.MyViewHolder holder, int position) {
-        Product_model mList = modelList.get(position);
+    public void onBindViewHolder(final Product_adapter.MyViewHolder holder, int position) {
+        final Product_model mList = modelList.get(position);
 
         Glide.with(context)
                 .load(BaseURL.IMG_PRODUCT_URL + mList.getProduct_image())
@@ -197,6 +233,68 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
         Log.v("price", mList.getPrice());
 
         holder.tv_total.setText("" + price * items);
+        String drop1= mList.getUnit() + "- Rs " + mList.getPrice();
+        String drop2= mList.getQuantity()  + "- Rs " + mList.getPrice_val();
+        String drop3= mList.getQuantity() + "- Rs " + mList.getPrice_val();
+        // String [] list_product ={"1kg", "2Kg", "3kg"};
+        list_product = new String[]{"select quantity", drop1, drop2, drop3};
+        ArrayAdapter<String>adapter = new ArrayAdapter<String>(context,
+                android.R.layout.simple_spinner_item,list_product);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        holder.iv_spinner.setAdapter(adapter);
+        holder.iv_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+               switch (position){
+                   case 0:
+                       int  qty = Integer.valueOf(holder.tv_contetiy.getText().toString());
+                       qty = 0;
+
+                       holder.tv_contetiy.setText(String.valueOf(qty));
+                       break;
+                   case 1:
+
+                         qty = Integer.valueOf(holder.tv_contetiy.getText().toString());
+                         if(qty == 0) {
+                             qty = qty + 1;
+                         } else {
+                             qty = 1;
+                         }
+
+                       holder.tv_contetiy.setText(String.valueOf(qty));
+                       break;
+
+                   case 2:
+                         qty = Integer.valueOf(holder.tv_contetiy.getText().toString());
+                       if(qty == 0) {
+                           qty = qty + 2;
+                       } else {
+                           qty = 2;
+                       }
+
+                       holder.tv_contetiy.setText(String.valueOf(qty));
+                       break;
+
+                   case 3:
+                       qty = Integer.valueOf(holder.tv_contetiy.getText().toString());
+                       if(qty == 0) {
+                           qty = qty + 3;
+                       } else {
+                           qty = 3;
+                       }
+
+                       holder.tv_contetiy.setText(String.valueOf(qty));
+                       break;
+
+               }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
     }
 
@@ -386,5 +484,6 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
         });
 
     }
+
 
 }
