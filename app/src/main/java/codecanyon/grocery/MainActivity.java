@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        getSupportActionBar().setTitle("");
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.btm_navigation);
         BottomNavigationViewHelper.removeShiftMode(navigation);

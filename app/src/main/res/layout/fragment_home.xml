@@ -9,7 +9,9 @@
         android:id="@+id/search_navbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/login_edittext"
         android:drawableEnd="@drawable/ic_action_mic"
         android:drawableLeft="@drawable/ic_search"
@@ -27,7 +29,7 @@
         android:textColorHint="@color/dark_gray"
         android:textSize="16sp" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true">
@@ -68,23 +70,13 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="10dp"
-                android:background="@color/lite_gray"></View>
+                android:background="@color/lite_gray" />
 
             <ImageView
                 android:id="@+id/add_image2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-            <!--     <android.support.design.widget.TabLayout
-                     android:id="@+id/tabLayout"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     />
 
-                 <android.support.v4.view.ViewPager
-                     android:id="@+id/masterViewPager"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:background="@color/lite_gray"/>-->
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
@@ -94,7 +86,7 @@
                 android:padding="@dimen/space_6"
                 android:text="@string/bestseller"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/space_18" />
+                android:textSize="18sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_bestproducts"
@@ -149,6 +141,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>

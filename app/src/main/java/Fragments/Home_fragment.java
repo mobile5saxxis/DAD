@@ -81,8 +81,6 @@ public class Home_fragment extends Fragment {
     ImageView addImage2;
 
 
-
-
     private List<Category_model> category_modelList = new ArrayList<>();
     private List<BestProducts_model> bestProducts_modelList = new ArrayList<>();
     private List<PopularBrands_Model> popularBrands_modelList = new ArrayList<>();
@@ -104,19 +102,20 @@ public class Home_fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        if(adapter != null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
-        if(bestProductAdapter != null){
+        if (bestProductAdapter != null) {
             bestProductAdapter.notifyDataSetChanged();
         }
-        if(popularBrandsAdapter != null){
+        if (popularBrandsAdapter != null) {
             popularBrandsAdapter.notifyDataSetChanged();
         }
-        if(offerAdapter != null){
+        if (offerAdapter != null) {
             offerAdapter.notifyDataSetChanged();
         }
 
@@ -133,7 +132,6 @@ public class Home_fragment extends Fragment {
        /* AdView mAdView = (AdView) view.findViewById(R.id.adView_home);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);*/
-
 
 
         //((MainActivity) getActivity()).setTitle(getResources().getString(R.string.tv_home_appname));
@@ -162,6 +160,11 @@ public class Home_fragment extends Fragment {
         rv_items_popularbrands = (RecyclerView) view.findViewById(R.id.rv_popularbrands);
         rv_items_offers = (RecyclerView) view.findViewById(R.id.rv_offers);
 
+        rv_items.setNestedScrollingEnabled(true);
+        rv_items_bestproducts.setNestedScrollingEnabled(true);
+        rv_items_popularbrands.setNestedScrollingEnabled(true);
+        rv_items_offers.setNestedScrollingEnabled(true);
+
         //rl_view_all = (RelativeLayout) view.findViewById(R.id.rl_home_view_allcat);
         searchbar_nav = (TextView) view.findViewById(R.id.search_navbar);
         addImage1 = (ImageView) view.findViewById(R.id.add_image1);
@@ -172,22 +175,16 @@ public class Home_fragment extends Fragment {
         //rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
         rv_items.setLayoutManager(layoutManager);*/
 
-      //  rv_items.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
-        rv_items.setLayoutManager(new GridLayoutManager(getActivity(),3));
-        rv_items_bestproducts.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
-        rv_items_popularbrands.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
-        rv_items_offers.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
+        //  rv_items.setLayoutManager(new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false));
+        rv_items.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        rv_items_bestproducts.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false));
+        rv_items_popularbrands.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false));
+        rv_items_offers.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false));
         // initialize a SliderLayout
         imgSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         imgSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         imgSlider.setCustomAnimation(new DescriptionAnimation());
         imgSlider.setDuration(4000);
-
-
-
-
-
-
 
 
         Log.v("AddImage", ADD_IMAGE_URL1 + "011.png");
@@ -214,9 +211,9 @@ public class Home_fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fm_search = new Search_fragment();
-               FragmentManager fragmentManager = getFragmentManager();
+                FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.contentPanel,fm_search , "Search_fragment")
+                        .replace(R.id.contentPanel, fm_search, "Search_fragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
             }
@@ -471,7 +468,6 @@ public class Home_fragment extends Fragment {
     }
 
 
-
     private void makeGetPopularBrandRequest(String parent_id) {
 
         // Tag used to cancel the request
@@ -580,8 +576,6 @@ public class Home_fragment extends Fragment {
     }
 
 
-
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // TODO Add your menu entries here
@@ -592,6 +586,7 @@ public class Home_fragment extends Fragment {
         MenuItem check = menu.findItem(R.id.action_change_password);
         check.setVisible(false);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
