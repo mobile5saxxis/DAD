@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Adapter.Home_adapter;
+import Adapter.HomeAdapter;
 import Adapter.View_time_adapter;
 import Config.BaseURL;
 import Model.Category_model;
@@ -48,7 +48,7 @@ public class View_time_fragment extends Fragment {
 
     private List<String> time_list = new ArrayList<>();
     private List<Category_model> category_modelList = new ArrayList<>();
-    private Home_adapter adapter;
+    private HomeAdapter adapter;
 
     private String getdate;
 

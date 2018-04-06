@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:width="24dp"
+    android:height="24dp">
+    <path
+        android:pathData="M3 2L1 2C0.4 2 0 2.4 0 3L0 5C0 5.6 0.4 6 1 6L3 6C3.6 6 4 5.6 4 5L4 3C4 2.4 3.6 2 3 2Z"
+        android:fillColor="#9e9e9e" />
+    <path
+        android:pathData="M3 10l-2 0c-0.6 0 -1 0.4 -1 1l0 2c0 0.6 0.4 1 1 1l2 0c0.6 0 1 -0.4 1 -1L4 11C4 10.4 3.6 10 3 10Z"
+        android:fillColor="#9e9e9e" />
+    <path
+        android:pathData="M3 18l-2 0c-0.6 0 -1 0.4 -1 1l0 2c0 0.6 0.4 1 1 1l2 0c0.6 0 1 -0.4 1 -1L4 19C4 18.4 3.6 18 3 18Z"
+        android:fillColor="#9e9e9e" />
+    <path
+        android:pathData="M23 2L9 2C8.4 2 8 2.4 8 3l0 2c0 0.6 0.4 1 1 1l14 0c0.6 0 1 -0.4 1 -1L24 3C24 2.4 23.6 2 23 2Z"
+        android:fillColor="#9e9e9e" />
+    <path
+        android:pathData="M23 10L9 10c-0.6 0 -1 0.4 -1 1l0 2c0 0.6 0.4 1 1 1l14 0c0.6 0 1 -0.4 1 -1l0 -2c0 -0.6 -0.4 -1 -1 -1z"
+        android:fillColor="#9e9e9e" />
+    <path
+        android:pathData="M23 18L9 18c-0.6 0 -1 0.4 -1 1l0 2c0 0.6 0.4 1 1 1l14 0c0.6 0 1 -0.4 1 -1l0 -2c0 -0.6 -0.4 -1 -1 -1z"
+        android:fillColor="#9e9e9e" />
+</vector>

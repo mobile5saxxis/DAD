@@ -4,7 +4,7 @@
     <group>
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_nav_home"
+            android:icon="@drawable/ic_home"
             android:title="@string/nav_home" />
         <!--<item
             android:id="@+id/nav_recipe"
@@ -12,9 +12,9 @@
             android:title="Recipes" />-->
 
         <item
-            android:title="Shop By Category"
             android:id="@+id/nav_category"
-            android:icon="@drawable/ic_action_category">
+            android:icon="@drawable/ic_category"
+            android:title="Shop By Category">
             <!--<menu>
                 <item
                     android:id="@+id/nav_fruits"
@@ -25,15 +25,17 @@
             </menu>-->
 
         </item>
-        <item android:title="@string/nav_user" android:id="@+id/nav_user">
+        <item
+            android:id="@+id/nav_user"
+            android:title="@string/nav_user">
             <menu>
                 <item
                     android:id="@+id/nav_myorders"
-                    android:icon="@drawable/ic_nav_order"
+                    android:icon="@drawable/ic_list"
                     android:title="@string/nav_order" />
                 <item
                     android:id="@+id/nav_myprofile"
-                    android:icon="@drawable/ic_nav_profile"
+                    android:icon="@drawable/ic_user"
                     android:title="@string/nav_profile" />
             </menu>
         </item>
@@ -41,21 +43,21 @@
         <item android:title="@string/app_name">
             <menu>
                 <item
+                    android:id="@+id/nav_review"
+                    android:icon="@drawable/ic_play_store"
+                    android:title="@string/nav_review" />
+                <item
                     android:id="@+id/nav_support"
-                    android:icon="@drawable/ic_nav_support"
+                    android:icon="@drawable/ic_support"
                     android:title="@string/nav_support" />
                 <item
-                    android:id="@+id/nav_aboutus"
-                    android:icon="@drawable/ic_nav_about"
-                    android:title="@string/nav_about" />
-                <item
                     android:id="@+id/nav_policy"
-                    android:icon="@drawable/ic_nav_policy"
+                    android:icon="@drawable/ic_policy"
                     android:title="@string/nav_terms" />
                 <item
-                    android:id="@+id/nav_review"
-                    android:icon="@drawable/ic_nav_review"
-                    android:title="@string/nav_review" />
+                    android:id="@+id/nav_aboutus"
+                    android:icon="@drawable/ic_about"
+                    android:title="@string/nav_about" />
                 <!--<item
                     android:id="@+id/nav_share"
                     android:icon="@drawable/ic_nav_share"
@@ -67,7 +69,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_logout"
-                    android:icon="@drawable/ic_exit"
+                    android:icon="@drawable/ic_logout"
                     android:title="@string/nav_logout" />
             </menu>
         </item>

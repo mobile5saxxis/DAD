@@ -16,26 +16,26 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#FFFFFF"
+            android:background="@android:color/white"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <ImageView
-                android:id="@+id/home_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerInside"
-                android:layout_gravity="center"
-                android:layout_marginRight="70dp"
-                android:gravity="center_horizontal" />
-        </android.support.v7.widget.Toolbar>
-        <!-- <android.support.v7.widget.Toolbar
-             android:id="@+id/toolbar_search"
-             android:layout_width="match_parent"
-             android:layout_height="?attr/actionBarSize"
-             android:background="@color/white"
-             app:popupTheme="@style/AppTheme.PopupOverlay" >-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <!-- </android.support.v7.widget.Toolbar>-->
+                <ImageView
+                    android:id="@+id/home_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_logo" />
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 

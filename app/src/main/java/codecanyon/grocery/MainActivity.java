@@ -101,11 +101,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-        ImageView logo= (ImageView) findViewById(R.id.home_logo);
-        Glide.with(this)
-                .load(R.drawable.navhomelogo)
-                .fitCenter()
-                .into(logo);
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.btm_navigation);
         BottomNavigationViewHelper.removeShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -123,7 +119,8 @@ public class MainActivity extends AppCompatActivity
         } else {
             expListView.setIndicatorBoundsRelative(width - GetDipsFromPixel(80), width - GetDipsFromPixel(30));
 
-        }*/
+        }*//*
+
 
         // preparing list data
         prepareListData();
@@ -229,16 +226,19 @@ return false;
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                /*Toast.makeText(
+                */
+/*Toast.makeText(
                         getApplicationContext(),
                         listDataHeader.get(groupPosition)
                                 + " : "
                                 + listDataChild.get(
                                 listDataHeader.get(groupPosition)).get(
                                 childPosition), Toast.LENGTH_SHORT)
-                        .show();*/
+                        .show();*//*
 
-               /* String getid = category_modelList.get(childPosition).getId();
+
+               */
+/* String getid = category_modelList.get(childPosition).getId();
                 String getcat_title = category_modelList.get(childPosition).getTitle();
 
                 switch (childPosition){
@@ -315,11 +315,13 @@ return false;
                         fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
                                 .addToBackStack(null).commit();
                 }
-                */
+                *//*
+
 
                 return false;
             }
         });
+*/
 
 
 

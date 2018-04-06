@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DeliveryAtDoor</string>
+    <string name="app_name">Delivery At Door</string>
     <string name="currency">Rs</string>
     <string name="title_activity_main">MainActivity</string>
 
@@ -18,7 +18,7 @@
     <string name="nav_profile">My Profile</string>
     <string name="nav_support">Support</string>
     <string name="nav_about">About Us</string>
-    <string name="nav_review">Review Us</string>
+    <string name="nav_review">Rate Us</string>
     <string name="nav_share">Share with Friends</string>
     <string name="nav_logout">Logout</string>
     <string name="nav_fruits">Fruits &amp; Vegetables</string>

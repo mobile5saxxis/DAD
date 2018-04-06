@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,13 +12,5 @@
     tools:showIn="@layout/app_bar_main"
     android:id="@+id/contentPanel">
 
-    <!-- <android.support.design.widget.BottomNavigationView
-        android:id="@+id/btm_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/colorAccent"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
-        app:menu="@menu/navigation" />-->
+
 </FrameLayout>

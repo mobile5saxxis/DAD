@@ -1,14 +1,11 @@
 package Fragments;
 
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,17 +44,14 @@ import java.util.List;
 import java.util.Map;
 
 import Adapter.BestProductAdapter;
-import Adapter.Home_adapter;
+import Adapter.HomeAdapter;
 import Adapter.Offer_adapter;
 import Adapter.PopularBrands_Adapter;
-import Adapter.Product_adapter;
 import Config.BaseURL;
 import Model.BestProducts_model;
-import Model.Brands_list_model;
 import Model.Category_model;
 import Model.Offers_model;
 import Model.PopularBrands_Model;
-import Model.Product_model;
 import codecanyon.grocery.AppController;
 import codecanyon.grocery.MainActivity;
 import codecanyon.grocery.R;
@@ -95,7 +88,7 @@ public class Home_fragment extends Fragment {
     private List<PopularBrands_Model> popularBrands_modelList = new ArrayList<>();
     private List<Offers_model> offers_modelList = new ArrayList<>();
 
-    private Home_adapter adapter;
+    private HomeAdapter adapter;
     private BestProductAdapter bestProductAdapter;
     private PopularBrands_Adapter popularBrandsAdapter;
     private Offer_adapter offerAdapter;
@@ -400,7 +393,7 @@ public class Home_fragment extends Fragment {
 
                         category_modelList = gson.fromJson(response.getString("data"), listType);
 
-                        adapter = new Home_adapter(category_modelList);
+                        adapter = new HomeAdapter(category_modelList);
                         rv_items.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }

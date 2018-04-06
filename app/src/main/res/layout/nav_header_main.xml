@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
+    android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
     android:gravity="bottom"
     android:orientation="vertical"
@@ -22,47 +22,46 @@
             android:id="@+id/iv_header_img"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginTop="@dimen/space_10"
-            android:src="@drawable/logo"
             android:layout_gravity="center"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:src="@drawable/logo"
             app:civ_border_color="@color/gray"
             app:civ_border_width="1dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="2">
 
-        <ImageButton
-            android:id="@+id/tv_header_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/navlogin"
-            android:scaleType="centerInside"
-            android:adjustViewBounds="true"
-            android:background="@color/colorPrimary" />
+            <ImageButton
+                android:id="@+id/tv_header_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@color/colorPrimary"
+                android:scaleType="centerInside"
+                android:src="@drawable/navlogin" />
 
-        <ImageButton
-            android:id="@+id/tv_header_Register"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:adjustViewBounds="true"
-            android:background="@color/colorPrimary"
-            android:src="@drawable/signin" />
+            <ImageButton
+                android:id="@+id/tv_header_Register"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@color/colorPrimary"
+                android:scaleType="centerInside"
+                android:src="@drawable/signin" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_header_moblie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_5"
             android:layout_gravity="center"
-            android:text="Mo. 8530875124" />
-
-
+            android:layout_marginTop="@dimen/space_5"
+            tools:text="Mo. 8530875124" />
 
     </LinearLayout>
 
