@@ -12,7 +12,7 @@
         android:id="@+id/action_search"
         android:actionViewClass="android.widget.SearchView"
         android:icon="@drawable/ic_search"
-        android:title="@string/search_here"
+        android:tv_title="@string/search_here"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />-->
 

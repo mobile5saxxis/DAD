@@ -9,7 +9,7 @@
         <!--<item
             android:id="@+id/nav_recipe"
             android:icon="@drawable/recipe_menu"
-            android:title="Recipes" />-->
+            android:tv_title="Recipes" />-->
 
         <item
             android:id="@+id/nav_category"
@@ -18,10 +18,10 @@
             <!--<menu>
                 <item
                     android:id="@+id/nav_fruits"
-                    android:title="@string/nav_fruits"/>
+                    android:tv_title="@string/nav_fruits"/>
                 <item
                     android:id="@+id/FoodGrains"
-                    android:title="@string/nav_foodgrain"/>
+                    android:tv_title="@string/nav_foodgrain"/>
             </menu>-->
 
         </item>
@@ -61,7 +61,7 @@
                 <!--<item
                     android:id="@+id/nav_share"
                     android:icon="@drawable/ic_nav_share"
-                    android:title="@string/nav_share" />-->
+                    android:tv_title="@string/nav_share" />-->
             </menu>
         </item>
 

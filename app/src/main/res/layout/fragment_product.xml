@@ -9,7 +9,7 @@
     <android.support.design.widget.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tab_cat"
+        android:id="@+id/tab_category"
         app:tabMode="scrollable"
         android:background="@color/colorPrimary"
         app:tabTextColor="@color/white"
@@ -28,7 +28,7 @@
         android:padding="@dimen/space_6"
         android:background="@color/gray"/>
         <TextView
-            android:id="@+id/noofitemsqty"
+            android:id="@+id/tv_no_of_items"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"

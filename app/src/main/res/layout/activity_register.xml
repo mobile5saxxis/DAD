@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="codecanyon.grocery.RegisterActivity">
+    tools:context="codecanyon.grocery.activities.RegisterActivity">
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -105,14 +105,14 @@
             <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Society/Flat(Optional)"
+                android:text="SoCity/Flat(Optional)"
                 android:textSize="14dp"
                 android:id="@+id/textView4" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Choose Society..."
+                android:text="Choose SoCity..."
                 android:background="@drawable/xml_textbox_bg"
                 android:id="@+id/txtSocity"
                 android:layout_marginBottom="5dp"
