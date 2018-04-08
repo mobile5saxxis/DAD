@@ -1,45 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#DCDCDC">
-    <android.support.design.widget.TabLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tab_category"
-        app:tabMode="scrollable"
-        android:background="@color/colorPrimary"
-        app:tabTextColor="@color/white"
-        app:tabSelectedTextColor="@color/white" />
+    android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/numberofitms"
-        android:textColor="@color/black"
-        android:textSize="@dimen/space_18"
-        android:padding="@dimen/space_6"
-        android:background="@color/gray"/>
-        <TextView
-            android:id="@+id/tv_no_of_items"
+        android:layout_height="match_parent"
+        android:background="#DCDCDC"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="@dimen/space_18"
-            android:padding="@dimen/space_6"
-            android:background="@color/gray"/>
+            android:background="@color/colorPrimary"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/gray"
+                android:padding="@dimen/space_6"
+                android:text="@string/numberofitms"
+                android:textColor="@color/black"
+                android:textSize="@dimen/space_18" />
+
+            <TextView
+                android:id="@+id/tv_no_of_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray"
+                android:padding="@dimen/space_6"
+                android:textColor="@color/black"
+                android:textSize="@dimen/space_18" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_subcategory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <RelativeLayout
+        android:id="@+id/rl_progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv_subcategory"/>
+        android:background="@android:color/white">
 
-</LinearLayout>
+        <ProgressBar
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+</RelativeLayout>
+

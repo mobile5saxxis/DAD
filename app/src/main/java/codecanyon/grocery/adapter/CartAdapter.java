@@ -133,7 +133,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
                 Double price = Double.parseDouble(map.get("price"));
 
                 holder.tv_total.setText("" + price * items );
-                //holder.tv_total.setText(activity.getResources().getString(R.string.tv_cart_total) + price * items + " " +activity.getResources().getString(R.string.currency));
+                //holder.tv_subcat_total.setText(activity.getResources().getString(R.string.tv_cart_total) + price * items + " " +activity.getResources().getString(R.string.currency));
                 updateintent();
             }
         });
@@ -169,7 +169,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
             tv_total = view.findViewById(R.id.tv_subcat_total);
             tv_contetiy = view.findViewById(R.id.tv_subcat_content);
             tv_add = view.findViewById(R.id.tv_subcat_add);
-            iv_logo = view.findViewById(R.id.iv_subcat_img);
+            iv_logo = view.findViewById(R.id.iv_subcat);
             iv_plus = view.findViewById(R.id.iv_subcat_plus);
             iv_minus = view.findViewById(R.id.iv_subcat_minus);
             iv_remove = view.findViewById(R.id.iv_subcat_remove);

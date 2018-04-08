@@ -19,7 +19,7 @@ public class Product implements Parcelable {
     String unit_value;
     String unit;
     String increament;
-    String tv_title;
+    String tv_subcat_title;
     String brand;
     String specifications;
     String how_to_use;
@@ -37,7 +37,7 @@ public class Product implements Parcelable {
         unit_value = in.readString();
         unit = in.readString();
         increament = in.readString();
-        tv_title = in.readString();
+        tv_subcat_title = in.readString();
         brand = in.readString();
         specifications = in.readString();
         how_to_use = in.readString();
@@ -98,7 +98,7 @@ public class Product implements Parcelable {
     }
 
     public String getTitle() {
-        return tv_title;
+        return tv_subcat_title;
     }
 
 
@@ -133,7 +133,7 @@ public class Product implements Parcelable {
         dest.writeString(unit_value);
         dest.writeString(unit);
         dest.writeString(increament);
-        dest.writeString(tv_title);
+        dest.writeString(tv_subcat_title);
         dest.writeString(brand);
         dest.writeString(specifications);
         dest.writeString(how_to_use);

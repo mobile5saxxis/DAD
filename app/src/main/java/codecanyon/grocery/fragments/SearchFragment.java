@@ -44,7 +44,6 @@ public class SearchFragment extends Fragment {
     private EditText et_search;
     private Button btn_search;
     private RecyclerView rv_search;
-    private List<Product> product_List = new ArrayList<>();
     private ProductAdapter adapter_product;
 
     @Override
@@ -98,18 +97,8 @@ public class SearchFragment extends Fragment {
             }
         });
 
-    /*    et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            String get_search_txt = et_search.getText().toString();
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                    makeGetProductRequest(get_search_txt);
-                    return true;
-                }
-
-                return false;
-            }
-        });*/
+        adapter_product = new ProductAdapter(getContext());
+        rv_search.setAdapter(adapter_product);
 
         return view;
     }
@@ -129,15 +118,11 @@ public class SearchFragment extends Fragment {
                 if (response.body() != null && response.isSuccessful()) {
                     ProductResponse pr = response.body();
 
-                    product_List = pr.getData();
+                    adapter_product.addItems(pr.getData());
 
-                    adapter_product = new ProductAdapter(product_List, getActivity());
-                    rv_search.setAdapter(adapter_product);
-                    adapter_product.notifyDataSetChanged();
-
-                    if (getActivity() != null) {
-                        if (product_List.isEmpty()) {
-                            Toast.makeText(getActivity(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
+                    if (getContext() != null) {
+                        if (pr.getData().isEmpty()) {
+                            Toast.makeText(getContext(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,10 +46,10 @@ public class ProductFragment extends Fragment {
     private TextView tv_no_of_items;
     private List<Category> categoryList = new ArrayList<>();
     private List<String> cat_menu_id = new ArrayList<>();
-    private List<Product> product_List = new ArrayList<>();
     private ProductAdapter productAdapter;
     private RetrofitService service;
     private String categoryId, categoryTitle;
+    private RelativeLayout rl_progress;
 
 
     public static ProductFragment newInstance(String categoryId, String categoryTitle) {
@@ -78,11 +79,14 @@ public class ProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
         service = RetrofitInstance.createService(RetrofitService.class);
+        productAdapter = new ProductAdapter(getContext());
 
+        rl_progress = view.findViewById(R.id.rl_progress);
         tab_category = view.findViewById(R.id.tab_category);
         rv_category = view.findViewById(R.id.rv_subcategory);
         tv_no_of_items = view.findViewById(R.id.tv_no_of_items);
         rv_category.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv_category.setAdapter(productAdapter);
 
         if (getActivity() != null) {
             ((MainActivity) getActivity()).setTitle(categoryTitle);
@@ -149,19 +153,17 @@ public class ProductFragment extends Fragment {
                 if (response.body() != null && response.isSuccessful()) {
                     ProductResponse pr = response.body();
 
-                    product_List = pr.getData();
-                    productAdapter = new ProductAdapter(product_List, getActivity());
-                    rv_category.setAdapter(productAdapter);
-                    productAdapter.notifyDataSetChanged();
+                    productAdapter.addItems(pr.getData());
 
-
-                    tv_no_of_items.setText(Integer.toString(productAdapter.getItemCount()));
+                    tv_no_of_items.setText(String.valueOf(pr.getData().size()));
 
                     if (getContext() != null) {
-                        if (product_List.isEmpty()) {
+                        if (pr.getData().isEmpty()) {
                             Toast.makeText(getContext(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
                         }
                     }
+
+                    rl_progress.setVisibility(View.GONE);
                 }
             }
 

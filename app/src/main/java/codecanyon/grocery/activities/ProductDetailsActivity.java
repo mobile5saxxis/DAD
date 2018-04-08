@@ -162,7 +162,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                 map.put("price", product.getPrice());
                 map.put("stock", product.getIn_stock());
-                map.put("tv_title", product.getTitle());
+                map.put("tv_subcat_title", product.getTitle());
                 map.put("unit", product.getUnit());
 
                 map.put("unit_value", product.getUnit_value());

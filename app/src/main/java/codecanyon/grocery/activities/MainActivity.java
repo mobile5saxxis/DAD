@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity
                     case 4:
                         fm = new SupportInfoFragment();
                         args.putString("url", APIAPIUrls.GET_SUPPORT_URL);
-                        args.putString("tv_title", getResources().getString(R.string.nav_support));
+                        args.putString("tv_subcat_title", getResources().getString(R.string.nav_support));
                         fm.setArguments(args);
                          fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity
                     case 5:
                         fm = new SupportInfoFragment();
                         args.putString("url", APIAPIUrls.GET_ABOUT_URL);
-                        args.putString("tv_title", getResources().getString(R.string.nav_about));
+                        args.putString("tv_subcat_title", getResources().getString(R.string.nav_about));
                         fm.setArguments(args);
                          fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity
                     case 6:
                         fm = new SupportInfoFragment();
                         args.putString("url", APIAPIUrls.GET_TERMS_URL);
-                        args.putString("tv_title", getResources().getString(R.string.nav_terms));
+                        args.putString("tv_subcat_title", getResources().getString(R.string.nav_terms));
                         fm.setArguments(args);
                         fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
@@ -587,7 +587,7 @@ return false;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up tv_add, so long
+        // automatically handle clicks on the Home/Up tv_subcat_add, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
@@ -641,17 +641,17 @@ return false;
 
             fm = new SupportInfoFragment();
             args.putString("url", APIUrls.GET_SUPPORT_URL);
-            args.putString("tv_title", getResources().getString(R.string.nav_support));
+            args.putString("tv_subcat_title", getResources().getString(R.string.nav_support));
             fm.setArguments(args);
         } else if (id == R.id.nav_aboutus) {
             fm = new SupportInfoFragment();
             args.putString("url", APIUrls.GET_ABOUT_URL);
-            args.putString("tv_title", getResources().getString(R.string.nav_about));
+            args.putString("tv_subcat_title", getResources().getString(R.string.nav_about));
             fm.setArguments(args);
         } else if (id == R.id.nav_policy) {
             fm = new SupportInfoFragment();
             args.putString("url", APIUrls.GET_TERMS_URL);
-            args.putString("tv_title", getResources().getString(R.string.nav_terms));
+            args.putString("tv_subcat_title", getResources().getString(R.string.nav_terms));
             fm.setArguments(args);
         } else if (id == R.id.nav_review) {
             reviewOnApp();
@@ -662,7 +662,7 @@ return false;
         } else if (id == R.id.nav_category) {
             fm = new CategoryFragment();
             args.putString("url", APIUrls.GET_CATEGORY_URL);
-            args.putString("tv_title", getResources().getString(R.string.nav_category));
+            args.putString("tv_subcat_title", getResources().getString(R.string.nav_category));
             fm.setArguments(args);
         }
 
@@ -688,7 +688,7 @@ return false;
     public void reviewOnApp() {
         Uri uri = Uri.parse("market://details?id=" + getPackageName());
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        // To count with Play market backstack, After pressing back tv_add,
+        // To count with Play market backstack, After pressing back tv_subcat_add,
         // to taken back to our application, we need to add following flags to intent.
         goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
                 Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
@@ -865,7 +865,7 @@ return false;
 
                Fragment fm_categories = new CategoryFragment();
               *//*  args.putString("url", APIAPIUrls.GET_SUPPORT_URL);
-                args.putString("tv_title", getResources().getString(R.string.nav_support));
+                args.putString("tv_subcat_title", getResources().getString(R.string.nav_support));
                 fm_categories.setArguments(args);*//*
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
@@ -876,12 +876,12 @@ return false;
            *//* } else if (id == R.id.nav_aboutus) {
                 fm = new SupportInfoFragment();
                 args.putString("url", APIAPIUrls.GET_ABOUT_URL);
-                args.putString("tv_title", getResources().getString(R.string.nav_about));
+                args.putString("tv_subcat_title", getResources().getString(R.string.nav_about));
                 fm.setArguments(args);
             } else if (id == R.id.nav_policy) {
                 fm = new SupportInfoFragment();
                 args.putString("url", APIAPIUrls.GET_TERMS_URL);
-                args.putString("tv_title", getResources().getString(R.string.nav_terms));
+                args.putString("tv_subcat_title", getResources().getString(R.string.nav_terms));
                 fm.setArguments(args);
             } else if (id == R.id.nav_review) {
                 reviewOnApp();

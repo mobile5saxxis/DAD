@@ -68,7 +68,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             JSONObject object = new JSONObject(remoteMessage.getData());
             try {
-                sendNotification(object.getString("message"),object.getString("tv_title"),object.getString("image"),object.getString("created_at"));
+                sendNotification(object.getString("message"),object.getString("tv_subcat_title"),object.getString("image"),object.getString("created_at"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -153,9 +153,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 
         /*Notification notification;
-        notification = mBuilder.setSmallIcon(R.drawable.ic_launcher).setTicker(tv_title)
+        notification = mBuilder.setSmallIcon(R.drawable.ic_launcher).setTicker(tv_subcat_title)
                 .setAutoCancel(true)
-                .setContentTitle(tv_title)
+                .setContentTitle(tv_subcat_title)
                 .setContentIntent(resultPendingIntent)
                 .setStyle(bigPictureStyle)
                 .setWhen(getTimeMilliSec(timeStamp))

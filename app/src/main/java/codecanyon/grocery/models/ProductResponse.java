@@ -1,5 +1,6 @@
 package codecanyon.grocery.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductResponse {
@@ -15,6 +16,11 @@ public class ProductResponse {
     }
 
     public List<Product> getData() {
+
+        if (data == null) {
+            data = new ArrayList<>();
+        }
+
         return data;
     }
 

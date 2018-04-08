@@ -60,7 +60,7 @@ public class SupportInfoFragment extends Fragment {
         tv_info = view.findViewById(R.id.tv_info);
 
         String geturl = getArguments().getString("url");
-        String title = getArguments().getString("tv_title");
+        String title = getArguments().getString("tv_subcat_title");
 
         ((MainActivity) getActivity()).setTitle(title);
 

@@ -149,7 +149,7 @@ public class BestProductAdapter extends CommonRecyclerAdapter<BestProducts> {
 
                 map.put("price", bestProducts.getPrice());
                 map.put("stock",bestProducts.getIn_stock());
-                map.put("tv_title", bestProducts.getProduct_name());
+                map.put("tv_subcat_title", bestProducts.getProduct_name());
                 map.put("unit", bestProducts.getUnit());
 
                 map.put("unit_value", bestProducts.getUnit_value());

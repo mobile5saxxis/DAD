@@ -75,7 +75,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
         tv_timeslot = view.findViewById(R.id.textTimeSlot);
         tv_address = view.findViewById(R.id.txtAddress);
         //tv_item = (TextView) view.findViewById(R.id.textItems);
-        //tv_total = (TextView) view.findViewById(R.id.textPrice);
+        //tv_subcat_total = (TextView) view.findViewById(R.id.textPrice);
         tv_total = view.findViewById(R.id.txtTotal);
 
         btn_order = view.findViewById(R.id.buttonContinue);
@@ -91,7 +91,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
         Double total = Double.parseDouble(db_cart.getTotalAmount()) + deli_charges;
 
-        //tv_total.setText("" + db_cart.getTotalAmount());
+        //tv_subcat_total.setText("" + db_cart.getTotalAmount());
         //tv_item.setText("" + db_cart.getCartCount());
         tv_total.setText(String.format("%s%d\n%s%s\n%s%d\n%s%s + %d = %s %s", getResources().getString(R.string.tv_cart_item), db_cart.getCartCount(), getResources().getString(R.string.amount), db_cart.getTotalAmount(), getResources().getString(R.string.delivery_charge), deli_charges, getResources().getString(R.string.total_amount), db_cart.getTotalAmount(), deli_charges, total, getResources().getString(R.string.currency)));
 

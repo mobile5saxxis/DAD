@@ -21,7 +21,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
     private List<String> _listDataHeader; // header titles
-    // child data in format of header tv_title, child tv_title
+    // child data in format of header tv_subcat_title, child tv_subcat_title
     private HashMap<String, List<String>> _listDataChild;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,

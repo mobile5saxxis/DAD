@@ -106,7 +106,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
 
                 map.put("price", modelList.get(position).getPrice());
                 map.put("stock", modelList.get(position).getIn_stock());
-                map.put("tv_title", modelList.get(position).getProduct_name());
+                map.put("tv_subcat_title", modelList.get(position).getProduct_name());
                 map.put("unit", modelList.get(position).getUnit());
 
                 map.put("unit_value", modelList.get(position).getUnit_value());

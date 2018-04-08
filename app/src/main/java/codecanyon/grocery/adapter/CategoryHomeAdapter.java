@@ -26,7 +26,7 @@ import codecanyon.grocery.reterofit.APIUrls;
  * Created by Rajesh Dabhi on 22/6/2017.
  */
 
-public class CategoryHomeAdapter extends CommonRecyclerAdapter<Category> {
+public class CategoryHomeAdapter extends CommonRecyclerAdapter<Category>{
 
     private MainActivity activity;
     private RequestOptions requestOptions;
@@ -59,11 +59,15 @@ public class CategoryHomeAdapter extends CommonRecyclerAdapter<Category> {
     public class CategoryHomeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView tv_title;
         public ImageView iv_category;
+        public View card_view;
 
         CategoryHomeViewHolder(View view) {
             super(view);
             tv_title = view.findViewById(R.id.tv_title);
             iv_category = view.findViewById(R.id.iv_category);
+            card_view = view.findViewById(R.id.card_view);
+            card_view.setOnClickListener(this);
+            view.setOnClickListener(this);
         }
 
         void bindData(int position) {
@@ -79,18 +83,20 @@ public class CategoryHomeAdapter extends CommonRecyclerAdapter<Category> {
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
+            if (activity != null && !activity.isFinishing()) {
+                int position = getAdapterPosition();
 
-            Category category = getItem(position);
+                Category category = getItem(position);
 
-            String id = category.getId();
-            String title = category.getTitle();
+                String id = category.getId();
+                String title = category.getTitle();
 
-            FragmentManager fM = activity.getSupportFragmentManager();
-            FragmentTransaction ft = fM.beginTransaction();
+                FragmentManager fM = activity.getSupportFragmentManager();
+                FragmentTransaction ft = fM.beginTransaction();
 
-            ft.replace(R.id.frame_layout, ProductFragment.newInstance(id, title), ProductFragment.class.getSimpleName());
-            ft.commit();
+                ft.replace(R.id.frame_layout, ProductFragment.newInstance(id, title), ProductFragment.class.getSimpleName());
+                ft.commit();
+            }
         }
     }
 }

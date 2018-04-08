@@ -163,7 +163,7 @@ public class OffersDetailsActivity extends AppCompatActivity {
 
                 map.put("price", product.getPrice());
                 map.put("stock", product.getIn_stock());
-                map.put("tv_title", product.getProduct_name());
+                map.put("tv_subcat_title", product.getProduct_name());
                 map.put("unit", product.getUnit());
 
                 map.put("unit_value", product.getUnit_value());

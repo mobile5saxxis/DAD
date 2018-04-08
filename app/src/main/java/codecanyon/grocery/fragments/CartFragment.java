@@ -173,14 +173,14 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 //
 //                                    if (total_amount < value) {
 //                                        issmall = true;
-//                                        Toast.makeText(getActivity(), "" + jsonObject.getString("tv_title") + " : " + value, Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getActivity(), "" + jsonObject.getString("tv_subcat_title") + " : " + value, Toast.LENGTH_SHORT).show();
 //                                    }
 //                                } else if (jsonObject.getString("id").equals("2")) {
 //                                    value = Integer.parseInt(jsonObject.getString("value"));
 //
 //                                    if (total_amount > value) {
 //                                        isbig = true;
-//                                        Toast.makeText(getActivity(), "" + jsonObject.getString("tv_title") + " : " + value, Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getActivity(), "" + jsonObject.getString("tv_subcat_title") + " : " + value, Toast.LENGTH_SHORT).show();
 //                                    }
 //                                }
 //

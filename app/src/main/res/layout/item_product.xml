@@ -1,160 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="0dp"
-    card_view:cardMaxElevation="0dp"
-    app:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="4dp"
-    android:background="@color/white">
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:paddingBottom="@dimen/space_4">
 
+    <ImageView
+        android:id="@+id/iv_subcat"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/logonew" />
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/iv_subcat_remove"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <LinearLayout
+        android:id="@+id/ll_titles"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/space_4">
-
-        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/iv_subcat_img"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logonew" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toRightOf="@+id/iv_subcat_img"
-            app:layout_constraintRight_toLeftOf="@+id/iv_subcat_minus"
-            app:layout_constraintTop_toTopOf="@+id/iv_subcat_img">
-
-            <TextView
-                android:id="@+id/tv_subcat_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text="TextView"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
-            <Spinner
-                android:id="@+id/tv_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/tv_subcat_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_3"
-                android:text="TextView rs"
-                android:textSize="@dimen/space_13" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/space_3"
-                android:layout_marginTop="2dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tv_cart_total"
-                    android:textSize="@dimen/space_13" />
-
-                <TextView
-                    android:id="@+id/tv_subcat_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    android:textSize="@dimen/space_13" />
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:text="Rs"
-                    android:textSize="@dimen/space_13" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/iv_subcat_plus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_more" />
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toEndOf="@+id/iv_subcat"
+        android:layout_toLeftOf="@+id/ll_add_cart"
+        android:layout_toRightOf="@+id/iv_subcat"
+        android:layout_toStartOf="@+id/ll_add_cart"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_subcat_content"
+            android:id="@+id/tv_subcat_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_8"
-            android:layout_marginEnd="@dimen/space_8"
-            android:layout_marginRight="@dimen/space_8"
-            android:layout_marginTop="@dimen/space_8"
-            android:text="0"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_subcat_plus"
-            app:layout_constraintRight_toLeftOf="@+id/iv_subcat_plus"
-            app:layout_constraintTop_toTopOf="@+id/iv_subcat_plus" />
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            tools:text="Add" />
 
-        <ImageView
-            android:id="@+id/iv_subcat_minus"
+        <Spinner
+            android:id="@+id/spinner_subcat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_subcat_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/space_8"
-            android:layout_marginRight="@dimen/space_8"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_subcat_plus"
-            app:layout_constraintRight_toLeftOf="@+id/tv_subcat_content"
-            app:layout_constraintTop_toTopOf="@+id/iv_subcat_plus"
-            app:srcCompat="@drawable/ic_less" />
+            android:textSize="14sp"
+            tools:text="TextView rs" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_3"
+            android:layout_marginTop="2dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_cart_total"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_subcat_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                tools:text="TextView" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:text="Rs"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_add_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_subcat_minus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:src="@drawable/ic_less" />
+
+            <TextView
+                android:id="@+id/tv_subcat_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:text="@string/_0"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_subcat_plus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:src="@drawable/ic_more" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_subcat_add"
-            android:layout_width="0dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_8"
+            android:layout_gravity="center_horizontal"
             android:background="@drawable/rounded_corner_textview"
             android:gravity="center"
-            android:padding="@dimen/space_10"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
             android:text="@string/tv_pro_add"
-            android:textColor="@color/white"
-            app:layout_constraintLeft_toLeftOf="@+id/iv_subcat_minus"
-            app:layout_constraintRight_toRightOf="@+id/iv_subcat_plus"
-            app:layout_constraintTop_toBottomOf="@+id/iv_subcat_plus" />
+            android:textColor="@color/white" />
 
-        <ImageView
-            android:id="@+id/iv_subcat_remove"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+    </LinearLayout>
 
-
-    </android.support.constraint.ConstraintLayout>
-</android.support.v7.widget.CardView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/ll_titles"
+        android:background="@color/lite_gray"
+        android:layout_marginTop="8dp" />
+</RelativeLayout>
