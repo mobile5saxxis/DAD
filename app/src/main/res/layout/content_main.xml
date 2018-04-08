@@ -5,11 +5,8 @@
     android:id="@+id/frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="60dp"
+    android:layout_marginBottom="?actionBarSize"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="codecanyon.grocery.activities.MainActivity"
-    tools:showIn="@layout/app_bar_main">
-
-
-</FrameLayout>
+    tools:showIn="@layout/app_bar_main"/>

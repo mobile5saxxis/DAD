@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -68,31 +69,16 @@ public class MainActivity extends AppCompatActivity
         ConnectivityReceiver.ConnectivityReceiverListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
-
     private TextView totalBudgetCount, tv_number;
-    private List<Category> categoryList = new ArrayList<>();
-    ImageButton tv_name, tv_register;
+    private ImageButton tv_name, tv_register;
     private ImageView iv_profile;
-
+    private boolean doubleBackToExit;
     private DatabaseHandler dbcart;
-    ImageView logo;
-
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
-
+    private List<String> listDataHeader;
+    private HashMap<String, List<String>> listDataChild;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
     private SessionManagement sessionManagement;
-
     private Menu nav_menu;
-    private final String android_image_urls[] = {
-            "R.drawable.ic_nav_home",
-            "R.drawable.ic_action_category",
-            "R.drawable.ic_nav_order",
-            "R.drawable.ic_nav_profile",
-            "R.drawable.ic_nav_support",
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,224 +91,6 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationView navigation = findViewById(R.id.btm_navigation);
         BottomNavigationViewHelper.removeShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-
-        //expListView = (ExpandableListView) findViewById(R.id.navigationmenu);
-
-        /*DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int width = metrics.widthPixels;
-
-        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            expListView.setIndicatorBounds(width - GetDipsFromPixel(80), width - GetDipsFromPixel(30));
-
-        } else {
-            expListView.setIndicatorBoundsRelative(width - GetDipsFromPixel(80), width - GetDipsFromPixel(30));
-
-        }*//*
-
-
-        // preparing list data
-        prepareListData();
-
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
-
-
-        // Listview Group click listener
-        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v,
-                                        int groupPosition, long id) {
-                // Toast.makeText(getApplicationContext(),
-                // "Group Clicked " + listDataHeader.get(groupPosition),
-                // Toast.LENGTH_SHORT).show();
-                Bundle args = new Bundle();
-                switch(groupPosition){
-                    case 0:  Fragment fm_home = new HomeFragment();
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.contentPanel, fm_home, "HomeFragment")
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                .commit();
-                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawer(GravityCompat.START);
-                        return true;
-
-
-                    case 1: return  false;
-
-                    case 2:
-                        Fragment fm_order = new MyOrderFragment();
-                        fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.contentPanel, fm_order, "MyOrderFragment")
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                .commit();
-                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawer(GravityCompat.START);
-                        return true;
-
-                    case 3:
-                        Fragment fm = new EditProfileFragment();
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawer(GravityCompat.START);
-                        return true;
-
-                    case 4:
-                        fm = new SupportInfoFragment();
-                        args.putString("url", APIAPIUrls.GET_SUPPORT_URL);
-                        args.putString("tv_subcat_title", getResources().getString(R.string.nav_support));
-                        fm.setArguments(args);
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawer(GravityCompat.START);
-                        return true;
-
-                    case 5:
-                        fm = new SupportInfoFragment();
-                        args.putString("url", APIAPIUrls.GET_ABOUT_URL);
-                        args.putString("tv_subcat_title", getResources().getString(R.string.nav_about));
-                        fm.setArguments(args);
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawer(GravityCompat.START);
-                        return true;
-                    case 6:
-                        fm = new SupportInfoFragment();
-                        args.putString("url", APIAPIUrls.GET_TERMS_URL);
-                        args.putString("tv_subcat_title", getResources().getString(R.string.nav_terms));
-                        fm.setArguments(args);
-                        fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawer(GravityCompat.START);
-                        return true;
-
-                    case 7:
-                        reviewOnApp();
-                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawer(GravityCompat.START);
-                        return true;
-                }
-return false;
-            }
-        });
-
-        // Listview on child click listener
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                */
-/*Toast.makeText(
-                        getApplicationContext(),
-                        listDataHeader.get(groupPosition)
-                                + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();*//*
-
-
-         */
-/* String getid = categoryList.get(childPosition).getId();
-                String getcat_title = categoryList.get(childPosition).getTitle();
-
-                switch (childPosition){
-                    case 0: Bundle args = new Bundle();
-                        Fragment fm = new ProductFragment();
-                        args.putString("cat_id", getid);
-                        args.putString("cat_title", getcat_title);
-                        fm.setArguments(args);
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                    case 1:  args = new Bundle();
-                         fm = new ProductFragment();
-                        args.putString("cat_id", getid);
-                        args.putString("cat_title", getcat_title);
-                        fm.setArguments(args);
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                    case 2:  args = new Bundle();
-                         fm = new ProductFragment();
-                        args.putString("cat_id", getid);
-                        args.putString("cat_title", getcat_title);
-                        fm.setArguments(args);
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                    case 3:  args = new Bundle();
-                         fm = new ProductFragment();
-                        args.putString("cat_id", getid);
-                        args.putString("cat_title", getcat_title);
-                        fm.setArguments(args);
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                    case 4:  args = new Bundle();
-                         fm = new ProductFragment();
-                        args.putString("cat_id", getid);
-                        args.putString("cat_title", getcat_title);
-                        fm.setArguments(args);
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                    case 5:  args = new Bundle();
-                         fm = new ProductFragment();
-                        args.putString("cat_id", getid);
-                        args.putString("cat_title", getcat_title);
-                        fm.setArguments(args);
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                    case 6:  args = new Bundle();
-                         fm = new ProductFragment();
-                        args.putString("cat_id", getid);
-                        args.putString("cat_title", getcat_title);
-                        fm.setArguments(args);
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                    case 7:  args = new Bundle();
-                         fm = new ProductFragment();
-                        args.putString("cat_id", getid);
-                        args.putString("cat_title", getcat_title);
-                        fm.setArguments(args);
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                    case 8:  args = new Bundle();
-                         fm = new ProductFragment();
-                        args.putString("cat_id", getid);
-                        args.putString("cat_title", getcat_title);
-                        fm.setArguments(args);
-                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                                .addToBackStack(null).commit();
-                }
-                *//*
-
-
-                return false;
-            }
-        });
-*/
-
 
         dbcart = new DatabaseHandler(this);
 
@@ -338,7 +106,7 @@ return false;
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         nav_menu = navigationView.getMenu();
-        View header = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
         iv_profile = header.findViewById(R.id.iv_header_img);
         tv_name = header.findViewById(R.id.tv_header_name);
         tv_register = header.findViewById(R.id.tv_header_Register);
@@ -353,7 +121,7 @@ return false;
                 .inflate(R.layout.menu_cart_layout, bottomNavigationMenuView, false);
         totalBudgetCount = badge.findViewById(R.id.actionbar_notifcation_textview);
 
-        totalBudgetCount.setText("" + dbcart.getCartCount());
+        totalBudgetCount.setText(String.valueOf(dbcart.getCartCount()));
         itemView.addView(badge);
 
         iv_profile.setOnClickListener(new View.OnClickListener() {
@@ -378,7 +146,8 @@ return false;
             Fragment fm = new HomeFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.frame_layout, fm, "HomeFragment")
+                    .replace(R.id.frame_layout, fm, HomeFragment.class.getSimpleName())
+                    .addToBackStack(HomeFragment.class.getSimpleName())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .commit();
         }
@@ -396,7 +165,7 @@ return false;
 
                     final String fm_name = fr.getClass().getSimpleName();
                     Log.e("backstack: ", ": " + fm_name);
-                    if (fm_name.contentEquals("HomeFragment")) {
+                    if (fm_name.contentEquals(HomeFragment.class.getSimpleName())) {
 
 
                         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -450,44 +219,6 @@ return false;
             FirebaseRegister fireReg = new FirebaseRegister(this);
             fireReg.RegisterUser(sessionManagement.getUserDetails().get(APIUrls.KEY_ID));
         }
-    }
-
-  /*  public int GetDipsFromPixel(float pixels)
-    {
-        // Get the screen's density scale
-        final float scale = getResources().getDisplayMetrics().density;
-        // Convert the dps to pixels, based on density scale
-        return (int) (pixels * scale + 0.5f);
-    }*/
-
-    private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
-
-        // Adding child data
-        listDataHeader.add("Home");
-        listDataHeader.add("Shop By Catrgory");
-        listDataHeader.add("My Order");
-        listDataHeader.add("My Profile");
-        listDataHeader.add("Support");
-        listDataHeader.add("About Us");
-        listDataHeader.add("Terms");
-        listDataHeader.add("Review");
-
-        // Adding child data
-        List<String> category = new ArrayList<String>();
-        category.add("Fruits & Vegetables");
-        category.add("Foodgrains, Oil & Masala");
-        category.add("Bakery, Cakes & Dairy");
-        category.add("Beverages");
-        category.add("Branded Foods");
-        category.add("Beauty & Hygiene");
-        category.add("Eggs, Meat & Fish");
-        category.add("Patanjali");
-
-
-        listDataChild.put(listDataHeader.get(1), category); // Header, Child data
-
     }
 
     public void updateHeader() {
@@ -547,15 +278,6 @@ return false;
         getSupportActionBar().setTitle(title);
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
@@ -621,7 +343,8 @@ return false;
             Fragment fm_home = new HomeFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.frame_layout, fm_home, "HomeFragment")
+                    .replace(R.id.frame_layout, fm_home, HomeFragment.class.getSimpleName())
+                    .addToBackStack(HomeFragment.class.getSimpleName())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .commit();
         } else if (id == R.id.offers) {
@@ -729,6 +452,32 @@ return false;
         super.onPause();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            FragmentManager fM = getSupportFragmentManager();
+
+            if (fM.getBackStackEntryCount() > 0) {
+                fM.popBackStackImmediate();
+            } else if (!doubleBackToExit) {
+                doubleBackToExit = true;
+                Toast.makeText(this, R.string.press_again_warn, Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExit = false;
+                    }
+                }, 2000);
+            } else {
+                finish();
+            }
+        }
+    }
+
     /**
      * Callback will be triggered when there is change in
      * network connection
@@ -784,139 +533,113 @@ return false;
         @Override
         public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
             int id = item.getItemId();
-            /*Fragment fm = null;
-            Bundle args = new Bundle();*/
-//Converted the if else to switch
+            FragmentManager fM = getSupportFragmentManager();
+            FragmentTransaction fT = fM.beginTransaction();
+            Fragment fragment = fM.findFragmentById(R.id.frame_layout);
+
             switch (id) {
+                default:
                 case R.id.home:
-                    Fragment fm_home = new HomeFragment();
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, fm_home, "HomeFragment")
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
+
+                    if (fM.findFragmentByTag(HomeFragment.class.getSimpleName()) == null) {
+                        Fragment fm_home = new HomeFragment();
+                        fT.replace(R.id.frame_layout, fm_home, HomeFragment.class.getSimpleName())
+                                .addToBackStack(HomeFragment.class.getSimpleName())
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                    } else {
+                        Fragment homeFragment = fM.findFragmentByTag(HomeFragment.class.getSimpleName());
+
+                        if (homeFragment != null && homeFragment instanceof HomeFragment) {
+                            fT.replace(R.id.frame_layout, homeFragment, HomeFragment.class.getSimpleName())
+                                    .addToBackStack(HomeFragment.class.getSimpleName())
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                    .commit();
+                        }
+                    }
 
                     break;
                 case R.id.offers:
-                    Fragment fm_offers = new OffersFragment();
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, fm_offers, "OffersFragment")
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
+
+                    if (fM.findFragmentByTag(OffersFragment.class.getSimpleName()) == null) {
+                        Fragment offersFragment = new OffersFragment();
+                        fT.replace(R.id.frame_layout, offersFragment, OffersFragment.class.getSimpleName())
+                                .addToBackStack(OffersFragment.class.getSimpleName())
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                    } else {
+                        Fragment offerFragment = fM.findFragmentByTag(OffersFragment.class.getSimpleName());
+
+                        if (offerFragment != null && offerFragment instanceof OffersFragment) {
+                            fT.replace(R.id.frame_layout, offerFragment, OffersFragment.class.getSimpleName())
+                                    .addToBackStack(OffersFragment.class.getSimpleName())
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                    .commit();
+                        }
+                    }
 
                     break;
                 case R.id.categories:
-                    Fragment fm_categories = new CategoryFragment();
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, fm_categories, "CategoryFragment")
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
+
+                    if (fM.findFragmentByTag(CategoryFragment.class.getSimpleName()) == null) {
+                        Fragment fragmentCategory = new CategoryFragment();
+                        fT.replace(R.id.frame_layout, fragmentCategory, CategoryFragment.class.getSimpleName())
+                                .addToBackStack(CategoryFragment.class.getSimpleName())
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                    } else {
+                        Fragment fragmentCategory = fM.findFragmentByTag(CategoryFragment.class.getSimpleName());
+
+                        if (fragmentCategory != null && fragmentCategory instanceof CategoryFragment) {
+                            fT.replace(R.id.frame_layout, fragmentCategory, CategoryFragment.class.getSimpleName())
+                                    .addToBackStack(CategoryFragment.class.getSimpleName())
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                    .commit();
+                        }
+                    }
 
                     break;
                 case R.id.search:
-                    Fragment fm_search = new SearchFragment();
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, fm_search, "SearchFragment")
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
+
+                    if (fM.findFragmentByTag(SearchFragment.class.getSimpleName()) == null) {
+                        Fragment searchFragment = new SearchFragment();
+                        fT.replace(R.id.frame_layout, searchFragment, SearchFragment.class.getSimpleName())
+                                .addToBackStack(SearchFragment.class.getSimpleName())
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                    } else {
+                        Fragment searchFragment = fM.findFragmentByTag(SearchFragment.class.getSimpleName());
+
+                        if (searchFragment != null && searchFragment instanceof SearchFragment) {
+                            fT.replace(R.id.frame_layout, searchFragment, SearchFragment.class.getSimpleName())
+                                    .addToBackStack(SearchFragment.class.getSimpleName())
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                    .commit();
+                        }
+                    }
 
                     break;
                 case R.id.cart:
-                    Fragment fm_cart = new CartFragment();
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, fm_cart, "CartFragment")
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
 
+                    if (fM.findFragmentByTag(CartFragment.class.getSimpleName()) == null) {
+                        Fragment cartFragment = new CartFragment();
+                        fT.replace(R.id.frame_layout, cartFragment, CartFragment.class.getSimpleName())
+                                .addToBackStack(CartFragment.class.getSimpleName())
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                    } else {
+                        Fragment cartFragment = fM.findFragmentByTag(OffersFragment.class.getSimpleName());
+
+                        if (cartFragment != null && cartFragment instanceof CartFragment) {
+                            fT.replace(R.id.frame_layout, cartFragment, CartFragment.class.getSimpleName())
+                                    .addToBackStack(CartFragment.class.getSimpleName())
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                    .commit();
+                        }
+                    }
 
                     break;
-                default:
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.frame_layout, new HomeFragment())
-                            .addToBackStack(null).commit();
             }
-/*
-            if (id == R.id.home) {
-                Fragment fm_home = new HomeFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.contentPanel, fm_home, "HomeFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-            *//*} else if (id == R.id.nav_myorders) {
-                Fragment fm_orders = new MyOrderFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.contentPanel,fm_orders , "MyOrderFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-            } else if (id == R.id.nav_myprofile) {
-                Fragment fm_profile = new EditProfileFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.contentPanel,fm_profile , "EditProfileFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();*//*
-            } else if (id == R.id.categories) {
-
-               Fragment fm_categories = new CategoryFragment();
-              *//*  args.putString("url", APIAPIUrls.GET_SUPPORT_URL);
-                args.putString("tv_subcat_title", getResources().getString(R.string.nav_support));
-                fm_categories.setArguments(args);*//*
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.contentPanel,fm_categories , "SupportInfoFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-
-           *//* } else if (id == R.id.nav_aboutus) {
-                fm = new SupportInfoFragment();
-                args.putString("url", APIAPIUrls.GET_ABOUT_URL);
-                args.putString("tv_subcat_title", getResources().getString(R.string.nav_about));
-                fm.setArguments(args);
-            } else if (id == R.id.nav_policy) {
-                fm = new SupportInfoFragment();
-                args.putString("url", APIAPIUrls.GET_TERMS_URL);
-                args.putString("tv_subcat_title", getResources().getString(R.string.nav_terms));
-                fm.setArguments(args);
-            } else if (id == R.id.nav_review) {
-                reviewOnApp();
-            } *//**//*else if (id == R.id.nav_share) {
-            shareApp();*//**//* else if (id == R.id.nav_logout) {
-                sessionManagement.logoutSession();
-                finish();*//*
-            }else if(id == R.id.offers){
-                Fragment fm_offers = new SupportInfoFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.contentPanel,fm_offers , "SupportInfoFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-            }else if(id == R.id.search){
-                Fragment fm_search = new SearchFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.contentPanel,fm_search , "SupportInfoFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-            }else if(id == R.id.cart) {
-                Fragment fm_cart = new CartFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.contentPanel, fm_cart, "SupportInfoFragment")
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-            }
-
-            if (fm != null) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-                        .addToBackStack(null).commit();
-            }*/
 
             return false;
         }

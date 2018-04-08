@@ -58,7 +58,8 @@
         <Spinner
             android:id="@+id/spinner_subcat"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_subcat_price"
@@ -153,7 +154,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/ll_titles"
+        android:layout_below="@+id/ll_add_cart"
         android:layout_marginTop="8dp"
         android:background="@color/clouds" />
 </RelativeLayout>

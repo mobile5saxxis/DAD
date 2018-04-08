@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView rv_cart;
     private TextView tv_clear, tv_total, tv_item;
-    private ImageButton btn_checkout;
+    private TextView tv_checkout;
 
     private DatabaseHandler db;
 
@@ -65,7 +64,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         tv_clear = view.findViewById(R.id.tv_cart_clear);
         tv_total = view.findViewById(R.id.tv_cart_total);
         tv_item = view.findViewById(R.id.tv_cart_item);
-        btn_checkout = view.findViewById(R.id.btn_cart_checkout);
+        tv_checkout = view.findViewById(R.id.tv_checkout);
         rv_cart = view.findViewById(R.id.rv_cart);
         rv_cart.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -80,7 +79,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         updateData();
 
         tv_clear.setOnClickListener(this);
-        btn_checkout.setOnClickListener(this);
+        tv_checkout.setOnClickListener(this);
 
         return view;
     }
@@ -92,7 +91,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         if (id == R.id.tv_cart_clear) {
             // showdialog
             showClearDialog();
-        } else if (id == R.id.btn_cart_checkout) {
+        } else if (id == R.id.tv_checkout) {
 
             if (ConnectivityReceiver.isConnected()) {
                 makeGetLimiterRequest();

@@ -90,15 +90,22 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btn_cart_checkout"
+        <TextView
+            android:id="@+id/tv_checkout"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp"
-            android:scaleType="centerInside"
-            android:adjustViewBounds="true"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
             android:background="@color/colorPrimary"
-            android:src="@drawable/checkout"/>
+            android:text="@string/checkout"
+            android:textAllCaps="true"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:drawableRight="@drawable/ic_chevoran_right"
+            android:drawableEnd="@drawable/ic_chevoran_right"/>
 
     </LinearLayout>
 

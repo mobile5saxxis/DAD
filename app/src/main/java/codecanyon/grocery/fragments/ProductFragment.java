@@ -42,7 +42,6 @@ public class ProductFragment extends Fragment {
     public static final String CATEGORY_ID = "CATEGORY_ID";
     public static final String CATEGORY_TITLE = "CATEGORY_TITLE";
     private RecyclerView rv_category;
-    private TabLayout tab_category;
     private TextView tv_no_of_items;
     private List<Category> categoryList = new ArrayList<>();
     private List<String> cat_menu_id = new ArrayList<>();
@@ -82,7 +81,6 @@ public class ProductFragment extends Fragment {
         productAdapter = new ProductAdapter(getContext());
 
         rl_progress = view.findViewById(R.id.rl_progress);
-        tab_category = view.findViewById(R.id.tab_category);
         rv_category = view.findViewById(R.id.rv_subcategory);
         tv_no_of_items = view.findViewById(R.id.tv_no_of_items);
         rv_category.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -93,34 +91,8 @@ public class ProductFragment extends Fragment {
         }
 
         if (ConnectivityReceiver.isConnected()) {
-            makeGetCategoryRequest(categoryId);
+            makeGetCategoryRequest();
         }
-
-        tab_category.setVisibility(View.GONE);
-        tab_category.setSelectedTabIndicatorColor(getActivity().getResources().getColor(R.color.white));
-
-        tab_category.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                String getcat_id = cat_menu_id.get(tab.getPosition());
-                tab_category.setVisibility(View.GONE);
-                if (ConnectivityReceiver.isConnected()) {
-                    makeGetProductRequest(getcat_id);
-                }
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
 
         return view;
     }
@@ -139,7 +111,7 @@ public class ProductFragment extends Fragment {
     }
 
 
-    private void makeGetProductRequest(String categoryId) {
+    private void makeGetProductRequest() {
 
         ProductRequest pr = new ProductRequest();
 
@@ -179,9 +151,9 @@ public class ProductFragment extends Fragment {
     /**
      * Method to make json object request where json response starts wtih
      */
-    private void makeGetCategoryRequest(final String parent_id) {
+    private void makeGetCategoryRequest() {
 
-        service.getCategories().enqueue(new Callback<CategoryResponse>() {
+        service.getCategories(categoryId).enqueue(new Callback<CategoryResponse>() {
             @Override
             public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
                 if (response.body() != null && response.isSuccessful()) {
@@ -189,17 +161,11 @@ public class ProductFragment extends Fragment {
 
                     categoryList = cr.getData();
 
-                    if (!categoryList.isEmpty()) {
-                        tab_category.setVisibility(View.VISIBLE);
-
-                        cat_menu_id.clear();
-                        for (int i = 0; i < categoryList.size(); i++) {
-                            cat_menu_id.add(categoryList.get(i).getId());
-                            tab_category.addTab(tab_category.newTab().setText(categoryList.get(i).getTitle()));
-                        }
-                    } else {
-                        makeGetProductRequest(parent_id);
+                    if (categoryList.isEmpty()) {
+                        makeGetProductRequest();
                     }
+
+                    rl_progress.setVisibility(View.GONE);
                 }
             }
 

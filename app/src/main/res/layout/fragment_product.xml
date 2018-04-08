@@ -7,17 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#DCDCDC"
         android:orientation="vertical">
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
