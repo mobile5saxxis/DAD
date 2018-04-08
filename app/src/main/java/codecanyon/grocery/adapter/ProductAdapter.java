@@ -3,7 +3,6 @@ package codecanyon.grocery.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,15 +18,23 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
+import codecanyon.grocery.R;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.activities.ProductDetailsActivity;
-import codecanyon.grocery.R;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.DatabaseHandler;
+
+import static codecanyon.grocery.util.DatabaseHandler.COLUMN_IMAGE;
+import static codecanyon.grocery.util.DatabaseHandler.COLUMN_INCREMENT;
+import static codecanyon.grocery.util.DatabaseHandler.COLUMN_NAME;
+import static codecanyon.grocery.util.DatabaseHandler.COLUMN_PRICE;
+import static codecanyon.grocery.util.DatabaseHandler.COLUMN_STOCK;
+import static codecanyon.grocery.util.DatabaseHandler.COLUMN_TITLE;
+import static codecanyon.grocery.util.DatabaseHandler.COLUMN_UNIT;
+import static codecanyon.grocery.util.DatabaseHandler.COLUMN_UNIT_VALUE;
 
 /**
  * Created by Rajesh Dabhi on 26/6/2017.
@@ -234,6 +237,7 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
             tv_subcat_add.setOnClickListener(this);
             iv_subcat.setOnClickListener(this);
 
+            view.findViewById(R.id.rl_product).setOnClickListener(this);
             view.setOnClickListener(this);
         }
 
@@ -242,92 +246,85 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
             int id = view.getId();
             int position = getAdapterPosition();
 
+            switch (id) {
+                case R.id.iv_subcat_plus:
+                    int qty = Integer.valueOf(tv_subcat_content.getText().toString());
+                    qty = qty + 1;
 
-            //int qty = Integer.valueOf(tv_subcat_content.getText().toString());
-            if (id == R.id.iv_subcat_plus) {
-
-                int qty = Integer.valueOf(tv_subcat_content.getText().toString());
-                qty = qty + 1;
-
-                tv_subcat_content.setText(String.valueOf(qty));
-
-            } else if (id == R.id.spinner_subcat) {
-                int qty = Integer.valueOf(tv_subcat_content.getText().toString());
-                qty = qty + 1;
-
-                tv_subcat_content.setText(String.valueOf(qty));
-
-            } else if (id == R.id.iv_subcat_minus) {
-
-                int qty = 0;
-                if (!tv_subcat_content.getText().toString().equalsIgnoreCase(""))
-                    qty = Integer.valueOf(tv_subcat_content.getText().toString());
-
-                if (qty > 0) {
-                    qty = qty - 1;
                     tv_subcat_content.setText(String.valueOf(qty));
-                }
+                    break;
+                case R.id.spinner_subcat:
+                    int qty1 = Integer.valueOf(tv_subcat_content.getText().toString());
+                    qty1 = qty1 + 1;
 
-            } else if (id == R.id.tv_subcat_add) {
-                Product product = getItem(position);
+                    tv_subcat_content.setText(String.valueOf(qty1));
+                    break;
+                case R.id.iv_subcat_minus:
+                    int qty2 = 0;
+                    if (!tv_subcat_content.getText().toString().equalsIgnoreCase(""))
+                        qty2 = Integer.valueOf(tv_subcat_content.getText().toString());
 
-                HashMap<String, String> map = new HashMap<>();
-
-                map.put("product_id", product.getProduct_id());
-                map.put("category_id", product.getCategory_id());
-                map.put("product_image", product.getProduct_image());
-                map.put("increament", product.getIncreament());
-                map.put("product_name", product.getProduct_name());
-
-                map.put("price", product.getPrice());
-                map.put("stock", product.getIn_stock());
-                map.put("tv_subcat_title", product.getTitle());
-                map.put("unit", product.getUnit());
-
-                map.put("unit_value", product.getUnit_value());
-
-                if (!tv_subcat_content.getText().toString().equalsIgnoreCase("0")) {
-
-                    if (dbcart.isInCart(map.get("product_id"))) {
-                        dbcart.setCart(map, Float.valueOf(tv_subcat_content.getText().toString()));
-                        tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                    } else {
-                        dbcart.setCart(map, Float.valueOf(tv_subcat_content.getText().toString()));
-                        tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                    if (qty2 > 0) {
+                        qty2 = qty2 - 1;
+                        tv_subcat_content.setText(String.valueOf(qty2));
                     }
-                } else {
-                    dbcart.removeItemFromCart(map.get("product_id"));
-                    tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_add));
-                }
+                    break;
+                case R.id.tv_subcat_add:
+                    Product product = getItem(position);
 
-                Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
-                Double price = Double.parseDouble(map.get("price"));
+                    HashMap<String, String> map = new HashMap<>();
 
-                tv_subcat_total.setText("" + price * items);
-                ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
+                    map.put(DatabaseHandler.COLUMN_ID, product.getProduct_id());
+                    map.put(DatabaseHandler.COLUMN_CAT_ID, product.getCategory_id());
+                    map.put(COLUMN_IMAGE, product.getProduct_image());
+                    map.put(COLUMN_INCREMENT, product.getIncreament());
+                    map.put(COLUMN_NAME, product.getProduct_name());
 
-            } else if (id == R.id.iv_subcat) {
-                Product product = getItem(position);
+                    map.put(COLUMN_PRICE, product.getPrice());
+                    map.put(COLUMN_STOCK, product.getIn_stock());
+                    map.put(COLUMN_TITLE, product.getTitle());
+                    map.put(COLUMN_UNIT, product.getUnit());
 
-                showImage(product.getProduct_image());
-            } else if (id == R.id.card_view) {
-               /* showProductDetail(modelList.get(position).getProduct_image(),
-                        modelList.get(position).getTitle(),
-                        modelList.get(position).getProduct_description(),
-                        modelList.get(position).getProduct_name(),
-                        position, tv_subcat_content.getText().toString(), modelList.get(position).getPrice(), modelList.get(position).getUnit());*/
+                    map.put(COLUMN_UNIT_VALUE, product.getUnit_value());
 
-                Intent intent = new Intent(context, ProductDetailsActivity.class);
-                intent.putExtra("position", position);
-                intent.putExtra("selectedProduct", getItem(position));
-                intent.putExtra("total", tv_subcat_total.getText().toString());
-                context.startActivity(intent);
+                    if (!tv_subcat_content.getText().toString().equalsIgnoreCase("0")) {
+
+                        if (dbcart.isInCart(map.get("product_id"))) {
+                            dbcart.setCart(map, Float.valueOf(tv_subcat_content.getText().toString()));
+                            tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                        } else {
+                            dbcart.setCart(map, Float.valueOf(tv_subcat_content.getText().toString()));
+                            tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                        }
+                    } else {
+                        dbcart.removeItemFromCart(map.get("product_id"));
+                        tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_add));
+                    }
+
+                    Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
+                    Double price = Double.parseDouble(map.get("price"));
+
+                    tv_subcat_total.setText(String.format("%s", price * items));
+                    ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
+
+                    break;
+                case R.id.iv_subcat:
+                    Product product1 = getItem(position);
+
+                    showImage(product1.getProduct_image());
+                    break;
+                case R.id.rl_product:
+                    Intent intent = new Intent(context, ProductDetailsActivity.class);
+                    intent.putExtra("position", position);
+                    intent.putExtra("selectedProduct", getItem(position));
+                    intent.putExtra("total", tv_subcat_total.getText().toString());
+                    context.startActivity(intent);
+                    break;
             }
-
         }
 
         public void bindData(int position) {
-            final Product mList = getItem(position);
+            final Product product = getItem(position);
 
             RequestOptions requestOptions = new RequestOptions()
                     .placeholder(R.drawable.logonew)
@@ -335,28 +332,28 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 
             Glide.with(context)
-                    .load(APIUrls.IMG_PRODUCT_URL + mList.getProduct_image())
+                    .load(APIUrls.IMG_PRODUCT_URL + product.getProduct_image())
                     .apply(requestOptions)
                     .into(iv_subcat);
 
-            tv_subcat_title.setText(mList.getProduct_name());
-            tv_subcat_price.setText(String.format("%s%s %s %s %s", context.getResources().getString(R.string.tv_pro_price), mList.getUnit_value(), mList.getUnit(), context.getResources().getString(R.string.currency), mList.getPrice()));
+            tv_subcat_title.setText(product.getProduct_name());
+            tv_subcat_price.setText(String.format("%s%s %s %s %s", context.getResources().getString(R.string.tv_pro_price), product.getUnit_value(), product.getUnit(), context.getResources().getString(R.string.currency), product.getPrice()));
 
-            if (dbcart.isInCart(mList.getProduct_id())) {
+            if (dbcart.isInCart(product.getProduct_id())) {
                 tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                tv_subcat_content.setText(dbcart.getCartItemQty(mList.getProduct_id()));
+                tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
             } else {
                 tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_add));
             }
 
-            Double items = Double.parseDouble(dbcart.getInCartItemQty(mList.getProduct_id()));
-            Double price = Double.parseDouble(mList.getPrice());
-            Log.v("price", mList.getPrice());
+            Double items = Double.parseDouble(dbcart.getInCartItemQty(product.getProduct_id()));
+            Double price = Double.parseDouble(product.getPrice());
+            Log.v("price", product.getPrice());
 
             tv_subcat_total.setText(String.format("%s", price * items));
-            String drop1 = mList.getUnit() + "- Rs " + mList.getPrice();
-            String drop2 = mList.getQuantity() + "- Rs " + mList.getPrice_val();
-            String drop3 = mList.getQuantity() + "- Rs " + mList.getPrice_val();
+            String drop1 = product.getUnit() + "- Rs " + product.getPrice();
+            String drop2 = product.getQuantity() + "- Rs " + product.getPrice_val();
+            String drop3 = product.getQuantity() + "- Rs " + product.getPrice_val();
 
 //            list_product = new String[]{"select tv_quantity", drop1, drop2, drop3};
 //            ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,

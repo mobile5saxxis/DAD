@@ -2,9 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_product"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:orientation="vertical"
     android:padding="8dp"
     android:paddingBottom="@dimen/space_4">
@@ -60,13 +64,12 @@
             android:id="@+id/tv_subcat_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="12sp"
             tools:text="TextView rs" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_3"
             android:layout_marginTop="2dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -76,13 +79,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tv_cart_total"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tv_subcat_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 tools:text="TextView" />
 
             <TextView
@@ -90,8 +93,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:text="Rs"
-                android:textSize="14sp" />
+                android:layout_marginStart="2dp"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -151,6 +154,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/ll_titles"
-        android:background="@color/lite_gray"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:background="@color/clouds" />
 </RelativeLayout>

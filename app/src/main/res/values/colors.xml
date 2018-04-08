@@ -14,5 +14,7 @@
     <color name="color_1">#1bdc84</color>
     <color name="color_2">#1b4ddc</color>
     <color name="color_3">#ff0023</color>
+    <color name="clouds">#ecf0f1</color>
+    <color name="silver">#bdc3c7</color>
 
 </resources>

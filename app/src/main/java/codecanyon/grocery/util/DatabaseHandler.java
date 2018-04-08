@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +30,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String COLUMN_UNIT_VALUE = "unit_value";
     public static final String COLUMN_UNIT = "unit";
 
-    public static final String COLUMN_INCREAMENT = "increament";
+    public static final String COLUMN_INCREMENT = "increament";
     public static final String COLUMN_STOCK = "stock";
     public static final String COLUMN_TITLE = "title";
 
@@ -53,7 +51,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + COLUMN_PRICE + " DOUBLE NOT NULL, "
                 + COLUMN_UNIT_VALUE + " DOUBLE NOT NULL, "
                 + COLUMN_UNIT + " TEXT NOT NULL, "
-                + COLUMN_INCREAMENT + " DOUBLE NOT NULL, "
+                + COLUMN_INCREMENT + " DOUBLE NOT NULL, "
                 + COLUMN_STOCK + " DOUBLE NOT NULL, "
                 + COLUMN_TITLE + " TEXT NOT NULL "
                 + ")";
@@ -74,7 +72,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             values.put(COLUMN_QTY, Qty);
             values.put(COLUMN_CAT_ID, map.get(COLUMN_CAT_ID));
             values.put(COLUMN_IMAGE, map.get(COLUMN_IMAGE));
-            values.put(COLUMN_INCREAMENT, map.get(COLUMN_INCREAMENT));
+            values.put(COLUMN_INCREMENT, map.get(COLUMN_INCREMENT));
             values.put(COLUMN_NAME, map.get(COLUMN_NAME));
             values.put(COLUMN_PRICE, map.get(COLUMN_PRICE));
             values.put(COLUMN_STOCK, map.get(COLUMN_STOCK));
@@ -119,10 +117,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public int getCartCount() {
-        db = getReadableDatabase();
-        String qry = "Select *  from " + CART_TABLE;
-        Cursor cursor = db.rawQuery(qry, null);
-        return cursor.getCount();
+        String countQuery = String.format("Select *  from %s", CART_TABLE);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+
+        return count;
     }
 
     public String getTotalAmount() {
@@ -156,7 +157,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             map.put(COLUMN_PRICE, cursor.getString(cursor.getColumnIndex(COLUMN_PRICE)));
             map.put(COLUMN_UNIT_VALUE, cursor.getString(cursor.getColumnIndex(COLUMN_UNIT_VALUE)));
             map.put(COLUMN_UNIT, cursor.getString(cursor.getColumnIndex(COLUMN_UNIT)));
-            map.put(COLUMN_INCREAMENT, cursor.getString(cursor.getColumnIndex(COLUMN_INCREAMENT)));
+            map.put(COLUMN_INCREMENT, cursor.getString(cursor.getColumnIndex(COLUMN_INCREMENT)));
             map.put(COLUMN_STOCK, cursor.getString(cursor.getColumnIndex(COLUMN_STOCK)));
             map.put(COLUMN_TITLE, cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)));
 
