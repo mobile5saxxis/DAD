@@ -2,11 +2,9 @@ package codecanyon.grocery.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,9 +20,6 @@ import codecanyon.grocery.adapter.ProductAdapter;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.Category;
-import codecanyon.grocery.models.CategoryResponse;
-import codecanyon.grocery.models.Product;
-import codecanyon.grocery.models.ProductRequest;
 import codecanyon.grocery.models.ProductResponse;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
@@ -39,15 +34,15 @@ import retrofit2.Response;
 
 public class ProductFragment extends Fragment {
 
-    public static final String CATEGORY_ID = "CATEGORY_ID";
-    public static final String CATEGORY_TITLE = "CATEGORY_TITLE";
+    public static final String SUB_CATEGORY_ID = "CATEGORY_ID";
+    public static final String SUB_CATEGORY_TITLE = "CATEGORY_TITLE";
     private RecyclerView rv_category;
     private TextView tv_no_of_items;
     private List<Category> categoryList = new ArrayList<>();
     private List<String> cat_menu_id = new ArrayList<>();
     private ProductAdapter productAdapter;
     private RetrofitService service;
-    private String categoryId, categoryTitle;
+    private String subCategoryId, categoryTitle;
     private RelativeLayout rl_progress;
 
 
@@ -55,8 +50,8 @@ public class ProductFragment extends Fragment {
         ProductFragment productFragment = new ProductFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString(CATEGORY_ID, categoryId);
-        bundle.putString(CATEGORY_TITLE, categoryTitle);
+        bundle.putString(SUB_CATEGORY_ID, categoryId);
+        bundle.putString(SUB_CATEGORY_TITLE, categoryTitle);
         productFragment.setArguments(bundle);
 
         return productFragment;
@@ -67,8 +62,8 @@ public class ProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            categoryId = getArguments().getString(CATEGORY_ID);
-            categoryTitle = getArguments().getString(CATEGORY_TITLE);
+            subCategoryId = getArguments().getString(SUB_CATEGORY_ID);
+            categoryTitle = getArguments().getString(SUB_CATEGORY_TITLE);
         }
     }
 
@@ -91,7 +86,7 @@ public class ProductFragment extends Fragment {
         }
 
         if (ConnectivityReceiver.isConnected()) {
-            makeGetCategoryRequest();
+            makeGetProductRequest();
         }
 
         return view;
@@ -112,14 +107,7 @@ public class ProductFragment extends Fragment {
 
 
     private void makeGetProductRequest() {
-
-        ProductRequest pr = new ProductRequest();
-
-        if (!TextUtils.isEmpty(categoryId)) {
-            pr.setCat_id(categoryId);
-        }
-
-        service.getProducts(pr).enqueue(new Callback<ProductResponse>() {
+        service.getProducts(subCategoryId).enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if (response.body() != null && response.isSuccessful()) {
@@ -141,36 +129,6 @@ public class ProductFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ProductResponse> call, Throwable t) {
-                if (getContext() != null) {
-                    Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    /**
-     * Method to make json object request where json response starts wtih
-     */
-    private void makeGetCategoryRequest() {
-
-        service.getCategories(categoryId).enqueue(new Callback<CategoryResponse>() {
-            @Override
-            public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
-                if (response.body() != null && response.isSuccessful()) {
-                    CategoryResponse cr = response.body();
-
-                    categoryList = cr.getData();
-
-                    if (categoryList.isEmpty()) {
-                        makeGetProductRequest();
-                    }
-
-                    rl_progress.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CategoryResponse> call, Throwable t) {
                 if (getContext() != null) {
                     Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
                 }

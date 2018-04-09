@@ -59,7 +59,7 @@
             android:id="@+id/spinner_subcat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_subcat_price"
@@ -108,9 +108,11 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/ll_add_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:visibility="invisible">
 
             <ImageView
                 android:id="@+id/iv_subcat_minus"

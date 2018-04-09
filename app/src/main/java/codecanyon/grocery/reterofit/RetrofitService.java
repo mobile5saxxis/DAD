@@ -26,6 +26,7 @@ import codecanyon.grocery.models.RegisterRequest;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.models.SliderImage;
 import codecanyon.grocery.models.SoCity;
+import codecanyon.grocery.models.SubCategoryResponse;
 import codecanyon.grocery.models.SupportInfoResponse;
 import codecanyon.grocery.models.TimeRequest;
 import codecanyon.grocery.models.TimeResponse;
@@ -64,10 +65,13 @@ public interface RetrofitService {
     Call<RequestResponse> addOrder(@Body AddOrderRequest addOrderRequest);
 
     @POST(APIUrls.GET_CATEGORY_URL)
-    Call<CategoryResponse> getCategories();
+    Call<CategoryResponse> getCategory();
 
     @POST(APIUrls.GET_CATEGORY_URL)
-    Call<CategoryResponse> getCategories(@Query("parent") String parent);
+    Call<CategoryResponse> getCategory(@Query("parent") String parent);
+
+    @POST(APIUrls.GET_CATEGORY_URL)
+    Call<SubCategoryResponse> getSubCategories(@Query("parent") String parent);
 
     @POST(APIUrls.GET_BEST_PRODUCTS)
     Call<BestProductResponse> getBestProducts();
@@ -81,7 +85,10 @@ public interface RetrofitService {
     @POST(APIUrls.GET_ORDER_URL)
     Call<List<MyOrder>> getOrder(@Body DeliveryRequest deliveryRequest);
 
-    @POST(APIUrls.GET_PRODUCT_URL)
+    @GET(APIUrls.GET_PRODUCT_URL)
+    Call<ProductResponse> getProducts(@Query("cat_id") String cat_id);
+
+    @GET(APIUrls.GET_PRODUCT_URL)
     Call<ProductResponse> getProducts(@Body ProductRequest pr);
 
     @GET(APIUrls.GET_SOCITY_URL)

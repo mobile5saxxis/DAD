@@ -461,7 +461,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             FragmentManager fM = getSupportFragmentManager();
 
-            if (fM.getBackStackEntryCount() > 0) {
+            if (fM.getBackStackEntryCount() > 1) {
                 fM.popBackStackImmediate();
             } else if (!doubleBackToExit) {
                 doubleBackToExit = true;

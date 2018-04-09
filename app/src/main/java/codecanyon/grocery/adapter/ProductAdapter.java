@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -217,9 +218,12 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
         public TextView tv_subcat_title, tv_subcat_price, tv_subcat_total, tv_subcat_content, tv_subcat_add;
         public ImageView iv_subcat, iv_subcat_plus, iv_subcat_minus, iv_subcat_remove;
         public Spinner spinner_subcat;
+        private LinearLayout ll_add_content;
 
         public ProductViewHolder(View view) {
             super(view);
+            ll_add_content = view.findViewById(R.id.ll_add_content);
+            ll_add_content.setVisibility(View.INVISIBLE);
             tv_subcat_title = view.findViewById(R.id.tv_subcat_title);
             tv_subcat_price = view.findViewById(R.id.tv_subcat_price);
             tv_subcat_total = view.findViewById(R.id.tv_subcat_total);
@@ -270,6 +274,13 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                     }
                     break;
                 case R.id.tv_subcat_add:
+
+                    if (ll_add_content.getVisibility() == View.INVISIBLE) {
+                        ll_add_content.setVisibility(View.VISIBLE);
+                    } else {
+                        ll_add_content.setVisibility(View.INVISIBLE);
+                    }
+
                     Product product = getItem(position);
 
                     HashMap<String, String> map = new HashMap<>();
@@ -282,7 +293,7 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
 
                     map.put(COLUMN_PRICE, product.getPrice());
                     map.put(COLUMN_STOCK, product.getIn_stock());
-                    map.put(COLUMN_TITLE, product.getTitle());
+                    map.put(COLUMN_TITLE, product.getProduct_name());
                     map.put(COLUMN_UNIT, product.getUnit());
 
                     map.put(COLUMN_UNIT_VALUE, product.getUnit_value());
@@ -301,10 +312,10 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                         tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_add));
                     }
 
-                    Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
-                    Double price = Double.parseDouble(map.get("price"));
-
-                    tv_subcat_total.setText(String.format("%s", price * items));
+//                    Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
+//                    Double price = Double.parseDouble(map.get("price"));
+//
+//                    tv_subcat_total.setText(String.format("%s", price * items));
                     ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
 
                     break;
@@ -346,14 +357,11 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                 tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_add));
             }
 
-            Double items = Double.parseDouble(dbcart.getInCartItemQty(product.getProduct_id()));
-            Double price = Double.parseDouble(product.getPrice());
-            Log.v("price", product.getPrice());
+//            Double items = Double.parseDouble(dbcart.getInCartItemQty(product.getProduct_id()));
+//            Double price = Double.parseDouble(product.getPrice());
+//            Log.v("price", product.getPrice());
 
-            tv_subcat_total.setText(String.format("%s", price * items));
-            String drop1 = product.getUnit() + "- Rs " + product.getPrice();
-            String drop2 = product.getQuantity() + "- Rs " + product.getPrice_val();
-            String drop3 = product.getQuantity() + "- Rs " + product.getPrice_val();
+//            tv_subcat_total.setText(String.format("%s", price * items));
 
 //            list_product = new String[]{"select tv_quantity", drop1, drop2, drop3};
 //            ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,

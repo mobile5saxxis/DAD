@@ -18,8 +18,6 @@ public class Category {
     String description;
     String image;
     String status;
-
-
     String Count;
     String PCount;
 

@@ -9,30 +9,27 @@ import android.os.Parcelable;
 
 public class Product implements Parcelable {
 
-   String product_id;
-    String product_name;
-    String brand;
-    String product_description;
-    String specifications;
-    String how_to_use;
-    String product_image;
-    String category_id;
-    String in_stock;
-    String best_seller;
-    String offer;
-    String price;
-    String unit_value;
-    String unit;
-    String quantity_per_user;
-    String increament;
-    String createddate;
-    String stock;
-    String title;
-    String id;
-    String pid;
-    String quantity;
-    String price_val;
-    String strikeprice;
+    private String quantity_per_user;
+    private String unit_value;
+    private String product_id;
+    private String in_stock;
+    private String increament;
+    private String product_name;
+    private String category_id;
+    private String attrid;
+    private String createddate;
+    private String offer;
+    private String product_description;
+    private String specifications;
+    private String best_seller;
+    private String unit;
+    private String price;
+    private String discount_price;
+    private String brand;
+    private String product_image;
+    private String quantity;
+    private String price_val;
+    private String how_to_use;
 
 
     protected Product(Parcel in) {
@@ -53,13 +50,8 @@ public class Product implements Parcelable {
         quantity_per_user = in.readString();
         increament = in.readString();
         createddate = in.readString();
-        stock = in.readString();
-        title = in.readString();
-        id = in.readString();
-        pid = in.readString();
         quantity = in.readString();
         price_val = in.readString();
-        strikeprice = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -210,61 +202,6 @@ public class Product implements Parcelable {
         this.createddate = createddate;
     }
 
-    public String getStock() {
-        return stock;
-    }
-
-    public void setStock(String stock) {
-        this.stock = stock;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getPrice_val() {
-        return price_val;
-    }
-
-    public void setPrice_val(String price_val) {
-        this.price_val = price_val;
-    }
-
-    public String getStrikeprice() {
-        return strikeprice;
-    }
-
-    public void setStrikeprice(String strikeprice) {
-        this.strikeprice = strikeprice;
-    }
 
 
     @Override
@@ -291,12 +228,7 @@ public class Product implements Parcelable {
         dest.writeString(quantity_per_user);
         dest.writeString(increament);
         dest.writeString(createddate);
-        dest.writeString(stock);
-        dest.writeString(title);
-        dest.writeString(id);
-        dest.writeString(pid);
         dest.writeString(quantity);
         dest.writeString(price_val);
-        dest.writeString(strikeprice);
     }
 }

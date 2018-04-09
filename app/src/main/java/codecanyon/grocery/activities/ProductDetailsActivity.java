@@ -71,7 +71,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).select();
 
         showProductDetail(product.getProduct_image(),
-                product.getTitle(),
+                product.getProduct_name(),
                 product.getProduct_description(),
                 product.getProduct_name(),
                 position, getqty, product.getPrice(), product.getUnit());
@@ -163,7 +163,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                 map.put("price", product.getPrice());
                 map.put("stock", product.getIn_stock());
-                map.put("tv_subcat_title", product.getTitle());
+                map.put("tv_subcat_title", product.getProduct_name());
                 map.put("unit", product.getUnit());
 
                 map.put("unit_value", product.getUnit_value());

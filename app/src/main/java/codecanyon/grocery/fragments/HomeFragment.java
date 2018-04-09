@@ -224,7 +224,7 @@ public class HomeFragment extends Fragment {
      * Method to make json object request where json response starts wtih {
      */
     private void makeGetCategoryRequest() {
-        service.getCategories().enqueue(new Callback<CategoryResponse>() {
+        service.getCategory().enqueue(new Callback<CategoryResponse>() {
             @Override
             public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
                 if (response.body() != null && response.isSuccessful()) {

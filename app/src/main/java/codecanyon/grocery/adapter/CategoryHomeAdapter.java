@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.fragments.ProductFragment;
+import codecanyon.grocery.fragments.SubCategoryFragment;
 import codecanyon.grocery.models.Category;
 import codecanyon.grocery.reterofit.APIUrls;
 
@@ -94,8 +95,8 @@ public class CategoryHomeAdapter extends CommonRecyclerAdapter<Category> {
                 FragmentManager fM = activity.getSupportFragmentManager();
                 FragmentTransaction ft = fM.beginTransaction();
 
-                ft.replace(R.id.frame_layout, ProductFragment.newInstance(id, title), ProductFragment.class.getSimpleName())
-                        .addToBackStack(ProductFragment.class.getSimpleName());
+                ft.replace(R.id.frame_layout, SubCategoryFragment.newInstance(id, title), SubCategoryFragment.class.getSimpleName())
+                        .addToBackStack(SubCategoryFragment.class.getSimpleName());
                 ft.commit();
             }
         }
