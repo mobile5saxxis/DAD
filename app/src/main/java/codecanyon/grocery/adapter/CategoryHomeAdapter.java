@@ -26,7 +26,7 @@ import codecanyon.grocery.reterofit.APIUrls;
  * Created by Rajesh Dabhi on 22/6/2017.
  */
 
-public class CategoryHomeAdapter extends CommonRecyclerAdapter<Category>{
+public class CategoryHomeAdapter extends CommonRecyclerAdapter<Category> {
 
     private MainActivity activity;
     private RequestOptions requestOptions;
@@ -94,7 +94,8 @@ public class CategoryHomeAdapter extends CommonRecyclerAdapter<Category>{
                 FragmentManager fM = activity.getSupportFragmentManager();
                 FragmentTransaction ft = fM.beginTransaction();
 
-                ft.replace(R.id.frame_layout, ProductFragment.newInstance(id, title), ProductFragment.class.getSimpleName());
+                ft.replace(R.id.frame_layout, ProductFragment.newInstance(id, title), ProductFragment.class.getSimpleName())
+                        .addToBackStack(ProductFragment.class.getSimpleName());
                 ft.commit();
             }
         }

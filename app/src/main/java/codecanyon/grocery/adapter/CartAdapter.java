@@ -2,6 +2,7 @@ package codecanyon.grocery.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,55 +26,28 @@ import codecanyon.grocery.util.DatabaseHandler;
  */
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder> {
-    //private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
-
-    //ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-    ArrayList<HashMap<String, String>> list;
-    Activity activity;
-    int lastpostion;
-    /*CommonClass common;
-    DisplayImageOptions options;
-    ImageLoaderConfiguration imgconfig;*/
-    DatabaseHandler dbHandler;
+    private ArrayList<HashMap<String, String>> list;
+    private Activity activity;
+    private DatabaseHandler dbHandler;
 
     public CartAdapter(Activity activity, ArrayList<HashMap<String, String>> list) {
         this.list = list;
         this.activity = activity;
 
         dbHandler = new DatabaseHandler(activity);
-        /*common = new CommonClass(activity);
-        File cacheDir = StorageUtils.getCacheDirectory(activity);
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.loading)
-                .showImageForEmptyUri(R.drawable.loading)
-                .showImageOnFail(R.drawable.loading)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .displayer(new SimpleBitmapDisplayer())
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .build();
-
-        imgconfig = new ImageLoaderConfiguration.Builder(activity)
-                .build();
-        ImageLoader.getInstance().init(imgconfig);*/
     }
 
+    @NonNull
     @Override
-    public ProductHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = null;
-
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
+    public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
 
         return new ProductHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ProductHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ProductHolder holder, final int position) {
         final HashMap<String, String> map = list.get(position);
-
-
-
 
 
         Glide.with(activity)
@@ -82,14 +56,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
                 .into(holder.iv_logo);
 
         holder.tv_title.setText(map.get("product_name"));
-        holder.tv_price.setText(activity.getResources().getString(R.string.tv_pro_price) + map.get("unit_value") + " " +
-                map.get("unit") +" "+activity.getResources().getString(R.string.currency)+" "+ map.get("price"));
+        holder.tv_price.setText(String.format("%s%s %s %s %s", activity.getResources().getString(R.string.tv_pro_price), map.get("unit_value"), map.get("unit"), activity.getResources().getString(R.string.currency), map.get("price")));
         holder.tv_contetiy.setText(map.get("qty"));
 
         Double items = Double.parseDouble(dbHandler.getInCartItemQty(map.get("product_id")));
         Double price = Double.parseDouble(map.get("price"));
 
-        holder.tv_total.setText("" + price * items);
+        holder.tv_total.setText(String.format("%s", price * items));
 
         holder.iv_minus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +105,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
                 Double items = Double.parseDouble(dbHandler.getInCartItemQty(map.get("product_id")));
                 Double price = Double.parseDouble(map.get("price"));
 
-                holder.tv_total.setText("" + price * items );
+                holder.tv_total.setText("" + price * items);
                 //holder.tv_subcat_total.setText(activity.getResources().getString(R.string.tv_cart_total) + price * items + " " +activity.getResources().getString(R.string.currency));
                 updateintent();
             }
@@ -157,11 +130,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
     }
 
     class ProductHolder extends RecyclerView.ViewHolder {
-        public TextView tv_title, tv_price, tv_total, tv_contetiy, tv_add,
-                tv_unit,tv_unit_value;
-        public ImageView iv_logo, iv_plus, iv_minus, iv_remove;
+        private TextView tv_title, tv_price, tv_total, tv_contetiy, tv_add,
+                tv_unit, tv_unit_value;
+        private ImageView iv_logo, iv_plus, iv_minus, iv_remove;
 
-        public ProductHolder(View view) {
+        private ProductHolder(View view) {
             super(view);
 
             tv_title = view.findViewById(R.id.tv_subcat_title);
@@ -179,7 +152,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
         }
     }
 
-    private void updateintent(){
+    private void updateintent() {
         Intent updates = new Intent("Grocery_cart");
         updates.putExtra("type", "update");
         activity.sendBroadcast(updates);

@@ -128,6 +128,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         tv_detail.setText(total);
         tv_price.setText("RS");
         tv_price.append(" " + price);
+        tv_quantity.setText(String.format("%s %s", product.getUnit_value(), product.getUnit()));
 
        /* Double items = Double.parseDouble(dbcart.getInCartItemQty(product.getProduct_id()));
         Double priceoftotal = Double.parseDouble(product.getPrice());

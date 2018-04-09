@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,20 +19,20 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/gray"
+                android:background="@color/clouds"
                 android:padding="@dimen/space_6"
                 android:text="@string/numberofitms"
-                android:textColor="@color/black"
-                android:textSize="@dimen/space_18" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_no_of_items"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray"
+                android:background="@color/clouds"
                 android:padding="@dimen/space_6"
-                android:textColor="@color/black"
-                android:textSize="@dimen/space_18" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -45,7 +46,8 @@
         android:id="@+id/rl_progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        tools:visibility="gone">
 
         <ProgressBar
             android:layout_width="64dp"

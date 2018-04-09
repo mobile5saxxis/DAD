@@ -6,32 +6,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="codecanyon.grocery.activities.ProductDetailsActivity">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-    <include
-        layout="@layout/dialog_product_detail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/dialog_product_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-    <android.support.v4.view.ViewPager
-        android:id="@+id/masterViewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/lite_gray"/>
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    </LinearLayout>
-</ScrollView>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/masterViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/clouds" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
