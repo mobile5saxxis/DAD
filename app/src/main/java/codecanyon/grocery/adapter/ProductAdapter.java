@@ -291,12 +291,12 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                     map.put(COLUMN_INCREMENT, product.getIncreament());
                     map.put(COLUMN_NAME, product.getProduct_name());
 
-                    map.put(COLUMN_PRICE, product.getPrice());
+//                    map.put(COLUMN_PRICE, product.getPrice());
                     map.put(COLUMN_STOCK, product.getIn_stock());
                     map.put(COLUMN_TITLE, product.getProduct_name());
-                    map.put(COLUMN_UNIT, product.getUnit());
+//                    map.put(COLUMN_UNIT, product.getUnit());
 
-                    map.put(COLUMN_UNIT_VALUE, product.getUnit_value());
+//                    map.put(COLUMN_UNIT_VALUE, product.getUnit_value());
 
                     if (!tv_subcat_content.getText().toString().equalsIgnoreCase("0")) {
 
@@ -327,7 +327,7 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                 case R.id.rl_product:
                     Intent intent = new Intent(context, ProductDetailsActivity.class);
                     intent.putExtra("position", position);
-                    intent.putExtra("selectedProduct", getItem(position));
+//                    intent.putExtra("selectedProduct", getItem(position));
                     intent.putExtra("total", tv_subcat_total.getText().toString());
                     context.startActivity(intent);
                     break;
@@ -348,7 +348,7 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                     .into(iv_subcat);
 
             tv_subcat_title.setText(product.getProduct_name());
-            tv_subcat_price.setText(String.format("%s%s %s %s %s", context.getResources().getString(R.string.tv_pro_price), product.getUnit_value(), product.getUnit(), context.getResources().getString(R.string.currency), product.getPrice()));
+//            tv_subcat_price.setText(String.format("%s%s %s %s %s", context.getResources().getString(R.string.tv_pro_price), product.getUnit_value(), product.getUnit(), context.getResources().getString(R.string.currency), product.getPrice()));
 
             if (dbcart.isInCart(product.getProduct_id())) {
                 tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));

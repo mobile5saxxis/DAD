@@ -38,8 +38,6 @@ public class ProductFragment extends Fragment {
     public static final String SUB_CATEGORY_TITLE = "CATEGORY_TITLE";
     private RecyclerView rv_category;
     private TextView tv_no_of_items;
-    private List<Category> categoryList = new ArrayList<>();
-    private List<String> cat_menu_id = new ArrayList<>();
     private ProductAdapter productAdapter;
     private RetrofitService service;
     private String subCategoryId, categoryTitle;

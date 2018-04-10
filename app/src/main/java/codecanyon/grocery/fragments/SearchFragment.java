@@ -117,12 +117,9 @@ public class SearchFragment extends Fragment {
      * Method to make json object request where json response starts wtih {
      */
     private void makeGetProductRequest(String search_text) {
-        ProductRequest pr = new ProductRequest();
-        pr.setSearch(search_text);
-
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
 
-        service.getProducts(pr).enqueue(new Callback<ProductResponse>() {
+        service.search(search_text).enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if (response.body() != null && response.isSuccessful()) {

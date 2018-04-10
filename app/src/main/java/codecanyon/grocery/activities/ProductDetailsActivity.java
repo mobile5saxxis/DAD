@@ -70,11 +70,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.getTabAt(0).select();
 
-        showProductDetail(product.getProduct_image(),
-                product.getProduct_name(),
-                product.getProduct_description(),
-                product.getProduct_name(),
-                position, getqty, product.getPrice(), product.getUnit());
+//        showProductDetail(product.getProduct_image(),
+//                product.getProduct_name(),
+//                product.getProduct_description(),
+//                product.getProduct_name(),
+//                position, getqty, product.getPrice(), product.getUnit());
 
     }
 
@@ -128,7 +128,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         tv_detail.setText(total);
         tv_price.setText("RS");
         tv_price.append(" " + price);
-        tv_quantity.setText(String.format("%s %s", product.getUnit_value(), product.getUnit()));
+//        tv_quantity.setText(String.format("%s %s", product.getUnit_value(), product.getUnit()));
 
        /* Double items = Double.parseDouble(dbcart.getInCartItemQty(product.getProduct_id()));
         Double priceoftotal = Double.parseDouble(product.getPrice());
@@ -161,12 +161,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 map.put("increament", product.getIncreament());
                 map.put("product_name", product.getProduct_name());
 
-                map.put("price", product.getPrice());
-                map.put("stock", product.getIn_stock());
-                map.put("tv_subcat_title", product.getProduct_name());
-                map.put("unit", product.getUnit());
-
-                map.put("unit_value", product.getUnit_value());
+//                map.put("price", product.getPrice());
+//                map.put("stock", product.getIn_stock());
+//                map.put("tv_subcat_title", product.getProduct_name());
+//                map.put("unit", product.getUnit());
+//
+//                map.put("unit_value", product.getUnit_value());
 
                 if (!tv_contetiy.getText().toString().equalsIgnoreCase("0")) {
 
