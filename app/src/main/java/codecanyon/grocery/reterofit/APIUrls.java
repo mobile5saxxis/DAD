@@ -51,6 +51,8 @@ public class APIUrls {
 
     public static final String GET_BEST_PRODUCTS = BASE_URL + "index.php/api/best_product?sid=1";
 
+    public static final String GET_BEST_PRODUCTS_LIST = BASE_URL + "index.php/api/brand_products";
+
     public static final String GET_NEW_ARRIVALS = BASE_URL + "index.php/api/new_arrival_products";
 
     public static final String GET_BRAND_LIST_URL = BASE_URL + "index.php/api/get_brands";

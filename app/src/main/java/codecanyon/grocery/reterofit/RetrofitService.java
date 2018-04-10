@@ -76,6 +76,9 @@ public interface RetrofitService {
     @POST(APIUrls.GET_BEST_PRODUCTS)
     Call<BestProductResponse> getBestProducts();
 
+    @POST(APIUrls.GET_BEST_PRODUCTS_LIST)
+    Call<ProductResponse> getBestProducts(@Query("bid")String bid);
+
     @POST(APIUrls.GET_BRAND_LIST_URL)
     Call<PopularBrandsResponse> getPopularBrands();
 

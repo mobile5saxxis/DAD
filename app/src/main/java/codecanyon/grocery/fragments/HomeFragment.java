@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment {
 
         service = RetrofitInstance.createService(RetrofitService.class);
 
-        rl_loading=view.findViewById(R.id.rl_loading);
+        rl_loading = view.findViewById(R.id.rl_loading);
         rl_loading.setVisibility(View.VISIBLE);
 
         sliderLayout = view.findViewById(R.id.sliderLayout);
@@ -109,6 +109,9 @@ public class HomeFragment extends Fragment {
 
         bestProductAdapter = new BestProductAdapter(getActivity());
         rv_best_products.setAdapter(bestProductAdapter);
+
+        popularBrandsAdapter = new PopularBrandsAdapter(getActivity());
+        rv_popular_brands.setAdapter(popularBrandsAdapter);
 
         sliderLayout.setPresetTransformer(SliderLayout.Transformer.Accordion);
         sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
@@ -271,10 +274,7 @@ public class HomeFragment extends Fragment {
                 if (response.body() != null && response.isSuccessful()) {
                     PopularBrandsResponse cr = response.body();
 
-                    popularBrandsAdapter = new PopularBrandsAdapter(cr.getData());
-                    rv_popular_brands.setAdapter(popularBrandsAdapter);
-                    popularBrandsAdapter.notifyDataSetChanged();
-
+                    popularBrandsAdapter.addItems(cr.getData());
                 }
             }
 
@@ -327,6 +327,5 @@ public class HomeFragment extends Fragment {
         }
         return false;
     }
-
 
 }
