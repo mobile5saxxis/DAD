@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +44,6 @@ public class SearchFragment extends Fragment {
     private static String TAG = SearchFragment.class.getSimpleName();
 
     private EditText et_search;
-    private Button btn_search;
     private RecyclerView rv_search;
     private ProductAdapter adapter_product;
 
@@ -63,34 +64,43 @@ public class SearchFragment extends Fragment {
         et_search.requestFocus();
         final InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        // et_search = (EditText) view.findViewById(R.id.search_navbar);
-        btn_search = view.findViewById(R.id.btn_search);
+
+
         rv_search = view.findViewById(R.id.rv_search);
         rv_search.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        btn_search.setOnClickListener(new View.OnClickListener() {
+        et_search.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                String get_search_txt = et_search.getText().toString();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                if (TextUtils.isEmpty(get_search_txt)) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.enter_keyword), Toast.LENGTH_SHORT).show();
-                } else {
-                    if (ConnectivityReceiver.isConnected()) {
-                        makeGetProductRequest(get_search_txt);
-                    } else {
-                        ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
-                    }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String value = et_search.getText().toString().trim();
+
+                if (!value.isEmpty() && value.length() > 2) {
+                    makeGetProductRequest(value);
                 }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
+
         et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    makeGetProductRequest(et_search.getText().toString());
-                    imgr.hideSoftInputFromWindow(et_search.getWindowToken(), 0);
+                    String value = et_search.getText().toString().trim();
+
+                    if (!value.isEmpty()) {
+                        makeGetProductRequest(value);
+                        imgr.hideSoftInputFromWindow(et_search.getWindowToken(), 0);
+                    }
+
                     return true;
                 }
                 return false;
@@ -116,6 +126,8 @@ public class SearchFragment extends Fragment {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if (response.body() != null && response.isSuccessful()) {
+                    adapter_product.resetItems();
+
                     ProductResponse pr = response.body();
 
                     adapter_product.addItems(pr.getData());

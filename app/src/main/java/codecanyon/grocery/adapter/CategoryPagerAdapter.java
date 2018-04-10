@@ -4,6 +4,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +16,20 @@ import codecanyon.grocery.models.SubCategory;
 public class CategoryPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<SubCategory> subCategories;
-    private List<ProductFragment> productFragments;
+    private SparseArray<ProductFragment> productFragments;
 
     public CategoryPagerAdapter(FragmentManager fM, List<SubCategory> subCategories) {
         super(fM);
         this.subCategories = subCategories;
-        productFragments = new ArrayList<>();
+        productFragments = new SparseArray<>();
     }
 
     @Override
     public Fragment getItem(int position) {
         SubCategory subCategory = subCategories.get(position);
 
-        if (position >= productFragments.size()) {
-            productFragments.add(ProductFragment.newInstance(subCategory.getId(), subCategory.getTitle()));
+        if (productFragments.get(position) == null) {
+            productFragments.put(position, ProductFragment.newInstance(subCategory.getId(), subCategory.getTitle()));
         }
 
         return productFragments.get(position);

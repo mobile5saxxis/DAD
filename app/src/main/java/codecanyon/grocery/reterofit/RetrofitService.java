@@ -91,7 +91,7 @@ public interface RetrofitService {
     @GET(APIUrls.GET_PRODUCT_URL)
     Call<ProductResponse> getProducts(@Query("cat_id") String cat_id);
 
-    @GET(APIUrls.GET_PRODUCT_URL)
+    @POST(APIUrls.GET_PRODUCT_URL)
     Call<ProductResponse> getProducts(@Body ProductRequest pr);
 
     @GET(APIUrls.GET_SOCITY_URL)
