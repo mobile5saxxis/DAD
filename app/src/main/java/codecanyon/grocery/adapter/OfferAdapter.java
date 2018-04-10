@@ -3,6 +3,7 @@ package codecanyon.grocery.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,19 +12,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
 
 import java.util.List;
 
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.activities.OffersDetailsActivity;
 import codecanyon.grocery.R;
-import codecanyon.grocery.models.Offers;
+import codecanyon.grocery.models.Price;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.DatabaseHandler;
@@ -39,15 +43,13 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tv_title, cost, quantity, tv_add, tv_content;
+        public TextView tv_title, tv_add, tv_content, tv_discount_price, tv_price;
         public ImageView image, iv_plus, iv_minus;
-
+        private Spinner spinner_quantity;
 
         public ViewHolder(View view) {
             super(view);
             tv_title = view.findViewById(R.id.tv_title);
-            cost = view.findViewById(R.id.cost);
-            quantity = view.findViewById(R.id.quantity);
             image = view.findViewById(R.id.iv_image);
             tv_add = view.findViewById(R.id.tv_add);
             iv_plus = view.findViewById(R.id.iv_subcat_plus);
@@ -58,6 +60,11 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             iv_plus.setOnClickListener(this);
             tv_add.setOnClickListener(this);
             image.setOnClickListener(this);
+
+            spinner_quantity = view.findViewById(R.id.spinner_qantity);
+            tv_discount_price = view.findViewById(R.id.tv_discount_price);
+            tv_price = view.findViewById(R.id.tv_price);
+            tv_price.setPaintFlags(tv_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
             CardView cardView = view.findViewById(R.id.card_view_bestproducts);
             cardView.setOnClickListener(this);
@@ -97,17 +104,18 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             } else if (id == R.id.tv_add) {
                 Product product = products.get(position);
 
-                int qty = Integer.parseInt(tv_content.getText().toString().trim());
+                Price price = (Price) spinner_quantity.getSelectedItem();
+                int quantity = Integer.parseInt(tv_content.getText().toString().trim());
 
-                if (qty > 1) {
-                    product.setQuantity(qty);
+                if (quantity > 0) {
+                    product.setPrice(new Gson().toJson(price));
+                    product.setQuantity(quantity);
+
                     dbcart.setCart(product);
                     tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
                 }
 
-                ((MainActivity) context).setCartCounter(dbcart.getCartCount());
-
-                ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
+                ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
 
             }
         }
@@ -124,34 +132,61 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     @Override
     public OfferAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.bestproduct_fragment, parent, false);
+                .inflate(R.layout.item_best_product, parent, false);
 
         context = parent.getContext();
         return new OfferAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OfferAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final OfferAdapter.ViewHolder holder, int position) {
+        Product product = products.get(position);
+
+        final PriceAdapter priceAdapter = new PriceAdapter(context, product.getCustom_fields());
+        holder.spinner_quantity.setAdapter(priceAdapter);
+
+        holder.spinner_quantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Price price = priceAdapter.getItem(position);
+                holder.tv_discount_price.setText(String.format("\u20B9 %s", price.getStrikeprice()));
+                holder.tv_price.setText(String.format("(\u20B9 %s)", price.getPrice_val()));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.ic_logonew)
                 .error(R.drawable.ic_logonew)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
-        Product product = products.get(position);
         Glide.with(context)
                 .load(APIUrls.IMG_PRODUCT_URL + product.getProduct_image())
                 .apply(requestOptions)
                 .into(holder.image);
 
         holder.tv_title.setText(product.getProduct_name());
-        holder.cost.setText("RS");
-//        holder.cost.append(" " + product.getPrice());
-//        holder.quantity.setText(product.getUnit_value());
-        holder.quantity.append(" " + "unit");
 
         if (dbcart.isInCart(product.getProduct_id())) {
             holder.tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
             holder.tv_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
+
+            Product p = dbcart.getProduct(product.getProduct_id());
+
+            Price price = new Gson().fromJson(p.getPrice(), Price.class);
+
+            for (int i = 0; i < product.getCustom_fields().size(); i++) {
+                Price price1 = product.getCustom_fields().get(i);
+
+                if (price.getQuantity().equals(price1.getQuantity())) {
+                    holder.spinner_quantity.setSelection(i);
+                    break;
+                }
+            }
         } else {
             holder.tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
         }

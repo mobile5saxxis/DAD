@@ -25,7 +25,7 @@ public class BestSellersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.bestproduct_fragment, container, false);
+        View layout = inflater.inflate(R.layout.item_best_product, container, false);
 
         return layout;
     }

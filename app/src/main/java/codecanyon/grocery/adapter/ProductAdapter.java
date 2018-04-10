@@ -220,7 +220,6 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
             if (dbcart.isInCart(product.getProduct_id())) {
                 ll_add_content.setVisibility(View.VISIBLE);
                 tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                String cartCount = dbcart.getCartItemQty(product.getProduct_id());
                 tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
 
                 Product p = dbcart.getProduct(product.getProduct_id());

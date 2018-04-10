@@ -17,7 +17,6 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import codecanyon.grocery.R;
@@ -92,7 +91,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         ImageView iv_plus = findViewById(R.id.iv_subcat_plus);
         TextView tv_title = findViewById(R.id.tv_product_detail_title);
         TextView tv_name = findViewById(R.id.product_name);
-        TextView tv_quantity = findViewById(R.id.quantity);
+        TextView tv_quantity = findViewById(R.id.tv_quantity);
         TextView tv_price = findViewById(R.id.price);
         final TextView tv_detail = findViewById(R.id.tv_product_detail);
         final TextView tv_content = findViewById(R.id.tv_subcat_content);

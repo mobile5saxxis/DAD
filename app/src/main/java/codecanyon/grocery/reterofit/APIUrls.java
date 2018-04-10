@@ -49,7 +49,7 @@ public class APIUrls {
 
     public static final String GET_SLIDER_URL = BASE_URL + "index.php/api/get_sliders";
 
-    public static final String GET_BEST_PRODUCTS = BASE_URL + "index.php/api/best_product?sid=1";
+    public static final String GET_BEST_PRODUCTS = BASE_URL + "index.php/api/get_products?bid=1";
 
     public static final String GET_BEST_PRODUCTS_LIST = BASE_URL + "index.php/api/brand_products";
 
@@ -59,7 +59,7 @@ public class APIUrls {
 
     public static final String GET_CATEGORY_URL = BASE_URL + "index.php/api/get_categories";
 
-    public static final String GET_OFFERS_URL = BASE_URL + "index.php/api/offer_product?oid=1";
+    public static final String GET_OFFERS_URL = BASE_URL + "index.php/api/get_products?oid=1";
 
     public static final String GET_PRODUCT_URL = BASE_URL + "index.php/api/get_products";
 
