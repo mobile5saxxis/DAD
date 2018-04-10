@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_sp"
+        android:id="@+id/tv_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="@dimen/space_10"
-        android:text="TextView"
+        android:padding="8dp"
         android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textSize="14sp"
+        tools:text="Sample" />
 
 </LinearLayout>

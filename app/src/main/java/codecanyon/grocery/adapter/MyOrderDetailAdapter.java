@@ -61,7 +61,7 @@ public class MyOrderDetailAdapter extends RecyclerView.Adapter<MyOrderDetailAdap
 
         Glide.with(context)
                 .load(APIUrls.IMG_PRODUCT_URL + mList.getProduct_image())
-                .apply(RequestOptions.placeholderOf(R.drawable.logonew).diskCacheStrategy(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_logonew).diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(holder.iv_img);
 
         holder.tv_title.setText(mList.getProduct_name());

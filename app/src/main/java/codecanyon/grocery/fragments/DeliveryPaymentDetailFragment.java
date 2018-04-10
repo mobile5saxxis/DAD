@@ -11,16 +11,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.AddOrderRequest;
+import codecanyon.grocery.models.Product;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.reterofit.RetrofitInstance;
@@ -69,7 +73,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
         ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.payment_detail));
 
-        db_cart = new DatabaseHandler(getActivity());
+        db_cart = new DatabaseHandler();
         sessionManagement = new SessionManagement(getActivity());
 
         tv_timeslot = view.findViewById(R.id.textTimeSlot);
@@ -112,36 +116,16 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
     private void attemptOrder() {
 
-        // retrive data from cart database
-        ArrayList<HashMap<String, String>> items = db_cart.getCartAll();
+        List<Product> items = db_cart.getCartAll();
+
         if (items.size() > 0) {
-            JSONArray passArray = new JSONArray();
-            for (int i = 0; i < items.size(); i++) {
-                HashMap<String, String> map = items.get(i);
 
-                JSONObject jObjP = new JSONObject();
-
-                try {
-                    jObjP.put("product_id", map.get("product_id"));
-                    jObjP.put("qty", map.get("qty"));
-                    jObjP.put("unit_value", map.get("unit_value"));
-                    jObjP.put("unit", map.get("unit"));
-                    jObjP.put("price", map.get("price"));
-
-                    passArray.put(jObjP);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+            String value = new Gson().toJson(items);
 
             getuser_id = sessionManagement.getUserDetails().get(APIUrls.KEY_ID);
 
             if (ConnectivityReceiver.isConnected()) {
-
-                Log.e(TAG, "from:" + gettime + "\ndate:" + getdate +
-                        "\n" + "\nuser_id:" + getuser_id + "\n" + getlocation_id + "\ndata:" + passArray.toString());
-
-                makeAddOrderRequest(getdate, gettime, getuser_id, getlocation_id, passArray);
+                makeAddOrderRequest(getdate, gettime, getuser_id, getlocation_id, value);
             }
         }
     }
@@ -150,14 +134,14 @@ public class DeliveryPaymentDetailFragment extends Fragment {
      * Method to make json object request where json response starts wtih
      */
     private void makeAddOrderRequest(String date, String gettime, String userid,
-                                     String location, JSONArray passArray) {
+                                     String location, String value) {
 
         AddOrderRequest aor = new AddOrderRequest();
         aor.setDate(date);
         aor.setTime(gettime);
         aor.setUser_id(userid);
         aor.setData(location);
-        aor.setData(passArray.toString());
+        aor.setData(value);
 
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
         service.addOrder(aor).enqueue(new Callback<RequestResponse>() {

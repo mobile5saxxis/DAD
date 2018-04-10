@@ -18,10 +18,6 @@ import com.bumptech.glide.request.RequestOptions;
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.fragments.PopularBrandsFragment;
-import codecanyon.grocery.fragments.ProductFragment;
-import codecanyon.grocery.fragments.SubCategoryFragment;
-import codecanyon.grocery.models.BestProducts;
-import codecanyon.grocery.models.Category;
 import codecanyon.grocery.models.PopularBrands;
 import codecanyon.grocery.reterofit.APIUrls;
 
@@ -71,8 +67,8 @@ public class PopularBrandsAdapter extends CommonRecyclerAdapter<PopularBrands> {
             PopularBrands mList = getItem(position);
 
             RequestOptions requestOptions = new RequestOptions()
-                    .placeholder(R.drawable.logonew)
-                    .error(R.drawable.logonew)
+                    .placeholder(R.drawable.ic_logonew)
+                    .error(R.drawable.ic_logonew)
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 
             Glide.with(context)

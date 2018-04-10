@@ -10,12 +10,18 @@
     <application
         android:name=".DADApp"
         android:allowBackup="true"
-        android:icon="@drawable/logonew"
+        android:icon="@drawable/ic_logonew"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:name="DATABASE" android:value="grocery.db" />
+        <meta-data android:name="VERSION" android:value="1" />
+        <meta-data android:name="QUERY_LOG" android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="codecanyon.grocery" />
+
         <activity
             android:name=".activities.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">

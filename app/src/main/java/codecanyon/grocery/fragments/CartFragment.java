@@ -17,10 +17,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import codecanyon.grocery.adapter.CartAdapter;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
+import codecanyon.grocery.models.Product;
 import codecanyon.grocery.util.ConnectivityReceiver;
 import codecanyon.grocery.util.DatabaseHandler;
 import codecanyon.grocery.util.SessionManagement;
@@ -68,11 +70,11 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         rv_cart = view.findViewById(R.id.rv_cart);
         rv_cart.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        db = new DatabaseHandler(getActivity());
+        db = new DatabaseHandler();
 
-        ArrayList<HashMap<String, String>> map = db.getCartAll();
+        List<Product> products = db.getCartAll();
 
-        CartAdapter adapter = new CartAdapter(getActivity(), map);
+        CartAdapter adapter = new CartAdapter(getActivity(), products);
         rv_cart.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -123,9 +125,9 @@ public class CartFragment extends Fragment implements View.OnClickListener {
             public void onClick(DialogInterface dialogInterface, int i) {
                 // clear cart data
                 db.clearCart();
-                ArrayList<HashMap<String, String>> map = db.getCartAll();
+                List<Product> products = db.getCartAll();
 
-                CartAdapter adapter = new CartAdapter(getActivity(), map);
+                CartAdapter adapter = new CartAdapter(getActivity(), products);
                 rv_cart.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 

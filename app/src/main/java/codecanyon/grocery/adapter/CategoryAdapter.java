@@ -57,7 +57,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
 
         Glide.with(context)
                 .load(APIUrls.IMG_CATEGORY_URL + mList.getImage())
-                .apply(RequestOptions.placeholderOf(R.drawable.logonew).diskCacheStrategy(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_logonew).diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(holder.image);
 
         holder.title.setText(mList.getTitle());

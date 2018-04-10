@@ -1,19 +1,18 @@
 package codecanyon.grocery.models;
 
-public class Price {
-    private String id;
+import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
+
+public class Price extends SugarRecord {
+
     private String stock;
     private String strikeprice;
     private String status;
     private String quantity;
     private String price_val;
 
-    public String getId() {
-        return id;
-    }
+    public Price() {
 
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getStock() {

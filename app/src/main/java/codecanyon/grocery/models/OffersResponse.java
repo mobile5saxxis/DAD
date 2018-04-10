@@ -4,7 +4,7 @@ import java.util.List;
 
 public class OffersResponse {
     private String responce;
-    private List<Offers> data;
+    private List<Product> data;
 
     public String getResponce() {
         return responce;
@@ -14,11 +14,11 @@ public class OffersResponse {
         this.responce = responce;
     }
 
-    public List<Offers> getData() {
+    public List<Product> getData() {
         return data;
     }
 
-    public void setData(List<Offers> data) {
+    public void setData(List<Product> data) {
         this.data = data;
     }
 }

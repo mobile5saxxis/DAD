@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.orm.SugarContext;
+
 import codecanyon.grocery.util.ConnectivityReceiver;
 
 
@@ -25,7 +27,14 @@ public class DADApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        SugarContext.init(this);
         mInstance = this;
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        SugarContext.terminate();
     }
 
     public static synchronized DADApp getInstance() {

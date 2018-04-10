@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/logonew" />
+            app:srcCompat="@drawable/ic_logonew" />
 
         <TextView
             android:id="@+id/tv_title"

@@ -17,7 +17,6 @@ import com.bumptech.glide.request.RequestOptions;
 
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.MainActivity;
-import codecanyon.grocery.fragments.ProductFragment;
 import codecanyon.grocery.fragments.SubCategoryFragment;
 import codecanyon.grocery.models.Category;
 import codecanyon.grocery.reterofit.APIUrls;
@@ -35,8 +34,8 @@ public class CategoryHomeAdapter extends CommonRecyclerAdapter<Category> {
 
     public CategoryHomeAdapter(Activity activity) {
         requestOptions = new RequestOptions()
-                .placeholder(R.drawable.logonew)
-                .error(R.drawable.logonew)
+                .placeholder(R.drawable.ic_logonew)
+                .error(R.drawable.ic_logonew)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .dontAnimate();
         this.activity = (MainActivity) activity;

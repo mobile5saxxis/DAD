@@ -119,8 +119,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         if (!TextUtils.isEmpty(getimage)) {
 
             RequestOptions requestOptions = new RequestOptions()
-                    .placeholder(R.drawable.logonew)
-                    .error(R.drawable.logonew)
+                    .placeholder(R.drawable.ic_logonew)
+                    .error(R.drawable.ic_logonew)
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 

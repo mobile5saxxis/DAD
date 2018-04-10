@@ -20,6 +20,7 @@ import codecanyon.grocery.R;
 import codecanyon.grocery.models.CategoryRequest;
 import codecanyon.grocery.models.Offers;
 import codecanyon.grocery.models.OffersResponse;
+import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.ConnectivityReceiver;
@@ -36,7 +37,7 @@ public class OffersFragment extends Fragment {
 
     private static String TAG = OffersFragment.class.getSimpleName();
     private RecyclerView rv_items;
-    private List<Offers> offers_List = new ArrayList<>();
+    private List<Product> offers_List = new ArrayList<>();
     private OfferListAdapter mAdapter;
 
 
@@ -68,12 +69,12 @@ public class OffersFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
 
-                String getid = offers_List.get(position).getProduct_id();
+                int getid = offers_List.get(position).getProduct_id();
                 String getcat_title = offers_List.get(position).getProduct_name();
 
                 Intent intent = new Intent(getActivity(), OffersDetailsActivity.class);
                 intent.putExtra("position", position);
-                intent.putExtra("selectedProduct", offers_List.get(position));
+//                intent.putExtra("selectedProduct", offers_List.get(position));
                 getActivity().startActivity(intent);
 
             }

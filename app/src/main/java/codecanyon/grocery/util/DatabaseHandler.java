@@ -8,196 +8,218 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import codecanyon.grocery.models.Product;
 
 /**
  * Created by Rajesh Dabhi on 26/6/2017.
  */
 
-public class DatabaseHandler extends SQLiteOpenHelper {
+public class DatabaseHandler {
 
-    private static String DB_NAME = "grocery";
-    private static int DB_VERSION = 1;
-    private SQLiteDatabase db;
+    //    private static String DB_NAME = "grocery";
+//    private static int DB_VERSION = 1;
+//    private SQLiteDatabase db;
+//
+//    public static final String CART_TABLE = "cart";
+//
+//    public static final String COLUMN_ID = "product_id";
+//    public static final String COLUMN_QTY = "qty";
+//    public static final String COLUMN_IMAGE = "product_image";
+//    public static final String COLUMN_CAT_ID = "category_id";
+//    public static final String COLUMN_NAME = "product_name";
+//    public static final String COLUMN_PRICE = "price";
+//    public static final String COLUMN_UNIT_VALUE = "unit_value";
+//    public static final String COLUMN_UNIT = "unit";
+//
+//    public static final String COLUMN_INCREMENT = "increament";
+//    public static final String COLUMN_STOCK = "stock";
+//    public static final String COLUMN_TITLE = "title";
+//
+//    public DatabaseHandler(Context context) {
+//        super(context, DB_NAME, null, DB_VERSION);
+//    }
+//
+//    @Override
+//    public void onCreate(SQLiteDatabase db) {
+//        this.db = db;
+//
+//        String exe = "CREATE TABLE IF NOT EXISTS " + CART_TABLE
+//                + "(" + COLUMN_ID + " integer primary key, "
+//                + COLUMN_QTY + " DOUBLE NOT NULL,"
+//                + COLUMN_IMAGE + " TEXT NOT NULL, "
+//                + COLUMN_CAT_ID + " TEXT NOT NULL, "
+//                + COLUMN_NAME + " TEXT NOT NULL, "
+//                + COLUMN_PRICE + " DOUBLE NOT NULL, "
+//                + COLUMN_UNIT_VALUE + " DOUBLE NOT NULL, "
+//                + COLUMN_UNIT + " TEXT NOT NULL, "
+//                + COLUMN_INCREMENT + " DOUBLE NOT NULL, "
+//                + COLUMN_STOCK + " DOUBLE NOT NULL, "
+//                + COLUMN_TITLE + " TEXT NOT NULL "
+//                + ")";
+//
+//        db.execSQL(exe);
+//
+//    }
+//
+    public boolean setCart(Product product) {
+        boolean isUpdated = false;
 
-    public static final String CART_TABLE = "cart";
+        try {
+            if (isInCart(product.getProduct_id())) {
+                Product.update(product);
+            } else {
+                Product.save(product);
+            }
 
-    public static final String COLUMN_ID = "product_id";
-    public static final String COLUMN_QTY = "qty";
-    public static final String COLUMN_IMAGE = "product_image";
-    public static final String COLUMN_CAT_ID = "category_id";
-    public static final String COLUMN_NAME = "product_name";
-    public static final String COLUMN_PRICE = "price";
-    public static final String COLUMN_UNIT_VALUE = "unit_value";
-    public static final String COLUMN_UNIT = "unit";
-
-    public static final String COLUMN_INCREMENT = "increament";
-    public static final String COLUMN_STOCK = "stock";
-    public static final String COLUMN_TITLE = "title";
-
-    public DatabaseHandler(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        this.db = db;
-
-        String exe = "CREATE TABLE IF NOT EXISTS " + CART_TABLE
-                + "(" + COLUMN_ID + " integer primary key, "
-                + COLUMN_QTY + " DOUBLE NOT NULL,"
-                + COLUMN_IMAGE + " TEXT NOT NULL, "
-                + COLUMN_CAT_ID + " TEXT NOT NULL, "
-                + COLUMN_NAME + " TEXT NOT NULL, "
-                + COLUMN_PRICE + " DOUBLE NOT NULL, "
-                + COLUMN_UNIT_VALUE + " DOUBLE NOT NULL, "
-                + COLUMN_UNIT + " TEXT NOT NULL, "
-                + COLUMN_INCREMENT + " DOUBLE NOT NULL, "
-                + COLUMN_STOCK + " DOUBLE NOT NULL, "
-                + COLUMN_TITLE + " TEXT NOT NULL "
-                + ")";
-
-        db.execSQL(exe);
-
-    }
-
-    public boolean setCart(HashMap<String, String> map, Float Qty) {
-        db = getWritableDatabase();
-        if (isInCart(map.get(COLUMN_ID))) {
-            db.execSQL("update " + CART_TABLE + " set " + COLUMN_QTY + " = '" + Qty + "' where " + COLUMN_ID + "=" + map.get(COLUMN_ID));
-            return false;
-        } else {
-            ContentValues values = new ContentValues();
-
-            values.put(COLUMN_ID, map.get(COLUMN_ID));
-            values.put(COLUMN_QTY, Qty);
-            values.put(COLUMN_CAT_ID, map.get(COLUMN_CAT_ID));
-            values.put(COLUMN_IMAGE, map.get(COLUMN_IMAGE));
-            values.put(COLUMN_INCREMENT, map.get(COLUMN_INCREMENT));
-            values.put(COLUMN_NAME, map.get(COLUMN_NAME));
-            values.put(COLUMN_PRICE, map.get(COLUMN_PRICE));
-            values.put(COLUMN_STOCK, map.get(COLUMN_STOCK));
-            values.put(COLUMN_TITLE, map.get(COLUMN_TITLE));
-            values.put(COLUMN_UNIT, map.get(COLUMN_UNIT));
-            values.put(COLUMN_UNIT_VALUE, map.get(COLUMN_UNIT_VALUE));
-
-            db.insert(CART_TABLE, null, values);
-            return true;
+            isUpdated = true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        return isUpdated;
     }
 
-    public boolean isInCart(String id) {
-        db = getReadableDatabase();
-        String qry = "Select *  from " + CART_TABLE + " where " + COLUMN_ID + " = " + id;
-        Cursor cursor = db.rawQuery(qry, null);
-        cursor.moveToFirst();
-        return cursor.getCount() > 0;
+    public boolean isInCart(int id) {
+        boolean itemExist = false;
 
-    }
+        try {
+            List<Product> products = Product.find(Product.class, "productId=?", String.valueOf(id));
 
-    public String getCartItemQty(String id) {
+            if (products != null && products.size() > 0) {
+                itemExist = true;
+            }
 
-        db = getReadableDatabase();
-        String qry = "Select *  from " + CART_TABLE + " where " + COLUMN_ID + " = " + id;
-        Cursor cursor = db.rawQuery(qry, null);
-        cursor.moveToFirst();
-        return cursor.getString(cursor.getColumnIndex(COLUMN_QTY));
-
-    }
-
-    public String getInCartItemQty(String id) {
-        if (isInCart(id)) {
-            db = getReadableDatabase();
-            String qry = "Select *  from " + CART_TABLE + " where " + COLUMN_ID + " = " + id;
-            Cursor cursor = db.rawQuery(qry, null);
-            cursor.moveToFirst();
-            return cursor.getString(cursor.getColumnIndex(COLUMN_QTY));
-        } else {
-            return "0.0";
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        return itemExist;
     }
 
-    public int getCartCount() {
-        String countQuery = String.format("Select *  from %s", CART_TABLE);
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
-        int count = cursor.getCount();
-        cursor.close();
+    public Product getProduct(int id) {
+        Product product = null;
 
-        return count;
+        try {
+            List<Product> products = Product.find(Product.class, "productId=?", String.valueOf(id));
+
+            if (products != null && products.size() > 0) {
+                product = products.get(0);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return product;
+    }
+
+    public String getCartItemQty(int id) {
+
+        String qty = "0";
+
+        try {
+            List<Product> products = Product.find(Product.class, "productId=?", String.valueOf(id));
+
+            if (products != null && products.size() > 0) {
+                qty = String.valueOf(products.get(0).getQuantity());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return qty;
+
+    }
+
+    //
+//    public String getInCartItemQty(String id) {
+//        if (isInCart(id)) {
+//            db = getReadableDatabase();
+//            String qry = "Select *  from " + CART_TABLE + " where " + COLUMN_ID + " = " + id;
+//            Cursor cursor = db.rawQuery(qry, null);
+//            cursor.moveToFirst();
+//            return cursor.getString(cursor.getColumnIndex(COLUMN_QTY));
+//        } else {
+//            return "0.0";
+//        }
+//    }
+
+    public String getCartCount() {
+        int qty = 0;
+
+        try {
+            qty = (int) Product.count(Product.class);
+
+            if (qty < 0) {
+                qty = 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return String.valueOf(qty);
     }
 
     public String getTotalAmount() {
-        db = getReadableDatabase();
-        String qry = "Select SUM(" + COLUMN_QTY + " * " + COLUMN_PRICE + ") as total_amount  from " + CART_TABLE;
-        Cursor cursor = db.rawQuery(qry, null);
-        cursor.moveToFirst();
-        String total = cursor.getString(cursor.getColumnIndex("total_amount"));
-        if (total != null) {
-
-            return total;
-        } else {
-            return "0";
-        }
+//        String ss = Product.executeQuery("Select SUM(" + COLUMN_QTY + " * " + COLUMN_PRICE + ") ");
+        return "0";
     }
 
-    public ArrayList<HashMap<String, String>> getCartAll() {
-        ArrayList<HashMap<String, String>> list = new ArrayList<>();
-        db = getReadableDatabase();
-        String qry = "Select *  from " + CART_TABLE;
-        Cursor cursor = db.rawQuery(qry, null);
-        cursor.moveToFirst();
+    public List<Product> getCartAll() {
+        List<Product> products = new ArrayList<>();
 
-        for (int i = 0; i < cursor.getCount(); i++) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put(COLUMN_ID, cursor.getString(cursor.getColumnIndex(COLUMN_ID)));
-            map.put(COLUMN_QTY, cursor.getString(cursor.getColumnIndex(COLUMN_QTY)));
-            map.put(COLUMN_IMAGE, cursor.getString(cursor.getColumnIndex(COLUMN_IMAGE)));
-            map.put(COLUMN_CAT_ID, cursor.getString(cursor.getColumnIndex(COLUMN_CAT_ID)));
-            map.put(COLUMN_NAME, cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
-            map.put(COLUMN_PRICE, cursor.getString(cursor.getColumnIndex(COLUMN_PRICE)));
-            map.put(COLUMN_UNIT_VALUE, cursor.getString(cursor.getColumnIndex(COLUMN_UNIT_VALUE)));
-            map.put(COLUMN_UNIT, cursor.getString(cursor.getColumnIndex(COLUMN_UNIT)));
-            map.put(COLUMN_INCREMENT, cursor.getString(cursor.getColumnIndex(COLUMN_INCREMENT)));
-            map.put(COLUMN_STOCK, cursor.getString(cursor.getColumnIndex(COLUMN_STOCK)));
-            map.put(COLUMN_TITLE, cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)));
-
-
-            list.add(map);
-            cursor.moveToNext();
+        try {
+            products = Product.listAll(Product.class);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return list;
+
+        return products;
     }
 
-    public String getFavConcatString() {
-        db = getReadableDatabase();
-        String qry = "Select *  from " + CART_TABLE;
-        Cursor cursor = db.rawQuery(qry, null);
-        cursor.moveToFirst();
-        String concate = "";
-        for (int i = 0; i < cursor.getCount(); i++) {
-            if (concate.equalsIgnoreCase("")) {
-                concate = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
-            } else {
-                concate = concate + "_" + cursor.getString(cursor.getColumnIndex(COLUMN_ID));
-            }
-            cursor.moveToNext();
-        }
-        return concate;
-    }
-
+    //
+//    public String getFavConcatString() {
+//        db = getReadableDatabase();
+//        String qry = "Select *  from " + CART_TABLE;
+//        Cursor cursor = db.rawQuery(qry, null);
+//        cursor.moveToFirst();
+//        String concate = "";
+//        for (int i = 0; i < cursor.getCount(); i++) {
+//            if (concate.equalsIgnoreCase("")) {
+//                concate = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
+//            } else {
+//                concate = concate + "_" + cursor.getString(cursor.getColumnIndex(COLUMN_ID));
+//            }
+//            cursor.moveToNext();
+//        }
+//        return concate;
+//    }
+//
     public void clearCart() {
-        db = getReadableDatabase();
-        db.execSQL("delete from " + CART_TABLE);
+        Product.deleteAll(Product.class);
     }
 
-    public void removeItemFromCart(String id) {
-        db = getReadableDatabase();
-        db.execSQL("delete from " + CART_TABLE + " where " + COLUMN_ID + " = " + id);
-    }
+    //
+    public void removeItemFromCart(long id) {
+        try {
+            Product p = Product.findById(Product.class, id);
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            if (p != null) {
+                p.delete();
+            }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+//
+//    @Override
+//    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//
+//    }
 
 }

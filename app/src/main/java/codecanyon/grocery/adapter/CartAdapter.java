@@ -16,8 +16,10 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import codecanyon.grocery.R;
+import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.DatabaseHandler;
 
@@ -26,15 +28,15 @@ import codecanyon.grocery.util.DatabaseHandler;
  */
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder> {
-    private ArrayList<HashMap<String, String>> list;
+    private List<Product> list;
     private Activity activity;
     private DatabaseHandler dbHandler;
 
-    public CartAdapter(Activity activity, ArrayList<HashMap<String, String>> list) {
+    public CartAdapter(Activity activity, List<Product> list) {
         this.list = list;
         this.activity = activity;
 
-        dbHandler = new DatabaseHandler(activity);
+        dbHandler = new DatabaseHandler();
     }
 
     @NonNull
@@ -47,22 +49,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
 
     @Override
     public void onBindViewHolder(@NonNull final ProductHolder holder, final int position) {
-        final HashMap<String, String> map = list.get(position);
+        final Product product = list.get(position);
 
 
         Glide.with(activity)
-                .load(APIUrls.IMG_PRODUCT_URL + map.get("product_image"))
-                .apply(RequestOptions.placeholderOf(R.drawable.logonew).diskCacheStrategy(DiskCacheStrategy.ALL))
+                .load(APIUrls.IMG_PRODUCT_URL + product.getProduct_image())
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_logonew).diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(holder.iv_logo);
 
-        holder.tv_title.setText(map.get("product_name"));
-        holder.tv_price.setText(String.format("%s%s %s %s %s", activity.getResources().getString(R.string.tv_pro_price), map.get("unit_value"), map.get("unit"), activity.getResources().getString(R.string.currency), map.get("price")));
-        holder.tv_contetiy.setText(map.get("qty"));
+        holder.tv_title.setText(product.getProduct_name());
+//        holder.tv_price.setText(String.format("%s%s %s %s %s", activity.getResources().getString(R.string.tv_pro_price), product.get("unit_value"), product.get("unit"), activity.getResources().getString(R.string.currency), product.get("price")));
+        holder.tv_contetiy.setText(String.valueOf(product.getQuantity()));
 
-        Double items = Double.parseDouble(dbHandler.getInCartItemQty(map.get("product_id")));
-        Double price = Double.parseDouble(map.get("price"));
-
-        holder.tv_total.setText(String.format("%s", price * items));
+//        Double items = Double.parseDouble(dbHandler.getInCartItemQty(product.get("product_id")));
+//        Double price = Double.parseDouble(product.get("price"));
+//
+//        holder.tv_total.setText(String.format("%s", price * items));
 
         holder.iv_minus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +79,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
                 }
 
                 if (holder.tv_contetiy.getText().toString().equalsIgnoreCase("0")) {
-                    dbHandler.removeItemFromCart(map.get("product_id"));
+                    dbHandler.removeItemFromCart(product.getProduct_id());
                     list.remove(position);
                     notifyDataSetChanged();
                     updateintent();
@@ -100,12 +102,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
             @Override
             public void onClick(View view) {
 
-                dbHandler.setCart(map, Float.valueOf(holder.tv_contetiy.getText().toString()));
+                product.setQuantity(Integer.valueOf(holder.tv_contetiy.getText().toString()));
+                dbHandler.setCart(product);
 
-                Double items = Double.parseDouble(dbHandler.getInCartItemQty(map.get("product_id")));
-                Double price = Double.parseDouble(map.get("price"));
-
-                holder.tv_total.setText("" + price * items);
+//                Double items = Double.parseDouble(dbHandler.getInCartItemQty(product.get("product_id")));
+//                Double price = Double.parseDouble(product.get("price"));
+//
+//                holder.tv_total.setText("" + price * items);
                 //holder.tv_subcat_total.setText(activity.getResources().getString(R.string.tv_cart_total) + price * items + " " +activity.getResources().getString(R.string.currency));
                 updateintent();
             }
@@ -114,7 +117,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
         holder.iv_remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dbHandler.removeItemFromCart(map.get("product_id"));
+                dbHandler.removeItemFromCart(product.getProduct_id());
                 list.remove(position);
                 notifyDataSetChanged();
 
@@ -130,7 +133,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
     }
 
     class ProductHolder extends RecyclerView.ViewHolder {
-        private TextView tv_title, tv_price, tv_total, tv_contetiy, tv_add,
+        private TextView tv_title, tv_price,  tv_contetiy, tv_add,
                 tv_unit, tv_unit_value;
         private ImageView iv_logo, iv_plus, iv_minus, iv_remove;
 
@@ -139,7 +142,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductHolder>
 
             tv_title = view.findViewById(R.id.tv_subcat_title);
             tv_price = view.findViewById(R.id.tv_subcat_price);
-            tv_total = view.findViewById(R.id.tv_subcat_total);
             tv_contetiy = view.findViewById(R.id.tv_subcat_content);
             tv_add = view.findViewById(R.id.tv_subcat_add);
             iv_logo = view.findViewById(R.id.iv_subcat);

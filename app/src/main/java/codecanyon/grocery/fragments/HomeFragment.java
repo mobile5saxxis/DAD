@@ -119,8 +119,8 @@ public class HomeFragment extends Fragment {
         sliderLayout.setDuration(4000);
 
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.logonew)
-                .error(R.drawable.logonew)
+                .placeholder(R.drawable.ic_logonew)
+                .error(R.drawable.ic_logonew)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true);

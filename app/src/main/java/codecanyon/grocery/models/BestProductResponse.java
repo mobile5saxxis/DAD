@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BestProductResponse {
-    private String responce;
-    private List<BestProducts> data;
+    private boolean responce;
+    private List<Product> data;
 
-    public String getResponce() {
+    public boolean getResponce() {
         return responce;
     }
 
-    public void setResponce(String responce) {
+    public void setResponce(boolean responce) {
         this.responce = responce;
     }
 
-    public List<BestProducts> getData() {
+    public List<Product> getData() {
         if (data == null) {
             data = new ArrayList<>();
         }
@@ -23,7 +23,7 @@ public class BestProductResponse {
         return data;
     }
 
-    public void setData(List<BestProducts> data) {
+    public void setData(List<Product> data) {
         this.data = data;
     }
 }

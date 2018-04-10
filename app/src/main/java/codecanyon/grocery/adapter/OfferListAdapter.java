@@ -17,6 +17,7 @@ import java.util.List;
 
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.Offers;
+import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
 
 /**
@@ -24,7 +25,7 @@ import codecanyon.grocery.reterofit.APIUrls;
  */
 
 public class OfferListAdapter extends RecyclerView.Adapter<OfferListAdapter.MyViewHolder> {
-    private List<Offers> modelList;
+    private List<Product> modelList;
     private Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -38,7 +39,7 @@ public class OfferListAdapter extends RecyclerView.Adapter<OfferListAdapter.MyVi
         }
     }
 
-    public OfferListAdapter(List<Offers> modelList) {
+    public OfferListAdapter(List<Product> modelList) {
         this.modelList = modelList;
     }
 
@@ -54,11 +55,11 @@ public class OfferListAdapter extends RecyclerView.Adapter<OfferListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull OfferListAdapter.MyViewHolder holder, int position) {
-        Offers mList = modelList.get(position);
+        Product mList = modelList.get(position);
 
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.logonew)
-                .error(R.drawable.logonew)
+                .placeholder(R.drawable.ic_logonew)
+                .error(R.drawable.ic_logonew)
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 

@@ -3,15 +3,19 @@ package codecanyon.grocery.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
+
 import java.util.List;
 
 /**
  * Created by Rajesh Dabhi on 26/6/2017.
  */
 
-public class Product {
+public class Product extends SugarRecord {
 
-    private String product_id;
+    @Unique
+    private int product_id;
     private String in_stock;
     private String increament;
     private String product_name;
@@ -26,14 +30,36 @@ public class Product {
     private String quantity_per_user;
     private String brand;
     private String product_image;
+    private int quantity;
+    private String price;
     private List<Price> custom_fields;
 
-    public String getProduct_id() {
+    public Product() {
+
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public int getProduct_id() {
         return product_id;
     }
 
-    public void setProduct_id(String product_id) {
+    public void setProduct_id(int product_id) {
         this.product_id = product_id;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getIn_stock() {

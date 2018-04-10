@@ -32,7 +32,7 @@ public class ProductDetails_fragment extends Fragment {
 
     Context context;
     private DatabaseHandler dbcart;
-    private List<Product_model> modelList;
+    private List<Product_model> products;
     private List<Product_model> mFilteredList;
 
     private String image;
@@ -95,9 +95,9 @@ public class ProductDetails_fragment extends Fragment {
                 .crossFade()
                 .into(iv_image);
 
-        if (dbcart.isInCart(modelList.get(position).getProduct_id())) {
+        if (dbcart.isInCart(products.get(position).getProduct_id())) {
             tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-            tv_contetiy.setText(dbcart.getCartItemQty(modelList.get(position).getProduct_id()));
+            tv_contetiy.setText(dbcart.getCartItemQty(products.get(position).getProduct_id()));
         } else {
             tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
         }
@@ -108,18 +108,18 @@ public class ProductDetails_fragment extends Fragment {
 
                 HashMap<String, String> map = new HashMap<>();
 
-                map.put("product_id", modelList.get(position).getProduct_id());
-                map.put("category_id", modelList.get(position).getCategory_id());
-                map.put("product_image", modelList.get(position).getProduct_image());
-                map.put("increament", modelList.get(position).getIncreament());
-                map.put("product_name", modelList.get(position).getProduct_name());
+                map.put("product_id", products.get(position).getProduct_id());
+                map.put("category_id", products.get(position).getCategory_id());
+                map.put("product_image", products.get(position).getProduct_image());
+                map.put("increament", products.get(position).getIncreament());
+                map.put("product_name", products.get(position).getProduct_name());
 
-                map.put("price", modelList.get(position).getPrice());
-                map.put("stock", modelList.get(position).getIn_stock());
-                map.put("title", modelList.get(position).getTitle());
-                map.put("unit", modelList.get(position).getUnit());
+                map.put("price", products.get(position).getPrice());
+                map.put("stock", products.get(position).getIn_stock());
+                map.put("title", products.get(position).getTitle());
+                map.put("unit", products.get(position).getUnit());
 
-                map.put("unit_value", modelList.get(position).getUnit_value());
+                map.put("unit_value", products.get(position).getUnit_value());
 
                 if (!tv_contetiy.getText().toString().equalsIgnoreCase("0")) {
 

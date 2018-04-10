@@ -101,7 +101,7 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
         //tv_socity = (TextView) view.findViewById(R.id.tv_deli_socity);
         //et_address = (EditText) view.findViewById(R.id.et_deli_address);
 
-        db_cart = new DatabaseHandler(getActivity());
+        db_cart = new DatabaseHandler();
         tv_total.setText(String.format("%s", db_cart.getTotalAmount()));
         tv_item.setText(String.format("%s", db_cart.getCartCount()));
 

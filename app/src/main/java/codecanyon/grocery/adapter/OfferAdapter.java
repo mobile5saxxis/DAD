@@ -18,13 +18,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.util.HashMap;
 import java.util.List;
 
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.activities.OffersDetailsActivity;
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.Offers;
+import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.DatabaseHandler;
 
@@ -33,13 +33,13 @@ import codecanyon.grocery.util.DatabaseHandler;
  */
 
 public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> {
-    private List<Offers> modelList;
+    private List<Product> products;
     private Context context;
     private DatabaseHandler dbcart;
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tv_title, cost, quantity, button, tv_contetiy;
+        public TextView tv_title, cost, quantity, tv_add, tv_content;
         public ImageView image, iv_plus, iv_minus;
 
 
@@ -49,14 +49,14 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             cost = view.findViewById(R.id.cost);
             quantity = view.findViewById(R.id.quantity);
             image = view.findViewById(R.id.iv_image);
-            button = view.findViewById(R.id.tv_add);
+            tv_add = view.findViewById(R.id.tv_add);
             iv_plus = view.findViewById(R.id.iv_subcat_plus);
             iv_minus = view.findViewById(R.id.iv_subcat_minus);
-            tv_contetiy = view.findViewById(R.id.tv_subcat_content);
+            tv_content = view.findViewById(R.id.tv_subcat_content);
 
             iv_minus.setOnClickListener(this);
             iv_plus.setOnClickListener(this);
-            button.setOnClickListener(this);
+            tv_add.setOnClickListener(this);
             image.setOnClickListener(this);
 
             CardView cardView = view.findViewById(R.id.card_view_bestproducts);
@@ -72,57 +72,40 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             if (id == R.id.card_view_bestproducts) {
                 Intent intent = new Intent(context, OffersDetailsActivity.class);
                 intent.putExtra("position", position);
-                intent.putExtra("selectedProduct", modelList.get(position));
+//                intent.putExtra("selectedProduct", products.get(position));
                 context.startActivity(intent);
             } else if (id == R.id.iv_image) {
-                showImage(modelList.get(position).getProduct_image());
+                showImage(products.get(position).getProduct_image());
             } else if (id == R.id.iv_subcat_minus) {
 
                 int qty = 0;
-                if (!tv_contetiy.getText().toString().equalsIgnoreCase(""))
-                    qty = Integer.valueOf(tv_contetiy.getText().toString());
+                if (!tv_content.getText().toString().equalsIgnoreCase(""))
+                    qty = Integer.valueOf(tv_content.getText().toString());
 
                 if (qty > 0) {
                     qty = qty - 1;
-                    tv_contetiy.setText(String.valueOf(qty));
+                    tv_content.setText(String.valueOf(qty));
                 }
 
             } else if (id == R.id.iv_subcat_plus) {
 
-                int qty = Integer.valueOf(tv_contetiy.getText().toString());
+                int qty = Integer.valueOf(tv_content.getText().toString());
                 qty = qty + 1;
 
-                tv_contetiy.setText(String.valueOf(qty));
+                tv_content.setText(String.valueOf(qty));
 
             } else if (id == R.id.tv_add) {
+                Product product = products.get(position);
 
-                HashMap<String, String> map = new HashMap<>();
+                int qty = Integer.parseInt(tv_content.getText().toString().trim());
 
-                map.put("product_id", modelList.get(position).getProduct_id());
-                map.put("category_id", modelList.get(position).getCategory_id());
-                map.put("product_image", modelList.get(position).getProduct_image());
-                map.put("increament", modelList.get(position).getIncreament());
-                map.put("product_name", modelList.get(position).getProduct_name());
-
-                map.put("price", modelList.get(position).getPrice());
-                map.put("stock", modelList.get(position).getIn_stock());
-                map.put("tv_subcat_title", modelList.get(position).getProduct_name());
-                map.put("unit", modelList.get(position).getUnit());
-
-                map.put("unit_value", modelList.get(position).getUnit_value());
-                if (!tv_contetiy.getText().toString().equalsIgnoreCase("0")) {
-
-                    if (dbcart.isInCart(map.get("product_id"))) {
-                        dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
-                        button.setText(context.getResources().getString(R.string.tv_pro_update));
-                    } else {
-                        dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
-                        button.setText(context.getResources().getString(R.string.tv_pro_update));
-                    }
-                } else {
-                    dbcart.removeItemFromCart(map.get("product_id"));
-                    button.setText(context.getResources().getString(R.string.tv_pro_add));
+                if (qty > 1) {
+                    product.setQuantity(qty);
+                    dbcart.setCart(product);
+                    tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
                 }
+
+                ((MainActivity) context).setCartCounter(dbcart.getCartCount());
 
                 ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
 
@@ -131,10 +114,10 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     }
 
 
-    public OfferAdapter(List<Offers> modelList, Context context) {
-        this.modelList = modelList;
+    public OfferAdapter(List<Product> products, Context context) {
+        this.products = products;
         this.context = context;
-        dbcart = new DatabaseHandler(context);
+        dbcart = new DatabaseHandler();
     }
 
     @NonNull
@@ -150,33 +133,33 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull OfferAdapter.ViewHolder holder, int position) {
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.logonew)
-                .error(R.drawable.logonew)
+                .placeholder(R.drawable.ic_logonew)
+                .error(R.drawable.ic_logonew)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
-        Offers mList = modelList.get(position);
+        Product product = products.get(position);
         Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + mList.getProduct_image())
+                .load(APIUrls.IMG_PRODUCT_URL + product.getProduct_image())
                 .apply(requestOptions)
                 .into(holder.image);
 
-        holder.tv_title.setText(mList.getProduct_name());
+        holder.tv_title.setText(product.getProduct_name());
         holder.cost.setText("RS");
-        holder.cost.append(" " + mList.getPrice());
-        holder.quantity.setText(mList.getUnit_value());
+//        holder.cost.append(" " + product.getPrice());
+//        holder.quantity.setText(product.getUnit_value());
         holder.quantity.append(" " + "unit");
 
-        if (dbcart.isInCart(mList.getProduct_id())) {
-            holder.button.setText(context.getResources().getString(R.string.tv_pro_update));
-            holder.tv_contetiy.setText(dbcart.getCartItemQty(mList.getProduct_id()));
+        if (dbcart.isInCart(product.getProduct_id())) {
+            holder.tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
+            holder.tv_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
         } else {
-            holder.button.setText(context.getResources().getString(R.string.tv_pro_add));
+            holder.tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
         }
     }
 
     @Override
     public int getItemCount() {
-        return modelList.size();
+        return products.size();
     }
 
 
@@ -192,8 +175,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         ImageView iv_image = dialog.findViewById(R.id.iv_dialog_img);
 
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.logonew)
-                .error(R.drawable.logonew)
+                .placeholder(R.drawable.ic_logonew)
+                .error(R.drawable.ic_logonew)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(context)

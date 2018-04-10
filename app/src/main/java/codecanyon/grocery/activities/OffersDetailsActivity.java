@@ -25,6 +25,7 @@ import codecanyon.grocery.fragments.ProductsAboutFragment;
 import codecanyon.grocery.fragments.ProductsHealthBenefitsFragment;
 import codecanyon.grocery.fragments.ProductsHowToUseFragment;
 import codecanyon.grocery.models.Offers;
+import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.DatabaseHandler;
 
@@ -36,7 +37,7 @@ public class OffersDetailsActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private Offers product;
+    private Product product;
     private Context context;
     private DatabaseHandler dbcart;
     private SliderLayout imgSlider;
@@ -52,7 +53,7 @@ public class OffersDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         context = OffersDetailsActivity.this;
-        dbcart = new DatabaseHandler(context);
+        dbcart = new DatabaseHandler();
         Bundle bundle = getIntent().getExtras();
         int position = bundle.getInt("position");
         product = bundle.getParcelable("selectedProduct");
@@ -74,11 +75,11 @@ public class OffersDetailsActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.getTabAt(0).select();
 
-        showProductDetail(product.getProduct_image(),
-                product.getProduct_name(),
-                product.getProduct_description(),
-                product.getProduct_name(),
-                position ,getqty, product.getPrice(), product.getUnit());
+//        showProductDetail(product.getProduct_image(),
+//                product.getProduct_name(),
+//                product.getProduct_description(),
+//                product.getProduct_name(),
+//                position ,getqty, product.getPrice(), product.getUnit());
 
     }
 
@@ -101,7 +102,7 @@ public class OffersDetailsActivity extends AppCompatActivity {
         TextView tv_quantity = findViewById(R.id.quantity);
         TextView tv_price = findViewById(R.id.price);
         final TextView tv_detail = findViewById(R.id.tv_product_detail);
-        final TextView tv_contetiy = findViewById(R.id.tv_subcat_content);
+        final TextView tv_content = findViewById(R.id.tv_subcat_content);
         final TextView tv_add = findViewById(R.id.tv_subcat_add);
 
 
@@ -113,7 +114,7 @@ public class OffersDetailsActivity extends AppCompatActivity {
             DefaultSliderView textSliderView = new DefaultSliderView(context);
             if(imageurls[i] == ""){
                 textSliderView
-                        .image(R.drawable.logonew)
+                        .image(R.drawable.ic_logonew)
                         .setScaleType(BaseSliderView.ScaleType.FitCenterCrop);
                 imgSlider.addSlider(textSliderView);
             } else {
@@ -143,7 +144,7 @@ public class OffersDetailsActivity extends AppCompatActivity {
 */
         if (dbcart.isInCart(product.getProduct_id())) {
             tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-            tv_contetiy.setText(dbcart.getCartItemQty(product.getProduct_id()));
+            tv_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
 
         } else {
             tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
@@ -153,41 +154,15 @@ public class OffersDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                HashMap<String, String> map = new HashMap<>();
+                int qty = Integer.parseInt(tv_content.getText().toString().trim());
 
-                map.put("product_id", product.getProduct_id());
-                map.put("category_id", product.getCategory_id());
-                map.put("product_image", product.getProduct_image());
-                map.put("increament", product.getIncreament());
-                map.put("product_name", product.getProduct_name());
-
-                map.put("price", product.getPrice());
-                map.put("stock", product.getIn_stock());
-                map.put("tv_subcat_title", product.getProduct_name());
-                map.put("unit", product.getUnit());
-
-                map.put("unit_value", product.getUnit_value());
-
-                if (!tv_contetiy.getText().toString().equalsIgnoreCase("0")) {
-
-                    if (dbcart.isInCart(map.get("product_id"))) {
-                        dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
-                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                    } else {
-                        dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
-                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                    }
-                } else {
-                    dbcart.removeItemFromCart(map.get("product_id"));
-                    tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
+                if (qty > 1) {
+                    product.setQuantity(qty);
+                    dbcart.setCart(product);
+                    tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
                 }
 
-                Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
-                Double price = Double.parseDouble(map.get("price"));
-
-                tv_detail.setText("" + price * items);
-
-                //((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
+                ((MainActivity) context).setCartCounter(dbcart.getCartCount());
 
 
             }
@@ -196,10 +171,10 @@ public class OffersDetailsActivity extends AppCompatActivity {
         iv_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int qty = Integer.valueOf(tv_contetiy.getText().toString());
+                int qty = Integer.valueOf(tv_content.getText().toString());
                 qty = qty + 1;
 
-                tv_contetiy.setText(String.valueOf(qty));
+                tv_content.setText(String.valueOf(qty));
             }
         });
 
@@ -207,12 +182,12 @@ public class OffersDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int qty = 0;
-                if (!tv_contetiy.getText().toString().equalsIgnoreCase(""))
-                    qty = Integer.valueOf(tv_contetiy.getText().toString());
+                if (!tv_content.getText().toString().equalsIgnoreCase(""))
+                    qty = Integer.valueOf(tv_content.getText().toString());
 
                 if (qty > 0) {
                     qty = qty - 1;
-                    tv_contetiy.setText(String.valueOf(qty));
+                    tv_content.setText(String.valueOf(qty));
                 }
             }
         });

@@ -58,6 +58,7 @@ import codecanyon.grocery.fragments.OffersFragment;
 import codecanyon.grocery.fragments.SearchFragment;
 import codecanyon.grocery.fragments.SupportInfoFragment;
 import codecanyon.grocery.models.Category;
+import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.BottomNavigationViewHelper;
 import codecanyon.grocery.util.ConnectivityReceiver;
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationViewHelper.removeShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        dbcart = new DatabaseHandler(this);
+        dbcart = new DatabaseHandler();
 
         checkConnection();
         sessionManagement = new SessionManagement(MainActivity.this);
@@ -308,25 +309,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up tv_subcat_add, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_cart) {
-
-            if (dbcart.getCartCount() > 0) {
-                Fragment fm = new CartFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
-                        .addToBackStack(null).commit();
-            } else {
-                Toast.makeText(MainActivity.this, "No item in cart", Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -338,60 +321,72 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fm = null;
         Bundle args = new Bundle();
+        FragmentManager fM = getSupportFragmentManager();
 
-        if (id == R.id.nav_home) {
-            Fragment fm_home = new HomeFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frame_layout, fm_home, HomeFragment.class.getSimpleName())
-                    .addToBackStack(HomeFragment.class.getSimpleName())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .commit();
-        } else if (id == R.id.offers) {
+        switch (id) {
+            case R.id.nav_home:
+                Fragment fm_home = new HomeFragment();
+                fM.beginTransaction()
+                        .replace(R.id.frame_layout, fm_home, HomeFragment.class.getSimpleName())
+                        .addToBackStack(HomeFragment.class.getSimpleName())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
 
+            case R.id.nav_myorders:
+                Fragment myOrderFragment = new MyOrderFragment();
+                fM.beginTransaction()
+                        .replace(R.id.frame_layout, myOrderFragment, "MyOrderFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
 
-        } else if (id == R.id.nav_myorders) {
+            case R.id.nav_myprofile:
+                fm = new EditProfileFragment();
+                break;
 
-            Fragment fm_home = new MyOrderFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frame_layout, fm_home, "MyOrderFragment")
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .commit();
-        } else if (id == R.id.nav_myprofile) {
-            fm = new EditProfileFragment();
-        } else if (id == R.id.nav_support) {
+            case R.id.nav_support:
+                fm = new SupportInfoFragment();
+                args.putString("url", APIUrls.GET_SUPPORT_URL);
+                args.putString("tv_subcat_title", getResources().getString(R.string.nav_support));
+                fm.setArguments(args);
+                break;
 
-            fm = new SupportInfoFragment();
-            args.putString("url", APIUrls.GET_SUPPORT_URL);
-            args.putString("tv_subcat_title", getResources().getString(R.string.nav_support));
-            fm.setArguments(args);
-        } else if (id == R.id.nav_aboutus) {
-            fm = new SupportInfoFragment();
-            args.putString("url", APIUrls.GET_ABOUT_URL);
-            args.putString("tv_subcat_title", getResources().getString(R.string.nav_about));
-            fm.setArguments(args);
-        } else if (id == R.id.nav_policy) {
-            fm = new SupportInfoFragment();
-            args.putString("url", APIUrls.GET_TERMS_URL);
-            args.putString("tv_subcat_title", getResources().getString(R.string.nav_terms));
-            fm.setArguments(args);
-        } else if (id == R.id.nav_review) {
-            reviewOnApp();
-        } /*else if (id == R.id.nav_share) {
-            shareApp();*/ else if (id == R.id.nav_logout) {
-            sessionManagement.logoutSession();
-            finish();
-        } else if (id == R.id.nav_category) {
-            fm = new CategoryFragment();
-            args.putString("url", APIUrls.GET_CATEGORY_URL);
-            args.putString("tv_subcat_title", getResources().getString(R.string.nav_category));
-            fm.setArguments(args);
+            case R.id.nav_aboutus:
+                fm = new SupportInfoFragment();
+                args.putString("url", APIUrls.GET_ABOUT_URL);
+                args.putString("tv_subcat_title", getResources().getString(R.string.nav_about));
+                fm.setArguments(args);
+                break;
+
+            case R.id.nav_policy:
+                fm = new SupportInfoFragment();
+                args.putString("url", APIUrls.GET_TERMS_URL);
+                args.putString("tv_subcat_title", getResources().getString(R.string.nav_terms));
+                fm.setArguments(args);
+                break;
+
+            case R.id.nav_review:
+                reviewOnApp();
+                break;
+
+            case R.id.nav_logout:
+                sessionManagement.logoutSession();
+                finish();
+                break;
+
+            case R.id.nav_category:
+                fm = new CategoryFragment();
+                args.putString("url", APIUrls.GET_CATEGORY_URL);
+                args.putString("tv_subcat_title", getResources().getString(R.string.nav_category));
+                fm.setArguments(args);
+                break;
+            case R.id.offers:
+                break;
         }
 
         if (fm != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
+            fM.beginTransaction().replace(R.id.frame_layout, fm)
                     .addToBackStack(null).commit();
         }
 

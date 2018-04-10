@@ -23,26 +23,25 @@ import codecanyon.grocery.activities.BestProductsDetailsActivity;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.BestProducts;
+import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.DatabaseHandler;
 
 
-public class BestProductAdapter extends CommonRecyclerAdapter<BestProducts> {
+public class BestProductAdapter extends CommonRecyclerAdapter<Product> {
 
     private Context context;
     private DatabaseHandler dbcart;
 
     public BestProductAdapter(Context context) {
         this.context = context;
-        dbcart = new DatabaseHandler(context);
+        dbcart = new DatabaseHandler();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateBasicItemViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.bestproduct_fragment, parent, false);
-
-        context = parent.getContext();
 
         return new BestProductViewHolder(itemView);
     }
@@ -80,27 +79,27 @@ public class BestProductAdapter extends CommonRecyclerAdapter<BestProducts> {
         }
 
         public void bind(int position) {
-            BestProducts mList = getItem(position);
+            Product product = getItem(position);
 
             RequestOptions requestOptions = new RequestOptions()
-                    .placeholder(R.drawable.logonew)
-                    .error(R.drawable.logonew)
+                    .placeholder(R.drawable.ic_logonew)
+                    .error(R.drawable.ic_logonew)
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 
             Glide.with(context)
-                    .load(APIUrls.IMG_PRODUCT_URL + mList.getProduct_image())
+                    .load(APIUrls.IMG_PRODUCT_URL + product.getProduct_image())
                     .apply(requestOptions)
                     .into(iv_image);
 
-            tv_title.setText(mList.getProduct_name());
-            tv_cost.setText("RS " + mList.getPrice());
-            tv_quantity.setText(mList.getUnit_value());
+            tv_title.setText(product.getProduct_name());
+//            tv_cost.setText("RS " + product.getPrice());
+//            tv_quantity.setText(product.getUnit_value());
             tv_quantity.append(" " + "unit");
 
-            if (dbcart.isInCart(mList.getProduct_id())) {
+            if (dbcart.isInCart(product.getProduct_id())) {
                 tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                tv_subcat_content.setText(dbcart.getCartItemQty(mList.getProduct_id()));
+                tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
             } else {
                 tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
             }
@@ -114,7 +113,7 @@ public class BestProductAdapter extends CommonRecyclerAdapter<BestProducts> {
             if (id == R.id.card_view_bestproducts) {
                 Intent intent = new Intent(context, BestProductsDetailsActivity.class);
                 intent.putExtra("position", position);
-                intent.putExtra("selectedProduct", getItem(position));
+//                intent.putExtra("selectedProduct", getItem(position));
                 context.startActivity(intent);
             } else if (id == R.id.iv_image) {
                 showImage(getItem(position).getProduct_image());
@@ -137,34 +136,14 @@ public class BestProductAdapter extends CommonRecyclerAdapter<BestProducts> {
                 tv_subcat_content.setText(String.valueOf(qty));
 
             } else if (id == R.id.tv_add) {
-                BestProducts bestProducts = getItem(position);
+                Product product = getItem(position);
 
-                HashMap<String, String> map = new HashMap<>();
+                int qty = Integer.parseInt(tv_subcat_content.getText().toString().trim());
 
-                map.put("product_id", bestProducts.getProduct_id());
-                map.put("category_id", bestProducts.getCategory_id());
-                map.put("product_image", bestProducts.getProduct_image());
-                map.put("increament", bestProducts.getIncreament());
-                map.put("product_name", bestProducts.getProduct_name());
-
-                map.put("price", bestProducts.getPrice());
-                map.put("stock",bestProducts.getIn_stock());
-                map.put("tv_subcat_title", bestProducts.getProduct_name());
-                map.put("unit", bestProducts.getUnit());
-
-                map.put("unit_value", bestProducts.getUnit_value());
-                if (!tv_subcat_content.getText().toString().equalsIgnoreCase("0")) {
-
-                    if (dbcart.isInCart(map.get("product_id"))) {
-                        dbcart.setCart(map, Float.valueOf(tv_subcat_content.getText().toString()));
-                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                    } else {
-                        dbcart.setCart(map, Float.valueOf(tv_subcat_content.getText().toString()));
-                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                    }
-                } else {
-                    dbcart.removeItemFromCart(map.get("product_id"));
-                    tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
+                if (qty > 1) {
+                    product.setQuantity(qty);
+                    dbcart.setCart(product);
+                    tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
                 }
 
                 ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
@@ -186,8 +165,8 @@ public class BestProductAdapter extends CommonRecyclerAdapter<BestProducts> {
         ImageView iv_image = dialog.findViewById(R.id.iv_dialog_img);
 
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.logonew)
-                .error(R.drawable.logonew)
+                .placeholder(R.drawable.ic_logonew)
+                .error(R.drawable.ic_logonew)
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 

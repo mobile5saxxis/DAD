@@ -25,7 +25,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/space_10"
                 android:layout_marginTop="@dimen/space_10"
-                android:src="@drawable/logonew"
+                android:src="@drawable/ic_logonew"
                 app:civ_border_color="@color/gray"
                 app:civ_border_width="1dp" />
 
