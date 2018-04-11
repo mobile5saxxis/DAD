@@ -26,8 +26,8 @@ import com.google.gson.reflect.TypeToken;
 import java.util.List;
 
 import codecanyon.grocery.activities.MainActivity;
-import codecanyon.grocery.activities.OffersDetailsActivity;
 import codecanyon.grocery.R;
+import codecanyon.grocery.activities.ProductDetailsActivity;
 import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
@@ -78,9 +78,10 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             int position = getAdapterPosition();
 
             if (id == R.id.card_view_bestproducts) {
-                Intent intent = new Intent(context, OffersDetailsActivity.class);
-                intent.putExtra("position", position);
-//                intent.putExtra("selectedProduct", products.get(position));
+                Product product1 = products.get(position);
+                String value = new Gson().toJson(product1);
+                Intent intent = new Intent(context, ProductDetailsActivity.class);
+                intent.putExtra(ProductDetailsActivity.PRODUCT, value);
                 context.startActivity(intent);
             } else if (id == R.id.iv_image) {
                 showImage(products.get(position).getProduct_image());

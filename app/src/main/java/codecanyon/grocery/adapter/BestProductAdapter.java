@@ -24,9 +24,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
-import codecanyon.grocery.activities.BestProductsDetailsActivity;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
+import codecanyon.grocery.activities.ProductDetailsActivity;
 import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
@@ -126,7 +126,8 @@ public class BestProductAdapter extends CommonRecyclerAdapter<Product> {
                 Product p = dbcart.getProduct(product.getProduct_id());
 
                 if (p.getStocks() != null) {
-                    List<Stock> stocks = new Gson().fromJson(p.getStocks(), new TypeToken<List<Stock>>(){}.getType());
+                    List<Stock> stocks = new Gson().fromJson(p.getStocks(), new TypeToken<List<Stock>>() {
+                    }.getType());
 
                     for (int i = 0; i < stocks.size(); i++) {
                         Stock stock1 = stocks.get(i);
@@ -149,9 +150,10 @@ public class BestProductAdapter extends CommonRecyclerAdapter<Product> {
 
             switch (id) {
                 case R.id.card_view_bestproducts:
-                    Intent intent = new Intent(context, BestProductsDetailsActivity.class);
-                    intent.putExtra("position", position);
-//                intent.putExtra("selectedProduct", getItem(position));
+                    Product product1 = getItem(position);
+                    String value = new Gson().toJson(product1);
+                    Intent intent = new Intent(context, ProductDetailsActivity.class);
+                    intent.putExtra(ProductDetailsActivity.PRODUCT, value);
                     context.startActivity(intent);
                     break;
                 case R.id.iv_image:
@@ -186,6 +188,9 @@ public class BestProductAdapter extends CommonRecyclerAdapter<Product> {
 
                         dbcart.setCart(product);
                         tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                    } else {
+                        Product p = dbcart.getProduct(product.getProduct_id());
+                        dbcart.removeItemFromCart(p.getId());
                     }
 
                     ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));

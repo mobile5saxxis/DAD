@@ -22,7 +22,7 @@
         android:padding="8dp">
 
         <TextView
-            android:id="@+id/product_name"
+            android:id="@+id/tv_product"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -47,12 +47,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:padding="8dp"
-            android:background="@drawable/rounded_corner_textview"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:background="@drawable/rounded_corner_textview"
+            android:padding="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
             tools:text="RS52" />
     </LinearLayout>
 
@@ -76,9 +76,9 @@
                 android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@+id/linearLayout"
                 android:layout_toStartOf="@+id/linearLayout"
-                tools:text="TextView"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:text="TextView" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"

@@ -38,10 +38,10 @@
     <string name="tv_reg_name_hint">Name (Required)</string>
     <string name="tv_reg_pincode">Pincode/Area Code/Zip (Required)</string>
     <string name="tv_reg_socity">Society/Flat(Required)</string>
-    <string name="btn_reg_socity_choose">Choose Society...</string>
+    <string name="btn_reg_socity_choose">Choose Society…</string>
     <string name="tv_reg_house">House Number(Required)</string>
     <string name="btn_reg_update">Update Profile</string>
-    <string name="et_reg_search">Search Society...</string>
+    <string name="et_reg_search">Search Society…</string>
     <string name="tv_reg_note">Note : service available for RAJKOT only</string>
     <string name="tv_reg_address">Address(Required)</string>
     <string name="et_reg_address">Complete Address</string>
@@ -138,7 +138,7 @@
     <string name="password_not_same">Confirm Password and New Password not same.</string>
     <string name="delivery_charge">Delivery Charges.:\u0020</string>
     <string name="amount">Amount:\u0020</string>
-    <string name="search_here">Search here...</string>
+    <string name="search_here">Search here…</string>
     <string name="total_amount">Total Amount:\u0020</string>
     <string name="search">Search</string>
     <string name="enter_keyword">Please Enter Keyword</string>
@@ -146,8 +146,8 @@
     <string name="edit">Edit</string>
     <string name="Total">Total</string>
     <string name="description">Description:</string>
-    <string name="health">Health Benifits:</string>
-    <string name="how_to_use">How To Use:</string>
+    <string name="health">Health Benefits</string>
+    <string name="how_to_use">How To Use</string>
 
     <!-- row_delivery_time.xml -->
     <string name="tv_deli_socity">Society:</string>
@@ -191,5 +191,6 @@
     <string name="checkout">Checkout</string>
     <string name="press_again_warn">Press again to exit DAD app</string>
     <string name="rs">Rs</string>
+    <string name="about">About</string>
 
 </resources>

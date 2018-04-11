@@ -10,15 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import codecanyon.grocery.activities.ProductDetailsActivity;
 import codecanyon.grocery.adapter.OfferListAdapter;
 import codecanyon.grocery.activities.MainActivity;
-import codecanyon.grocery.activities.OffersDetailsActivity;
 import codecanyon.grocery.R;
-import codecanyon.grocery.models.CategoryRequest;
-import codecanyon.grocery.models.Offers;
 import codecanyon.grocery.models.OffersResponse;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.RetrofitInstance;
@@ -69,13 +69,11 @@ public class OffersFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
 
-                int getid = offers_List.get(position).getProduct_id();
-                String getcat_title = offers_List.get(position).getProduct_name();
-
-                Intent intent = new Intent(getActivity(), OffersDetailsActivity.class);
-                intent.putExtra("position", position);
-//                intent.putExtra("selectedProduct", offers_List.get(position));
-                getActivity().startActivity(intent);
+                Product product = offers_List.get(position);
+                String value = new Gson().toJson(product);
+                Intent intent = new Intent(getActivity(), ProductDetailsActivity.class);
+                intent.putExtra(ProductDetailsActivity.PRODUCT, value);
+                startActivity(intent);
 
             }
 

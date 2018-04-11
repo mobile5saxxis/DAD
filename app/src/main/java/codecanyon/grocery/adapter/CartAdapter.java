@@ -125,6 +125,9 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
                         dbcart.setCart(product);
                         tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                    } else {
+                        Product p = dbcart.getProduct(product.getProduct_id());
+                        dbcart.removeItemFromCart(p.getId());
                     }
 
                     ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));

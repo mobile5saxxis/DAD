@@ -14,15 +14,15 @@ import codecanyon.grocery.R;
  * Created by srikarn on 02-04-2018.
  */
 
-public class ProductsHealthBenefitsFragment extends Fragment {
+public class ProductsHealthBenefitsFragment  extends Fragment {
 
-    String mDescription;
+    public static final String HEALTH = "HEALTH";
+    private String health;
 
-    public static ProductsHealthBenefitsFragment newInstance(String  description) {
-        ProductsHealthBenefitsFragment fragment = new ProductsHealthBenefitsFragment();
+    public static ProductsAboutFragment newInstance(String description) {
+        ProductsAboutFragment fragment = new ProductsAboutFragment();
         Bundle args = new Bundle();
-        args.putString("description", description);
-        //args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putString(HEALTH, description);
         fragment.setArguments(args);
         return fragment;
     }
@@ -30,21 +30,20 @@ public class ProductsHealthBenefitsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null){
 
-            mDescription = getArguments().getString("description");
+        if (getArguments() != null) {
+            health = getArguments().getString(HEALTH);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_product_healthbenifits, container, false);
+        View layout = inflater.inflate(R.layout.fragment_product_health_benifits, container, false);
 
-        TextView about = layout.findViewById(R.id.healthbenefits);
-        about.setText(mDescription);
+        TextView tv_health = layout.findViewById(R.id.tv_health);
+        tv_health.setText(health);
 
         return layout;
     }
-
 }

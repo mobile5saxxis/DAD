@@ -17,13 +17,13 @@ import codecanyon.grocery.R;
 
 public class ProductsAboutFragment extends Fragment {
 
-    String mDescription;
+    public static final String ABOUT = "HEALTH";
+    private String about;
 
-    public static ProductsAboutFragment newInstance(String  description) {
+    public static ProductsAboutFragment newInstance(String description) {
         ProductsAboutFragment fragment = new ProductsAboutFragment();
         Bundle args = new Bundle();
-        args.putString("description", description);
-        //args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putString(ABOUT, description);
         fragment.setArguments(args);
         return fragment;
     }
@@ -31,9 +31,9 @@ public class ProductsAboutFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null){
 
-            mDescription = getArguments().getString("description");
+        if (getArguments() != null) {
+            about = getArguments().getString(ABOUT);
         }
     }
 
@@ -42,12 +42,9 @@ public class ProductsAboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_product_about, container, false);
 
-        TextView about = layout.findViewById(R.id.aboutdescription);
-        about.setText(mDescription);
+        TextView tv_about = layout.findViewById(R.id.tv_about);
+        tv_about.setText(about);
 
         return layout;
     }
-
-
-
 }

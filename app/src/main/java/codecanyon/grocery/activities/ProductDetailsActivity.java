@@ -1,245 +1,200 @@
 package codecanyon.grocery.activities;
 
-import android.content.Context;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import codecanyon.grocery.R;
-import codecanyon.grocery.fragments.ProductsAboutFragment;
-import codecanyon.grocery.fragments.ProductsHealthBenefitsFragment;
-import codecanyon.grocery.fragments.ProductsHowToUseFragment;
+import codecanyon.grocery.adapter.PriceAdapter;
+import codecanyon.grocery.adapter.SectionPagerAdapter;
 import codecanyon.grocery.models.Product;
+import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.DatabaseHandler;
 
-public class ProductDetailsActivity extends AppCompatActivity {
-    private static final String TAG = ProductDetailsActivity.class.getSimpleName();
-    private ViewPager mViewPager;
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private Product product;
-    private Context context;
+public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+    public static final String PRODUCT = "PRODUCT";
+    public static final int PRODUCT_DETAIL = 5241;
     private DatabaseHandler dbcart;
-    private SliderLayout imgSlider;
+    private TextView tv_add, tv_content;
+    private Product product;
+    private Spinner spinner_stock;
+    private boolean isUpdated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = findViewById(R.id.masterViewPager);
 
+        ActionBar actionBar = getSupportActionBar();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
-        context = ProductDetailsActivity.this;
+        String value = getIntent().getStringExtra(PRODUCT);
+        product = new Gson().fromJson(value, Product.class);
+
         dbcart = new DatabaseHandler();
-        Bundle bundle = getIntent().getExtras();
-        int position = bundle.getInt("position");
-        product = bundle.getParcelable("selectedProduct");
-        String getqty = bundle.getString("total");
-/*        String getqty = bundle.getString("qty");
-        int qty = Integer.parseInt(getqty);*/
 
+        tv_content = findViewById(R.id.tv_content);
+        tv_add = findViewById(R.id.tv_add);
+        tv_add.setOnClickListener(this);
+        findViewById(R.id.iv_plus).setOnClickListener(this);
+        findViewById(R.id.iv_minus).setOnClickListener(this);
 
-        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        TextView tv_title = findViewById(R.id.tv_title);
+        final TextView tv_discount_price = findViewById(R.id.tv_discount_price);
+        final TextView tv_price = findViewById(R.id.tv_price);
+        spinner_stock = findViewById(R.id.spinner_stock);
 
+        SliderLayout sl_product = findViewById(R.id.sl_product);
+        sl_product.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        sl_product.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        sl_product.setCustomAnimation(new DescriptionAnimation());
+        sl_product.setDuration(4000);
 
-        mSectionsPagerAdapter.addFragment(ProductsAboutFragment.newInstance(product.getProduct_description()), "About");
-        mSectionsPagerAdapter.addFragment(ProductsHealthBenefitsFragment.newInstance(product.getProduct_description()), "Health Benefits");
-        mSectionsPagerAdapter.addFragment(ProductsHowToUseFragment.newInstance(product.getHow_to_use()), " How To Use");
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(0);
-        mViewPager.setCurrentItem(0);
+        for (String imageUrl : product.getProduct_image().split(",")) {
+            DefaultSliderView textSliderView = new DefaultSliderView(this);
 
-        tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.getTabAt(0).select();
-
-//        showProductDetail(product.getProduct_image(),
-//                product.getProduct_name(),
-//                product.getProduct_description(),
-//                product.getProduct_name(),
-//                position, getqty, product.getPrice(), product.getUnit());
-
-    }
-
-
-    private void showProductDetail(String image, String title, String description, String detail, final int position, String total, String price, String quantity) {// showProductDetail(product.getProduct_image(),
-       /* product.getTitle(),
-                product.getProduct_description(),
-                product.getProduct_name(),
-                position, tv_subcat_content.getText().toString());*/
-
-
-        //ImageView iv_image = (ImageView) findViewById(R.id.iv_product_detail_img);
-        imgSlider = findViewById(R.id.iv_product_detail_img);
-        ImageView iv_minus = findViewById(R.id.iv_subcat_minus);
-        ImageView iv_plus = findViewById(R.id.iv_subcat_plus);
-        TextView tv_title = findViewById(R.id.tv_product_detail_title);
-        TextView tv_name = findViewById(R.id.product_name);
-        TextView tv_quantity = findViewById(R.id.tv_quantity);
-        TextView tv_price = findViewById(R.id.price);
-        final TextView tv_detail = findViewById(R.id.tv_product_detail);
-        final TextView tv_content = findViewById(R.id.tv_subcat_content);
-        final TextView tv_add = findViewById(R.id.tv_subcat_add);
-
-        imgSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        imgSlider.stopAutoCycle();
-
-
-        String[] imageurls = image.split(",");
-        for (int i = 0; i < imageurls.length; i++) {
-            DefaultSliderView textSliderView = new DefaultSliderView(context);
-            if (imageurls[i] == "") {
+            if (!imageUrl.trim().isEmpty()) {
                 textSliderView
-                        .image(R.drawable.ic_logonew)
+                        .image(APIUrls.IMG_PRODUCT_URL + imageUrl)
                         .setScaleType(BaseSliderView.ScaleType.FitCenterCrop);
-                imgSlider.addSlider(textSliderView);
-            } else {
-                // initialize a SliderLayout
-                textSliderView
-                        .image(APIUrls.IMG_PRODUCT_URL + imageurls[i])
-                        .setScaleType(BaseSliderView.ScaleType.FitCenterCrop);
-                imgSlider.addSlider(textSliderView);
+                sl_product.addSlider(textSliderView);
             }
         }
 
+        tv_title.setText(product.getProduct_name());
+        tv_price.setPaintFlags(tv_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        final PriceAdapter priceAdapter = new PriceAdapter(this, product.getCustom_fields());
+        spinner_stock.setAdapter(priceAdapter);
 
-        tv_title.setText(title);
-        tv_detail.setText(detail);
-        //tv_subcat_content.setText(qty);
-        tv_name.setText(detail);
-        tv_quantity.setText(quantity);
-        tv_detail.setText(total);
-        tv_price.setText("RS");
-        tv_price.append(" " + price);
-//        tv_quantity.setText(String.format("%s %s", product.getUnit_value(), product.getUnit()));
-
-       /* Double items = Double.parseDouble(dbcart.getInCartItemQty(product.getProduct_id()));
-        Double priceoftotal = Double.parseDouble(product.getPrice());
-        tv_detail.setText("" + priceoftotal * items);*/
-
-        /*Glide.with(context)
-                .load(APIAPIUrls.IMG_PRODUCT_URL + iv_category)
-                .placeholder(R.drawable.logonew)
-                .fitCenter()
-                .crossFade()
-                .into(iv_image);*/
-
-        if (dbcart.isInCart(product.getProduct_id())) {
-            tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-            tv_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
-
-        } else {
-            tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
-        }
-
-        tv_add.setOnClickListener(new View.OnClickListener() {
+        spinner_stock.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Stock stock = priceAdapter.getItem(position);
+                tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
+            }
 
-                int qty = Integer.parseInt(tv_content.getText().toString().trim());
-
-                if (qty > 1) {
-                    product.setQuantity(qty);
-                    dbcart.setCart(product);
-                    tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                }
-
-                ((MainActivity) context).setCartCounter(dbcart.getCartCount());
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
 
-        iv_plus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if (dbcart.isInCart(product.getProduct_id())) {
+            tv_add.setText(R.string.tv_pro_update);
+            tv_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
+
+            Product p = dbcart.getProduct(product.getProduct_id());
+
+            if (p.getStocks() != null) {
+                List<Stock> stocks = new Gson().fromJson(p.getStocks(), new TypeToken<List<Stock>>() {
+                }.getType());
+
+                for (int i = 0; i < stocks.size(); i++) {
+                    Stock stock = stocks.get(i);
+
+                    if (p.getStockId() == stock.getStockId()) {
+                        spinner_stock.setSelection(i);
+                        break;
+                    }
+                }
+            }
+        } else {
+            tv_add.setText(R.string.tv_pro_add);
+        }
+
+        TabLayout tab_layout = findViewById(R.id.tab_layout);
+        ViewPager view_pager = findViewById(R.id.view_pager);
+        tab_layout.setupWithViewPager(view_pager);
+        SectionPagerAdapter adapter = new SectionPagerAdapter(getSupportFragmentManager(), this, product);
+        view_pager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        switch (id) {
+            case R.id.iv_minus:
+                int qty2 = 0;
+                if (!tv_content.getText().toString().equalsIgnoreCase(""))
+                    qty2 = Integer.valueOf(tv_content.getText().toString());
+
+                if (qty2 > 0) {
+                    qty2 = qty2 - 1;
+                    tv_content.setText(String.valueOf(qty2));
+                }
+
+                if (qty2 == 0) {
+                    tv_add.setText(R.string.tv_pro_add);
+                }
+                break;
+            case R.id.iv_plus:
                 int qty = Integer.valueOf(tv_content.getText().toString());
                 qty = qty + 1;
 
                 tv_content.setText(String.valueOf(qty));
-            }
-        });
+                break;
+            case R.id.tv_add:
+                Stock stock = (Stock) spinner_stock.getSelectedItem();
+                int quantity = Integer.parseInt(tv_content.getText().toString().trim());
 
-        iv_minus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int qty = 0;
-                if (!tv_content.getText().toString().equalsIgnoreCase(""))
-                    qty = Integer.valueOf(tv_content.getText().toString());
+                if (quantity > 0) {
+                    product.setStockId(stock.getStockId());
+                    product.setStocks(new Gson().toJson(product.getCustom_fields()));
+                    product.setQuantity(quantity);
 
-                if (qty > 0) {
-                    qty = qty - 1;
-                    tv_content.setText(String.valueOf(qty));
+                    dbcart.setCart(product);
+                    tv_add.setText(R.string.tv_pro_update);
+                    isUpdated = true;
+                } else {
+                    Product p = dbcart.getProduct(product.getProduct_id());
+                    dbcart.removeItemFromCart(p.getId());
                 }
-            }
-        });
 
-    }
-
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return mFragmentList.get(position);
-
-        }
-
-        @Override
-        public int getCount() {
-            // Show 2 total pages.
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+                break;
         }
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        imgSlider.stopAutoCycle();
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(MainActivity.CART_UPDATED, isUpdated);
+        setResult(PRODUCT_DETAIL, intent);
+        finish();
     }
 }

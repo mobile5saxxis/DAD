@@ -169,6 +169,9 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
 
                         dbcart.setCart(product);
                         tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                    } else {
+                        Product p = dbcart.getProduct(product.getProduct_id());
+                        dbcart.removeItemFromCart(p.getId());
                     }
 
                     ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
@@ -178,10 +181,9 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                     showImage(product.getProduct_image());
                     break;
                 case R.id.rl_product:
+                    String value = new Gson().toJson(product);
                     Intent intent = new Intent(context, ProductDetailsActivity.class);
-                    intent.putExtra("position", position);
-//                    intent.putExtra("selectedProduct", getItem(position));
-//                    intent.putExtra("total", tv_subcat_total.getText().toString());
+                    intent.putExtra(ProductDetailsActivity.PRODUCT, value);
                     context.startActivity(intent);
                     break;
             }

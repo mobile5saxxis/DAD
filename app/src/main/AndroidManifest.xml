@@ -60,8 +60,6 @@
             android:name=".activities.ForgotActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.ProductDetailsActivity"></activity>
-        <activity android:name=".activities.OffersDetailsActivity"></activity>
-        <activity android:name=".activities.BestProductsDetailsActivity"></activity>
     </application>
 
 </manifest>

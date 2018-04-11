@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         ConnectivityReceiver.ConnectivityReceiverListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    public static final String CART_UPDATED = "CART_UPDATED";
     private TextView totalBudgetCount, tv_number;
     private ImageButton tv_name, tv_register;
     private ImageView iv_profile;
@@ -278,7 +279,6 @@ public class MainActivity extends AppCompatActivity
     public void setTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
@@ -519,6 +519,26 @@ public class MainActivity extends AppCompatActivity
             //txtRegId.setText("Firebase Reg Id: " + regId);
         } else {
             //txtRegId.setText("Firebase Reg Id is not received yet!");
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        try {
+            switch (requestCode) {
+                case ProductDetailsActivity.PRODUCT_DETAIL:
+                    if (data != null) {
+                        boolean isUpdated = data.getBooleanExtra(CART_UPDATED, false);
+
+                        if (isUpdated) {
+                            setCartCounter(String.valueOf(dbcart.getCartCount()));
+                        }
+                    }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
