@@ -77,7 +77,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="price" />
+                android:text="stock" />
 
             <TextView
                 android:id="@+id/tv_order_item"

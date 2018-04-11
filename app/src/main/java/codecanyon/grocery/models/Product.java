@@ -1,8 +1,5 @@
 package codecanyon.grocery.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
@@ -31,19 +28,28 @@ public class Product extends SugarRecord {
     private String brand;
     private String product_image;
     private int quantity;
-    private String price;
-    private List<Price> custom_fields;
+    private int stockId;
+    private String stocks;
+    private List<Stock> custom_fields;
 
     public Product() {
 
     }
 
-    public String getPrice() {
-        return price;
+    public String getStocks() {
+        return stocks;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setStocks(String stocks) {
+        this.stocks = stocks;
+    }
+
+    public int getStockId() {
+        return stockId;
+    }
+
+    public void setStockId(int stockId) {
+        this.stockId = stockId;
     }
 
     public int getProduct_id() {
@@ -174,11 +180,11 @@ public class Product extends SugarRecord {
         this.product_image = product_image;
     }
 
-    public List<Price> getCustom_fields() {
+    public List<Stock> getCustom_fields() {
         return custom_fields;
     }
 
-    public void setCustom_fields(List<Price> custom_fields) {
+    public void setCustom_fields(List<Stock> custom_fields) {
         this.custom_fields = custom_fields;
     }
 

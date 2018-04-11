@@ -40,7 +40,7 @@ public class ProductDetails_fragment extends Fragment {
     private String description;
     private String detail;
     private String qty;
-    private String price;
+    private String stock;
     private String quantity;
     int position;
 
@@ -48,14 +48,14 @@ public class ProductDetails_fragment extends Fragment {
 
     }
 
-    public static ProductDetails_fragment createInstance(String image, String title, String description, String detail, final int position, String qty, String price, String quantity) {
+    public static ProductDetails_fragment createInstance(String image, String title, String description, String detail, final int position, String qty, String stock, String quantity) {
         ProductDetails_fragment fragment = new ProductDetails_fragment();
         fragment.image = image;
         fragment.title = title;
         fragment.description = description;
         fragment.detail = detail;
         fragment.qty = qty;
-        fragment.price = price;
+        fragment.stock = stock;
         fragment.quantity = quantity;
         fragment.position = position;
         return fragment;
@@ -78,7 +78,7 @@ public class ProductDetails_fragment extends Fragment {
         TextView tv_detail = (TextView) view.findViewById(R.id.tv_product_detail);
         final TextView tv_contetiy = (TextView) view.findViewById(R.id.tv_subcat_contetiy);
         final TextView tv_add = (TextView) view.findViewById(R.id.tv_subcat_add);
-        final TextView tv_price = (TextView) view.findViewById(R.id.price);
+        final TextView tv_price = (TextView) view.findViewById(R.id.stock);
 
         tv_title.setText(title);
         tv_detail.setText(detail);
@@ -86,7 +86,7 @@ public class ProductDetails_fragment extends Fragment {
         tv_detail.setText(detail);
         tv_contetiy.setText(quantity);
         tv_detail.setText(description);
-        tv_price.setText(price);
+        tv_price.setText(stock);
 
         Glide.with(context)
                 .load(APIUrls.IMG_PRODUCT_URL + image)
@@ -114,7 +114,7 @@ public class ProductDetails_fragment extends Fragment {
                 map.put("increament", products.get(position).getIncreament());
                 map.put("product_name", products.get(position).getProduct_name());
 
-                map.put("price", products.get(position).getPrice());
+                map.put("stock", products.get(position).getPrice());
                 map.put("stock", products.get(position).getIn_stock());
                 map.put("title", products.get(position).getTitle());
                 map.put("unit", products.get(position).getUnit());
@@ -136,7 +136,7 @@ public class ProductDetails_fragment extends Fragment {
                 }
 
                 Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
-                Double price = Double.parseDouble(map.get("price"));
+                Double stock = Double.parseDouble(map.get("stock"));
 
                 ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
                 

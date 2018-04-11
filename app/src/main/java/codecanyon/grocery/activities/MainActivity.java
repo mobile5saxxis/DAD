@@ -530,7 +530,6 @@ public class MainActivity extends AppCompatActivity
             int id = item.getItemId();
             FragmentManager fM = getSupportFragmentManager();
             FragmentTransaction fT = fM.beginTransaction();
-            Fragment fragment = fM.findFragmentById(R.id.frame_layout);
 
             switch (id) {
                 default:
@@ -623,7 +622,7 @@ public class MainActivity extends AppCompatActivity
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
                     } else {
-                        Fragment cartFragment = fM.findFragmentByTag(OffersFragment.class.getSimpleName());
+                        Fragment cartFragment = fM.findFragmentByTag(CartFragment.class.getSimpleName());
 
                         if (cartFragment != null && cartFragment instanceof CartFragment) {
                             fT.replace(R.id.frame_layout, cartFragment, CartFragment.class.getSimpleName())

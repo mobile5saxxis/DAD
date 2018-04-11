@@ -38,9 +38,8 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     private RecyclerView rv_cart;
     private TextView tv_clear, tv_total, tv_item;
     private TextView tv_checkout;
-
     private DatabaseHandler db;
-
+    private CartAdapter cartAdapter;
     private SessionManagement sessionManagement;
 
     public CartFragment() {
@@ -74,9 +73,10 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
         List<Product> products = db.getCartAll();
 
-        CartAdapter adapter = new CartAdapter(getActivity(), products);
-        rv_cart.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        cartAdapter = new CartAdapter(getContext());
+        rv_cart.setAdapter(cartAdapter);
+
+        cartAdapter.addItems(products);
 
         updateData();
 
@@ -123,13 +123,10 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // clear cart data
                 db.clearCart();
                 List<Product> products = db.getCartAll();
-
-                CartAdapter adapter = new CartAdapter(getActivity(), products);
-                rv_cart.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                cartAdapter.resetItems();
+                cartAdapter.addItems(products);
 
                 updateData();
 

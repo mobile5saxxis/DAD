@@ -2,50 +2,48 @@ package codecanyon.grocery.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
 
 import codecanyon.grocery.R;
-import codecanyon.grocery.models.Price;
+import codecanyon.grocery.models.Stock;
 
 public class PriceAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
-    private List<Price> prices;
+    private List<Stock> stocks;
     private Context context;
 
-    public PriceAdapter(Context context, List<Price> prices) {
-        this.prices = prices;
+    public PriceAdapter(Context context, List<Stock> stocks) {
+        this.stocks = stocks;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return prices.size();
+        return stocks.size();
     }
 
     @Override
-    public Price getItem(int position) {
-        return prices.get(position);
+    public Stock getItem(int position) {
+        return stocks.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return prices.get(position).getId();
+        return stocks.get(position).getStockId();
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Price price = getItem(position);
+        Stock stock = getItem(position);
         PriceViewHolder priceVH;
         View rowView = convertView;
 
@@ -61,8 +59,8 @@ public class PriceAdapter extends BaseAdapter {
             priceVH = (PriceViewHolder) rowView.getTag();
         }
 
-        if (price != null) {
-            priceVH.tv_price.setText(String.valueOf(price.getQuantity()));
+        if (stock != null) {
+            priceVH.tv_price.setText(String.valueOf(stock.getQuantity()));
         }
 
         return rowView;

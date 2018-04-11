@@ -20,13 +20,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.HashMap;
+import java.util.List;
 
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.activities.ProductDetailsActivity;
-import codecanyon.grocery.models.Price;
+import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.DatabaseHandler;
@@ -92,7 +93,7 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tv_subcat_title, tv_subcat_price,  tv_subcat_content, tv_subcat_add, tv_subcat_discount_price;
+        public TextView tv_subcat_title, tv_subcat_price, tv_subcat_content, tv_subcat_add, tv_subcat_discount_price;
         public ImageView iv_subcat, iv_subcat_plus, iv_subcat_minus, iv_subcat_remove;
         public Spinner spinner_subcat;
         private LinearLayout ll_add_content;
@@ -158,11 +159,12 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                         ll_add_content.setVisibility(View.VISIBLE);
                     }
 
-                    Price price = (Price) spinner_subcat.getSelectedItem();
+                    Stock stock = (Stock) spinner_subcat.getSelectedItem();
                     int quantity = Integer.parseInt(tv_subcat_content.getText().toString().trim());
 
                     if (quantity > 0) {
-                        product.setPrice(new Gson().toJson(price));
+                        product.setStockId(stock.getStockId());
+                        product.setStocks(new Gson().toJson(product.getCustom_fields()));
                         product.setQuantity(quantity);
 
                         dbcart.setCart(product);
@@ -194,9 +196,9 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
             spinner_subcat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Price price = priceAdapter.getItem(position);
-                    tv_subcat_discount_price.setText(String.format("\u20B9 %s", price.getStrikeprice()));
-                    tv_subcat_price.setText(String.format("(\u20B9 %s)", price.getPrice_val()));
+                    Stock stock = priceAdapter.getItem(position);
+                    tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                    tv_subcat_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
                 }
 
                 @Override
@@ -224,14 +226,17 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
 
                 Product p = dbcart.getProduct(product.getProduct_id());
 
-                Price price = new Gson().fromJson(p.getPrice(), Price.class);
+                if (p.getStocks() != null) {
+                    List<Stock> stocks = new Gson().fromJson(p.getStocks(), new TypeToken<List<Stock>>() {
+                    }.getType());
 
-                for (int i = 0; i < product.getCustom_fields().size(); i++) {
-                    Price price1 = product.getCustom_fields().get(i);
+                    for (int i = 0; i < stocks.size(); i++) {
+                        Stock stock1 = stocks.get(i);
 
-                    if (price.getQuantity().equals(price1.getQuantity())) {
-                        spinner_subcat.setSelection(i);
-                        break;
+                        if (p.getStockId() == stock1.getStockId()) {
+                            spinner_subcat.setSelection(i);
+                            break;
+                        }
                     }
                 }
             } else {
