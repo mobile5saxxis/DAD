@@ -36,15 +36,10 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     private static String TAG = CartFragment.class.getSimpleName();
 
     private RecyclerView rv_cart;
-    private TextView tv_clear, tv_total, tv_item;
-    private TextView tv_checkout;
+    private TextView tv_checkout, tv_cart_clear, tv_cart_count;
     private DatabaseHandler db;
     private CartAdapter cartAdapter;
     private SessionManagement sessionManagement;
-
-    public CartFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,19 +47,15 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
-
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.tv_cart_title));
 
         sessionManagement = new SessionManagement(getActivity());
         sessionManagement.cleardatetime();
 
-        tv_clear = view.findViewById(R.id.tv_cart_clear);
-        tv_total = view.findViewById(R.id.tv_cart_total);
-        tv_item = view.findViewById(R.id.tv_cart_item);
+        tv_cart_count = view.findViewById(R.id.tv_cart_count);
+        tv_cart_clear = view.findViewById(R.id.tv_cart_clear);
         tv_checkout = view.findViewById(R.id.tv_checkout);
         rv_cart = view.findViewById(R.id.rv_cart);
         rv_cart.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -80,7 +71,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
         updateData();
 
-        tv_clear.setOnClickListener(this);
+        tv_cart_clear.setOnClickListener(this);
         tv_checkout.setOnClickListener(this);
 
         return view;
@@ -91,7 +82,6 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         int id = view.getId();
 
         if (id == R.id.tv_cart_clear) {
-            // showdialog
             showClearDialog();
         } else if (id == R.id.tv_checkout) {
 
@@ -106,15 +96,15 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
     // update UI
     private void updateData() {
-        tv_total.setText("" + db.getTotalAmount());
-        tv_item.setText("" + db.getCartCount());
+        tv_checkout.setText(String.format("PAY \u20B9 %s", db.getTotalAmount()));
+        tv_cart_count.setText(String.format("%s (%s)", getString(R.string.checkout), db.getCartCount()));
         ((MainActivity) getActivity()).setCartCounter("" + db.getCartCount());
     }
 
     private void showClearDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setMessage("Are you sure!\nyou want to delete all cart product");
-        alertDialog.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();

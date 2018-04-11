@@ -6,11 +6,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import codecanyon.grocery.models.Product;
+import codecanyon.grocery.models.Stock;
 
 /**
  * Created by Rajesh Dabhi on 26/6/2017.
@@ -165,8 +170,28 @@ public class DatabaseHandler {
     }
 
     public String getTotalAmount() {
-//        String ss = Product.executeQuery("Select SUM(" + COLUMN_QTY + " * " + COLUMN_PRICE + ") ");
-        return "0";
+        int totalAmount = 0;
+
+        try {
+            List<Product> products = Product.listAll(Product.class);
+
+            for (Product product : products) {
+
+                List<Stock> stocks = new Gson().fromJson(product.getStocks(), new TypeToken<List<Stock>>() {
+                }.getType());
+
+                for (Stock stock : stocks) {
+                    if (stock.getStockId() == product.getStockId()) {
+                        totalAmount = Integer.parseInt(stock.getStrikeprice()) * product.getQuantity();
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return String.valueOf(totalAmount);
     }
 
     public List<Product> getCartAll() {

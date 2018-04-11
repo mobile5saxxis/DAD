@@ -393,7 +393,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             FragmentManager fM = getSupportFragmentManager();
 
-            if (fM.getBackStackEntryCount() > 1) {
+            if (!(fM.findFragmentById(R.id.frame_layout) instanceof HomeFragment) && fM.getBackStackEntryCount() > 1) {
                 fM.popBackStackImmediate();
             } else if (!doubleBackToExit) {
                 doubleBackToExit = true;
@@ -494,7 +494,7 @@ public class MainActivity extends AppCompatActivity
 
                     if (fM.findFragmentByTag(HomeFragment.class.getSimpleName()) == null) {
                         Fragment fm_home = new HomeFragment();
-                        fT.replace(R.id.frame_layout, fm_home, HomeFragment.class.getSimpleName())
+                        fT.add(R.id.frame_layout, fm_home, HomeFragment.class.getSimpleName())
                                 .addToBackStack(HomeFragment.class.getSimpleName())
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
@@ -514,7 +514,7 @@ public class MainActivity extends AppCompatActivity
 
                     if (fM.findFragmentByTag(OffersFragment.class.getSimpleName()) == null) {
                         Fragment offersFragment = new OffersFragment();
-                        fT.replace(R.id.frame_layout, offersFragment, OffersFragment.class.getSimpleName())
+                        fT.add(R.id.frame_layout, offersFragment, OffersFragment.class.getSimpleName())
                                 .addToBackStack(OffersFragment.class.getSimpleName())
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
@@ -534,7 +534,7 @@ public class MainActivity extends AppCompatActivity
 
                     if (fM.findFragmentByTag(CategoryFragment.class.getSimpleName()) == null) {
                         Fragment fragmentCategory = new CategoryFragment();
-                        fT.replace(R.id.frame_layout, fragmentCategory, CategoryFragment.class.getSimpleName())
+                        fT.add(R.id.frame_layout, fragmentCategory, CategoryFragment.class.getSimpleName())
                                 .addToBackStack(CategoryFragment.class.getSimpleName())
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
@@ -554,7 +554,7 @@ public class MainActivity extends AppCompatActivity
 
                     if (fM.findFragmentByTag(SearchFragment.class.getSimpleName()) == null) {
                         Fragment searchFragment = new SearchFragment();
-                        fT.replace(R.id.frame_layout, searchFragment, SearchFragment.class.getSimpleName())
+                        fT.add(R.id.frame_layout, searchFragment, SearchFragment.class.getSimpleName())
                                 .addToBackStack(SearchFragment.class.getSimpleName())
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
@@ -574,7 +574,7 @@ public class MainActivity extends AppCompatActivity
 
                     if (fM.findFragmentByTag(CartFragment.class.getSimpleName()) == null) {
                         Fragment cartFragment = new CartFragment();
-                        fT.replace(R.id.frame_layout, cartFragment, CartFragment.class.getSimpleName())
+                        fT.add(R.id.frame_layout, cartFragment, CartFragment.class.getSimpleName())
                                 .addToBackStack(CartFragment.class.getSimpleName())
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();

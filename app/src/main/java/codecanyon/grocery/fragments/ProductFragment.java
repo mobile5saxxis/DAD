@@ -80,10 +80,6 @@ public class ProductFragment extends Fragment {
         rv_category.setLayoutManager(new LinearLayoutManager(getContext()));
         rv_category.setAdapter(productAdapter);
 
-        if (getActivity() != null) {
-            ((MainActivity) getActivity()).setTitle(categoryTitle);
-        }
-
         if (ConnectivityReceiver.isConnected()) {
             makeGetProductRequest();
         }

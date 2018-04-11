@@ -193,5 +193,6 @@
     <string name="rs">Rs</string>
     <string name="about">About</string>
     <string name="no_of_items">No of items: %s</string>
+    <string name="clear_cart">Clear cart</string>
 
 </resources>

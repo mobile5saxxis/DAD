@@ -72,7 +72,6 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
             iv_subcat_plus = view.findViewById(R.id.iv_subcat_plus);
             iv_subcat_minus = view.findViewById(R.id.iv_subcat_minus);
             iv_subcat_remove = view.findViewById(R.id.iv_subcat_remove);
-            iv_subcat_remove.setVisibility(View.GONE);
             spinner_subcat = view.findViewById(R.id.spinner_subcat);
 
             iv_subcat_minus.setOnClickListener(this);
@@ -91,6 +90,14 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
             Product product = getItem(position);
 
             switch (id) {
+                case R.id.iv_subcat_remove:
+
+                    if (product.getId() != null) {
+                        dbcart.removeItemFromCart(product.getId());
+                        updateintent();
+                    }
+
+                    break;
                 case R.id.iv_subcat_plus:
                     int qty = Integer.valueOf(tv_subcat_content.getText().toString());
                     qty = qty + 1;
@@ -124,11 +131,11 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
                     if (quantity > 0) {
                         product.setStockId(stock.getStockId());
-                        product.setStocks(new Gson().toJson(product.getCustom_fields()));
                         product.setQuantity(quantity);
 
                         dbcart.setCart(product);
                         tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                        updateintent();
                     } else {
                         Product p = dbcart.getProduct(product.getProduct_id());
 
@@ -207,6 +214,5 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
         updates.putExtra("type", "update");
         context.sendBroadcast(updates);
     }
-
 }
 
