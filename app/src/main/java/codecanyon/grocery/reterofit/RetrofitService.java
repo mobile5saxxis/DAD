@@ -82,6 +82,9 @@ public interface RetrofitService {
     @POST(APIUrls.GET_BRAND_LIST_URL)
     Call<PopularBrandsResponse> getPopularBrands();
 
+    @POST(APIUrls.GET_PRODUCT_URL)
+    Call<ProductResponse> getPopularBrands(@Query("bid")String bid);
+
     @POST(APIUrls.GET_OFFERS_URL)
     Call<OffersResponse> getGetOffers();
 

@@ -6,20 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import codecanyon.grocery.R;
-import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.adapter.ProductAdapter;
-import codecanyon.grocery.models.Category;
 import codecanyon.grocery.models.ProductResponse;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
@@ -30,24 +24,21 @@ import retrofit2.Response;
 
 public class PopularBrandsFragment extends Fragment {
 
-    public static final String SUB_CATEGORY_ID = "CATEGORY_ID";
-    public static final String SUB_CATEGORY_TITLE = "CATEGORY_TITLE";
-    private RecyclerView rv_category;
+    public static final String POPULAR_BRAND_ID = "CATEGORY_ID";
+    public static final String POPULAR_BRAND_TITLE = "CATEGORY_TITLE";
     private TextView tv_no_of_items;
-    private List<Category> categoryList = new ArrayList<>();
-    private List<String> cat_menu_id = new ArrayList<>();
     private ProductAdapter productAdapter;
     private RetrofitService service;
-    private String subCategoryId, categoryTitle;
+    private String brandId, brandTitle;
     private RelativeLayout rl_progress;
 
 
-    public static ProductFragment newInstance(String categoryId, String categoryTitle) {
-        ProductFragment productFragment = new ProductFragment();
+    public static PopularBrandsFragment newInstance(String brandId, String brandTitle) {
+        PopularBrandsFragment productFragment = new PopularBrandsFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString(SUB_CATEGORY_ID, categoryId);
-        bundle.putString(SUB_CATEGORY_TITLE, categoryTitle);
+        bundle.putString(POPULAR_BRAND_ID, brandId);
+        bundle.putString(POPULAR_BRAND_TITLE, brandTitle);
         productFragment.setArguments(bundle);
 
         return productFragment;
@@ -58,8 +49,8 @@ public class PopularBrandsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            subCategoryId = getArguments().getString(SUB_CATEGORY_ID);
-            categoryTitle = getArguments().getString(SUB_CATEGORY_TITLE);
+            brandId = getArguments().getString(POPULAR_BRAND_ID);
+            brandTitle = getArguments().getString(POPULAR_BRAND_TITLE);
         }
     }
 
@@ -72,14 +63,10 @@ public class PopularBrandsFragment extends Fragment {
         productAdapter = new ProductAdapter(getContext());
 
         rl_progress = view.findViewById(R.id.rl_progress);
-        rv_category = view.findViewById(R.id.rv_subcategory);
+        RecyclerView rv_popular_brands = view.findViewById(R.id.rv_popular_brands);
         tv_no_of_items = view.findViewById(R.id.tv_no_of_items);
-        rv_category.setLayoutManager(new LinearLayoutManager(getContext()));
-        rv_category.setAdapter(productAdapter);
-
-        if (getActivity() != null) {
-            ((MainActivity) getActivity()).setTitle(categoryTitle);
-        }
+        rv_popular_brands.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv_popular_brands.setAdapter(productAdapter);
 
         if (ConnectivityReceiver.isConnected()) {
             makeGetProductRequest();
@@ -88,33 +75,19 @@ public class PopularBrandsFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (getActivity() != null) {
-                    getActivity().onBackPressed();
-                }
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
     private void makeGetProductRequest() {
-        service.getBestProducts(subCategoryId).enqueue(new Callback<ProductResponse>() {
+        service.getPopularBrands(brandId).enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 ProductResponse pr = response.body();
 
                 productAdapter.addItems(pr.getData());
 
-                tv_no_of_items.setText(String.valueOf(pr.getData().size()));
+                tv_no_of_items.setText(String.format("%s (%s)", brandTitle, pr.getData().size()));
 
                 if (getContext() != null) {
                     if (pr.getData().isEmpty()) {
-                        Toast.makeText(getContext(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.no_rcord_found, Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -129,5 +102,4 @@ public class PopularBrandsFragment extends Fragment {
             }
         });
     }
-
 }

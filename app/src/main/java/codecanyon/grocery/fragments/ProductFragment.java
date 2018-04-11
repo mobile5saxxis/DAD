@@ -73,9 +73,10 @@ public class ProductFragment extends Fragment {
         service = RetrofitInstance.createService(RetrofitService.class);
         productAdapter = new ProductAdapter(getContext());
 
-        rl_progress = view.findViewById(R.id.rl_progress);
-        rv_category = view.findViewById(R.id.rv_subcategory);
         tv_no_of_items = view.findViewById(R.id.tv_no_of_items);
+
+        rl_progress = view.findViewById(R.id.rl_progress);
+        rv_category = view.findViewById(R.id.rv_popular_brands);
         rv_category.setLayoutManager(new LinearLayoutManager(getContext()));
         rv_category.setAdapter(productAdapter);
 
@@ -113,7 +114,7 @@ public class ProductFragment extends Fragment {
 
                     productAdapter.addItems(pr.getData());
 
-                    tv_no_of_items.setText(String.valueOf(pr.getData().size()));
+                    tv_no_of_items.setText(String.format(getString(R.string.no_of_items), String.valueOf(pr.getData().size())));
 
                     if (getContext() != null) {
                         if (pr.getData().isEmpty()) {

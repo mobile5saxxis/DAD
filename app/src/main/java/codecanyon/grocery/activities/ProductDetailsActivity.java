@@ -171,7 +171,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     isUpdated = true;
                 } else {
                     Product p = dbcart.getProduct(product.getProduct_id());
-                    dbcart.removeItemFromCart(p.getId());
+
+                    if (p != null) {
+                        dbcart.removeItemFromCart(p.getId());
+                    }
                 }
 
                 break;

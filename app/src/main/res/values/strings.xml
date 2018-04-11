@@ -192,5 +192,6 @@
     <string name="press_again_warn">Press again to exit DAD app</string>
     <string name="rs">Rs</string>
     <string name="about">About</string>
+    <string name="no_of_items">No of items: %s</string>
 
 </resources>

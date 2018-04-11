@@ -112,6 +112,10 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                         qty2 = qty2 - 1;
                         tv_subcat_content.setText(String.valueOf(qty2));
                     }
+
+                    if (qty2 == 0) {
+                        tv_subcat_content.setText(R.string.tv_pro_add);
+                    }
                     break;
                 case R.id.tv_subcat_add:
 
@@ -127,7 +131,10 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                         tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
                     } else {
                         Product p = dbcart.getProduct(product.getProduct_id());
-                        dbcart.removeItemFromCart(p.getId());
+
+                        if (p != null) {
+                            dbcart.removeItemFromCart(p.getId());
+                        }
                     }
 
                     ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
