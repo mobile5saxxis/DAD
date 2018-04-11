@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -19,8 +22,10 @@ import codecanyon.grocery.activities.ProductDetailsActivity;
 import codecanyon.grocery.adapter.OfferListAdapter;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
+import codecanyon.grocery.adapter.ProductAdapter;
 import codecanyon.grocery.models.OffersResponse;
 import codecanyon.grocery.models.Product;
+import codecanyon.grocery.models.ProductResponse;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.ConnectivityReceiver;
@@ -35,11 +40,10 @@ import retrofit2.Response;
 
 public class OffersFragment extends Fragment {
 
-    private static String TAG = OffersFragment.class.getSimpleName();
-    private RecyclerView rv_items;
-    private List<Product> offers_List = new ArrayList<>();
-    private OfferListAdapter mAdapter;
-
+    private RetrofitService service;
+    private TextView tv_no_of_items;
+    private ProductAdapter productAdapter;
+    private RelativeLayout rl_progress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,39 +53,22 @@ public class OffersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_offers, container, false);
-        setHasOptionsMenu(true);
 
-        rv_items = view.findViewById(R.id.offers_recyclerview);
-        rv_items.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        //setHasOptionsMenu(true);
-        //return view;
+        service = RetrofitInstance.createService(RetrofitService.class);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.offer_name));
-        ((MainActivity) getActivity()).updateHeader();
+        productAdapter = new ProductAdapter(getContext());
 
-        // check internet connection
+        rl_progress = view.findViewById(R.id.rl_progress);
+        RecyclerView rv_offers = view.findViewById(R.id.rv_offers);
+        tv_no_of_items = view.findViewById(R.id.tv_no_of_items);
+        rv_offers.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv_offers.setAdapter(productAdapter);
+
         if (ConnectivityReceiver.isConnected()) {
             makeGetOfferRequest();
         }
-        rv_items.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
 
-                Product product = offers_List.get(position);
-                String value = new Gson().toJson(product);
-                Intent intent = new Intent(getActivity(), ProductDetailsActivity.class);
-                intent.putExtra(ProductDetailsActivity.PRODUCT, value);
-                startActivity(intent);
-
-            }
-
-            @Override
-            public void onLongItemClick(View view, int position) {
-
-            }
-        }));
         return view;
     }
 
@@ -90,19 +77,24 @@ public class OffersFragment extends Fragment {
      * Method to make json object request where json response starts wtih
      */
     private void makeGetOfferRequest() {
-        RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
 
         service.getGetOffers().enqueue(new Callback<OffersResponse>() {
             @Override
             public void onResponse(Call<OffersResponse> call, Response<OffersResponse> response) {
                 if (response.body() != null && response.isSuccessful()) {
-                    OffersResponse cr = response.body();
+                    OffersResponse or = response.body();
 
-                    offers_List = cr.getData();
+                    productAdapter.addItems(or.getData());
 
-                    mAdapter = new OfferListAdapter(offers_List);
-                    rv_items.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
+                    tv_no_of_items.setText(String.format("%s (%s)", getString(R.string.offer_name), or.getData().size()));
+
+                    if (getContext() != null) {
+                        if (or.getData().isEmpty()) {
+                            Toast.makeText(getContext(), R.string.no_rcord_found, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    rl_progress.setVisibility(View.GONE);
                 }
             }
 
