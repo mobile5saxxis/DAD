@@ -154,69 +154,6 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         }
 
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                try {
-
-                    InputMethodManager inputMethodManager = (InputMethodManager)
-                            getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-
-                    Fragment fr = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
-
-                    final String fm_name = fr.getClass().getSimpleName();
-                    Log.e("backstack: ", ": " + fm_name);
-                    if (fm_name.contentEquals(HomeFragment.class.getSimpleName())) {
-
-
-                        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
-                        toggle.setDrawerIndicatorEnabled(true);
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                        toggle.syncState();
-
-                    } else if (fm_name.contentEquals("MyOrderFragment") ||
-                            fm_name.contentEquals("ThanksFragment")) {
-                        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
-                        toggle.setDrawerIndicatorEnabled(false);
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                        toggle.syncState();
-
-                        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Fragment fm = new HomeFragment();
-                                FragmentManager fragmentManager = getSupportFragmentManager();
-                                fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
-                                        .addToBackStack(null).commit();
-                            }
-                        });
-                    } else {
-
-                        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
-                        toggle.setDrawerIndicatorEnabled(false);
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                        toggle.syncState();
-
-                        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                onBackPressed();
-                            }
-                        });
-                    }
-
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
         if (sessionManagement.getUserDetails().get(APIUrls.KEY_ID) != null && !sessionManagement.getUserDetails().get(APIUrls.KEY_ID).equalsIgnoreCase("")) {
             FirebaseRegister fireReg = new FirebaseRegister(this);
             fireReg.RegisterUser(sessionManagement.getUserDetails().get(APIUrls.KEY_ID));
@@ -280,38 +217,38 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setTitle(title);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-
-        final MenuItem item = menu.findItem(R.id.action_cart);
-        final MenuItem search_nav = menu.findItem(R.id.tv_search_bar);
-        MenuItem c_password = menu.findItem(R.id.action_change_password);
-        MenuItem search = menu.findItem(R.id.action_search);
-        item.setVisible(false);
-        c_password.setVisible(false);
-        search.setVisible(false);
-        /*View count = item.getActionView();
-        count.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                menu.performIdentifierAction(item.getItemId(), 0);
-            }
-        });
-        totalBudgetCount = (TextView) count.findViewById(R.id.actionbar_notifcation_textview);
-
-        totalBudgetCount.setText("" + dbcart.getCartCount());*/
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(final Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//
+//        final MenuItem item = menu.findItem(R.id.action_cart);
+//        final MenuItem search_nav = menu.findItem(R.id.tv_search_bar);
+//        MenuItem c_password = menu.findItem(R.id.action_change_password);
+//        MenuItem search = menu.findItem(R.id.action_search);
+//        item.setVisible(false);
+//        c_password.setVisible(false);
+//        search.setVisible(false);
+//        /*View count = item.getActionView();
+//        count.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                menu.performIdentifierAction(item.getItemId(), 0);
+//            }
+//        });
+//        totalBudgetCount = (TextView) count.findViewById(R.id.actionbar_notifcation_textview);
+//
+//        totalBudgetCount.setText("" + dbcart.getCartCount());*/
+//
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

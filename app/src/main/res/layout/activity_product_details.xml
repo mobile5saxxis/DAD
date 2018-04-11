@@ -143,11 +143,11 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            app:tabGravity="fill"
+            app:tabGravity="center"
             app:tabIndicatorColor="@color/colorPrimary"
-            app:tabMode="scrollable"
+            app:tabMode="fixed"
             app:tabSelectedTextColor="@color/colorPrimary"
-            app:tabTextColor="@color/silver" />
+            app:tabTextColor="@color/black" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager"
