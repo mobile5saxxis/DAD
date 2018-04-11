@@ -5,6 +5,7 @@ import java.util.List;
 import codecanyon.grocery.models.AddDeliveryRequest;
 import codecanyon.grocery.models.AddOrderRequest;
 import codecanyon.grocery.models.AddressDeleteRequest;
+import codecanyon.grocery.models.AddressResponse;
 import codecanyon.grocery.models.BestProductResponse;
 import codecanyon.grocery.models.CategoryRequest;
 import codecanyon.grocery.models.CategoryResponse;
@@ -12,7 +13,9 @@ import codecanyon.grocery.models.ChangePasswordRequest;
 import codecanyon.grocery.models.CheckLoginRequest;
 import codecanyon.grocery.models.DeliveryAddress;
 import codecanyon.grocery.models.DeliveryRequest;
+import codecanyon.grocery.models.DeliveryResponse;
 import codecanyon.grocery.models.ForgotPasswordRequest;
+import codecanyon.grocery.models.LimitCheck;
 import codecanyon.grocery.models.LoginRequest;
 import codecanyon.grocery.models.LoginResponse;
 import codecanyon.grocery.models.MyOrder;
@@ -30,8 +33,11 @@ import codecanyon.grocery.models.SubCategoryResponse;
 import codecanyon.grocery.models.SupportInfoResponse;
 import codecanyon.grocery.models.TimeRequest;
 import codecanyon.grocery.models.TimeResponse;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -49,10 +55,18 @@ public interface RetrofitService {
 //    Call<ProfileResponse> getProfile(@Query("token") String token);
 
     @POST(APIUrls.GET_ADDRESS_URL)
-    Call<List<DeliveryAddress>> getDeliveryAddressList(@Body DeliveryRequest deliveryRequest);
+    @FormUrlEncoded
+    Call<AddressResponse> getDeliveryAddressList(@Field("user_id") String user_id);
 
     @POST(APIUrls.ADD_ADDRESS_URL)
-    Call<RequestResponse> addDeliveryList(@Body AddDeliveryRequest deliveryRequest);
+    @FormUrlEncoded
+    Call<DeliveryResponse> addDeliveryList(@Field("user_id") String user_id,
+                                           @Field("pincode") String pincode,
+                                           @Field("socity_id") String socity_id,
+                                           @Field("house_no") String house_no,
+                                           @Field("receiver_name") String receiver_name,
+                                           @Field("receiver_mobile") String receiver_mobile,
+                                           @Field("location_id") String location_id);
 
 
     @POST(APIUrls.EDIT_ADDRESS_URL)
@@ -62,7 +76,11 @@ public interface RetrofitService {
     Call<RequestResponse> changePassword(@Body ChangePasswordRequest changePasswordRequest);
 
     @POST(APIUrls.ADD_ORDER_URL)
-    Call<RequestResponse> addOrder(@Body AddOrderRequest addOrderRequest);
+    @FormUrlEncoded
+    Call<RequestResponse> addOrder(@Field("date") String date,
+                                   @Field("time") String time,
+                                   @Field("user_id") String user_id,
+                                   @Field("location") String location, @Field("data") String data);
 
     @POST(APIUrls.GET_CATEGORY_URL)
     Call<CategoryResponse> getCategory();
@@ -77,13 +95,13 @@ public interface RetrofitService {
     Call<BestProductResponse> getBestProducts();
 
     @POST(APIUrls.GET_BEST_PRODUCTS_LIST)
-    Call<ProductResponse> getBestProducts(@Query("bid")String bid);
+    Call<ProductResponse> getBestProducts(@Query("bid") String bid);
 
     @POST(APIUrls.GET_BRAND_LIST_URL)
     Call<PopularBrandsResponse> getPopularBrands();
 
     @POST(APIUrls.GET_PRODUCT_URL)
-    Call<ProductResponse> getPopularBrands(@Query("bid")String bid);
+    Call<ProductResponse> getPopularBrands(@Query("bid") String bid);
 
     @POST(APIUrls.GET_OFFERS_URL)
     Call<OffersResponse> getGetOffers();
@@ -97,6 +115,9 @@ public interface RetrofitService {
     @GET(APIUrls.GET_PRODUCT_URL)
     Call<ProductResponse> search(@Query("search") String search);
 
+    @GET(APIUrls.GET_LIMITE_SETTING_URL)
+    Call<List<LimitCheck>> limitCheck();
+
     @POST(APIUrls.GET_PRODUCT_URL)
     Call<ProductResponse> getProducts(@Body ProductRequest pr);
 
@@ -107,16 +128,22 @@ public interface RetrofitService {
     Call<SupportInfoResponse> getSupportInfo(@Url String url);
 
     @POST(APIUrls.GET_TIME_SLOT_URL)
-    Call<TimeResponse> getTime(@Body TimeRequest tr);
+    @FormUrlEncoded
+    Call<TimeResponse> getTime(@Field("date") String date);
 
     @POST(APIUrls.LOGIN_URL)
-    Call<LoginResponse> login(@Body LoginRequest tr);
+    @FormUrlEncoded
+    Call<LoginResponse> login(@Field("user_email") String email, @Field("password") String password);
 
     @POST(APIUrls.FORGOT_URL)
     Call<LoginResponse> forgotPassword(@Body ForgotPasswordRequest tr);
 
     @POST(APIUrls.REGISTER_URL)
-    Call<RequestResponse> register(@Body RegisterRequest tr);
+    @FormUrlEncoded
+    Call<RequestResponse> register(@Field("user_name") String name,
+                                   @Field("user_mobile") String email,
+                                   @Field("user_email") String phoneNo,
+                                   @Field("password") String password);
 
     @POST(APIUrls.ORDER_DETAIL_URL)
     Call<List<MyOrderDetail>> orderDetail(@Body OrderRequest tr);

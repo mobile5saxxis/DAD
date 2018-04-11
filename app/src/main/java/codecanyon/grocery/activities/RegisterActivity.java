@@ -12,12 +12,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.RegisterRequest;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.ConnectivityReceiver;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -152,17 +161,9 @@ public class RegisterActivity extends AppCompatActivity {
     /**
      * Method to make json object request where json response starts wtih
      */
-    private void makeRegisterRequest(String name, String mobile,
-                                     String email, String password) {
-
-        RegisterRequest rr = new RegisterRequest();
-        rr.setPassword(password);
-        rr.setUser_email(email);
-        rr.setUser_mobile(mobile);
-        rr.setUser_name(name);
-
+    private void makeRegisterRequest(String name, String mobile, String email, String password) {
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-        service.register(rr).enqueue(new Callback<RequestResponse>() {
+        service.register(name, email, mobile, password).enqueue(new Callback<RequestResponse>() {
             @Override
             public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

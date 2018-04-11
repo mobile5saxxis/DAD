@@ -15,6 +15,7 @@ import android.widget.Toast;
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.models.AddDeliveryRequest;
+import codecanyon.grocery.models.DeliveryResponse;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.reterofit.RetrofitInstance;
@@ -54,8 +55,6 @@ public class AddDeliveryAddressFragment extends Fragment implements View.OnClick
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_delivery_address, container, false);
-
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.add_delivery_address));
 
         sessionManagement = new SessionManagement(getActivity());
         service = RetrofitInstance.createService(RetrofitService.class);
@@ -235,27 +234,22 @@ public class AddDeliveryAddressFragment extends Fragment implements View.OnClick
     private void makeAddAddressRequest(String user_id, String pincode, String socity_id,
                                        String house_no, String receiver_name, String receiver_mobile) {
 
-        AddDeliveryRequest adr = new AddDeliveryRequest();
-        adr.setUser_id(user_id);
-        adr.setPincode(pincode);
-        adr.setSocity_id(socity_id);
-        adr.setHouse_no(house_no);
-        adr.setReceiver_name(receiver_name);
-        adr.setReceiver_mobile(receiver_mobile);
+        service.addDeliveryList(user_id, pincode, socity_id, house_no, receiver_name, receiver_mobile, location_id)
+                .enqueue(new Callback<DeliveryResponse>() {
+                    @Override
+                    public void onResponse(Call<DeliveryResponse> call, Response<DeliveryResponse> response) {
+                        if (response != null && response.body() != null && response.body().isResponce()) {
+                            getActivity().onBackPressed();
+                        } else {
+                            Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-        service.addDeliveryList(adr).enqueue(new Callback<RequestResponse>() {
-            @Override
-            public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
-                if (response != null && response.body() != null && response.body().isResponce()) {
-                    getActivity().onBackPressed();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RequestResponse> call, Throwable t) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onFailure(Call<DeliveryResponse> call, Throwable t) {
+                        Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     /**

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,18 +15,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import codecanyon.grocery.activities.LoginActivity;
 import codecanyon.grocery.adapter.CartAdapter;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
+import codecanyon.grocery.models.LimitCheck;
 import codecanyon.grocery.models.Product;
+import codecanyon.grocery.reterofit.RetrofitInstance;
+import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.ConnectivityReceiver;
 import codecanyon.grocery.util.DatabaseHandler;
 import codecanyon.grocery.util.SessionManagement;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Rajesh Dabhi on 26/6/2017.
@@ -40,6 +49,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     private DatabaseHandler db;
     private CartAdapter cartAdapter;
     private SessionManagement sessionManagement;
+    private RetrofitService service;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +81,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
         updateData();
 
+        service = RetrofitInstance.createService(RetrofitService.class);
         tv_cart_clear.setOnClickListener(this);
         tv_checkout.setOnClickListener(this);
 
@@ -131,6 +142,54 @@ public class CartFragment extends Fragment implements View.OnClickListener {
      * Method to make json array request where json response starts wtih
      */
     private void makeGetLimiterRequest() {
+
+        service.limitCheck().enqueue(new Callback<List<LimitCheck>>() {
+            @Override
+            public void onResponse(Call<List<LimitCheck>> call, Response<List<LimitCheck>> response) {
+                if (response.body() != null && response.isSuccessful()) {
+                    Double total_amount = Double.parseDouble(db.getTotalAmount());
+
+                    boolean isSmall = false;
+                    boolean isBig = false;
+
+                    for (LimitCheck limitCheck : response.body()) {
+
+                        if (limitCheck.getId().equals("1")) {
+                            if (total_amount < limitCheck.getValue()) {
+                                isSmall = true;
+                                Toast.makeText(getActivity(), String.format("%s : %s", limitCheck.getTitle(), limitCheck.getValue()), Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (limitCheck.getId().equals("2")) {
+                            if (total_amount > limitCheck.getValue()) {
+                                isBig = true;
+                                Toast.makeText(getActivity(), String.format("%s : %s", limitCheck.getTitle(), limitCheck.getValue()), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    if (!isSmall && !isBig) {
+                        if (sessionManagement.isLoggedIn()) {
+                            Bundle args = new Bundle();
+                            Fragment fm = new DeliveryFragment();
+                            fm.setArguments(args);
+                            FragmentManager fragmentManager = getFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
+                                    .addToBackStack(null).commit();
+                        } else {
+                            Intent i = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(i);
+                        }
+                    }
+                } else {
+                    Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<LimitCheck>> call, Throwable t) {
+                Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+            }
+        });
 //
 //        JsonArrayRequest req = new JsonArrayRequest(APIUrls.GET_LIMITE_SETTING_URL,
 //                new Response.Listener<JSONArray>() {

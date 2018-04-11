@@ -33,6 +33,7 @@ import java.util.Locale;
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.adapter.DeliveryAddressAdapter;
+import codecanyon.grocery.models.AddressResponse;
 import codecanyon.grocery.models.DeliveryAddress;
 import codecanyon.grocery.models.DeliveryRequest;
 import codecanyon.grocery.reterofit.APIUrls;
@@ -276,7 +277,7 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
 
             Bundle args = new Bundle();
             Fragment fm = new DeliveryPaymentDetailFragment();
-            args.putString("getDate", getdate);
+            args.putString("getdate", getdate);
             args.putString("time", gettime);
             args.putString("location_id", location_id);
             args.putString("address", address);
@@ -293,24 +294,26 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
      * Method to make json object request where json response starts wtih
      */
     private void makeGetAddressRequest(String user_id) {
-
-        DeliveryRequest deliveryRequest = new DeliveryRequest();
-        deliveryRequest.setUser_id(user_id);
-
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-        service.getDeliveryAddressList(deliveryRequest).enqueue(new Callback<List<DeliveryAddress>>() {
+        service.getDeliveryAddressList(user_id).enqueue(new Callback<AddressResponse>() {
             @Override
-            public void onResponse(Call<List<DeliveryAddress>> call, Response<List<DeliveryAddress>> response) {
-                delivery_addressList.clear();
-                delivery_addressList = response.body();
-                adapter = new DeliveryAddressAdapter(delivery_addressList);
-                adapter.setMode(Attributes.Mode.Single);
-                rv_address.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+            public void onResponse(Call<AddressResponse> call, Response<AddressResponse> response) {
+                if (response.body() != null && response.isSuccessful()) {
+                    AddressResponse aR = response.body();
+
+                    if (aR.isResponce()) {
+                        delivery_addressList.clear();
+                        delivery_addressList = aR.getData();
+                        adapter = new DeliveryAddressAdapter(delivery_addressList);
+                        adapter.setMode(Attributes.Mode.Single);
+                        rv_address.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override
-            public void onFailure(Call<List<DeliveryAddress>> call, Throwable t) {
+            public void onFailure(Call<AddressResponse> call, Throwable t) {
                 Toast.makeText(getActivity(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
             }
         });

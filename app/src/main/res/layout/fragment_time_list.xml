@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Delivery time"
-        android:padding="@dimen/space_10"
-        android:background="#e5e5e5"
-        android:textStyle="bold"/>
+        android:background="@color/clouds"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/delivery_time"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_times"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rv_times"/>
+        android:layout_height="match_parent" />
 </LinearLayout>

@@ -35,15 +35,10 @@ public class ViewTimeFragment extends Fragment {
 
     private static String TAG = ViewTimeFragment.class.getSimpleName();
 
-    private RecyclerView rv_time;
-
     private List<String> time_list = new ArrayList<>();
-    private List<Category> categoryList = new ArrayList<>();
-    private CategoryHomeAdapter adapter;
-
     private String getdate;
-
     private SessionManagement sessionManagement;
+    private ViewTimeAdapter adapter;
 
     public ViewTimeFragment() {
         // Required empty public constructor
@@ -64,9 +59,11 @@ public class ViewTimeFragment extends Fragment {
 
         sessionManagement = new SessionManagement(getActivity());
 
-        rv_time = view.findViewById(R.id.rv_times);
+        RecyclerView rv_time = view.findViewById(R.id.rv_times);
         rv_time.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new ViewTimeAdapter(time_list);
 
+        rv_time.setAdapter(adapter);
         getdate = getArguments().getString("date");
 
         // check internet connection
@@ -104,19 +101,15 @@ public class ViewTimeFragment extends Fragment {
      */
     private void makeGetTimeRequest(String date) {
 
-        TimeRequest tr = new TimeRequest();
-        tr.setDate(date);
-
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-        service.getTime(tr).enqueue(new Callback<TimeResponse>() {
+        service.getTime(date).enqueue(new Callback<TimeResponse>() {
             @Override
             public void onResponse(Call<TimeResponse> call, Response<TimeResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     TimeResponse timeResponse = response.body();
 
                     if (timeResponse.getResponce()) {
-                        ViewTimeAdapter adapter = new ViewTimeAdapter(time_list);
-                        rv_time.setAdapter(adapter);
+                        time_list.addAll(timeResponse.getTimes());
                         adapter.notifyDataSetChanged();
                     }
                 }

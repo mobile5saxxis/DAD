@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         lr.setPassword(password);
 
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-        service.login(lr).enqueue(new Callback<LoginResponse>() {
+        service.login(email, password).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

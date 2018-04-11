@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +36,8 @@ import codecanyon.grocery.util.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Rajesh Dabhi on 29/6/2017.
@@ -71,8 +74,6 @@ public class DeliveryPaymentDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_confirm_order, container, false);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.payment_detail));
-
         db_cart = new DatabaseHandler();
         sessionManagement = new SessionManagement(getActivity());
 
@@ -95,9 +96,11 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
         Double total = Double.parseDouble(db_cart.getTotalAmount()) + deli_charges;
 
-        //tv_subcat_total.setText("" + db_cart.getTotalAmount());
-        //tv_item.setText("" + db_cart.getCartCount());
-        tv_total.setText(String.format("%s%d\n%s%s\n%s%d\n%s%s + %d = %s %s", getResources().getString(R.string.tv_cart_item), db_cart.getCartCount(), getResources().getString(R.string.amount), db_cart.getTotalAmount(), getResources().getString(R.string.delivery_charge), deli_charges, getResources().getString(R.string.total_amount), db_cart.getTotalAmount(), deli_charges, total, getResources().getString(R.string.currency)));
+        tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
+                getResources().getString(R.string.amount) + db_cart.getTotalAmount() + "\n" +
+                getResources().getString(R.string.delivery_charge) + deli_charges + "\n" +
+                getResources().getString(R.string.total_amount) +
+                db_cart.getTotalAmount() + " + " + deli_charges + " = " + total + " " + getResources().getString(R.string.currency));
 
         btn_order.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +123,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
         if (items.size() > 0) {
 
-            String value = new Gson().toJson(items);
+            String value = new GsonBuilder().setLenient().create().toJson(items);
 
             getuser_id = sessionManagement.getUserDetails().get(APIUrls.KEY_ID);
 
@@ -135,16 +138,15 @@ public class DeliveryPaymentDetailFragment extends Fragment {
      */
     private void makeAddOrderRequest(String date, String gettime, String userid,
                                      String location, String value) {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
 
-        AddOrderRequest aor = new AddOrderRequest();
-        aor.setDate(date);
-        aor.setTime(gettime);
-        aor.setUser_id(userid);
-        aor.setData(location);
-        aor.setData(value);
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(APIUrls.BASE_URL)
+                .addConverterFactory((GsonConverterFactory.create(gson)));
 
-        RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-        service.addOrder(aor).enqueue(new Callback<RequestResponse>() {
+        builder.build().create(RetrofitService.class).addOrder(date, gettime, userid, location, value).enqueue(new Callback<RequestResponse>() {
             @Override
             public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
                 if (response.body() != null & response.isSuccessful()) {

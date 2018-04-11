@@ -106,7 +106,6 @@
     <string name="add_delivery_address">Add Delivery Address</string>
     <string name="order_now">Order Now</string>
     <string name="payment_detail">Payment Details</string>
-    <string name="delivery_time">Delivery time</string>
     <string name="please_enter_pincode">Please enter pincode</string>
     <string name="receiver_mobile_number">Receiver Mobile Number(Required)</string>
     <string name="receiver_name_req">Receiver Name(Required)</string>
@@ -194,5 +193,6 @@
     <string name="about">About</string>
     <string name="no_of_items">No of items: %s</string>
     <string name="clear_cart">Clear cart</string>
+    <string name="delivery_time">Delivery time</string>
 
 </resources>
