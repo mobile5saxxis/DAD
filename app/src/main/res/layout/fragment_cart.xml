@@ -42,6 +42,36 @@
                 android:textColor="@android:color/white" />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_coupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/tv_add_coupon"
+                android:layout_toStartOf="@+id/tv_add_coupon"
+                android:maxLines="1"
+                android:paddingBottom="@dimen/activity_horizontal_margin"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="@dimen/activity_horizontal_margin" />
+
+            <TextView
+                android:id="@+id/tv_add_coupon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:background="@drawable/rounded_corner_textview"
+                android:padding="8dp"
+                android:text="@string/apply_coupon"
+                android:textColor="@android:color/white" />
+
+        </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_cart"

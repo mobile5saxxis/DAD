@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,8 @@ import codecanyon.grocery.activities.LoginActivity;
 import codecanyon.grocery.adapter.CartAdapter;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
+import codecanyon.grocery.models.Coupon;
+import codecanyon.grocery.models.CouponResponse;
 import codecanyon.grocery.models.LimitCheck;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.RetrofitInstance;
@@ -50,6 +53,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     private CartAdapter cartAdapter;
     private SessionManagement sessionManagement;
     private RetrofitService service;
+    private EditText et_coupon;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,8 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
         updateData();
 
+        et_coupon = view.findViewById(R.id.et_coupon);
+        view.findViewById(R.id.tv_add_coupon).setOnClickListener(this);
         service = RetrofitInstance.createService(RetrofitService.class);
         tv_cart_clear.setOnClickListener(this);
         tv_checkout.setOnClickListener(this);
@@ -92,17 +98,65 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
 
-        if (id == R.id.tv_cart_clear) {
-            showClearDialog();
-        } else if (id == R.id.tv_checkout) {
+        switch (id) {
+            case R.id.tv_cart_clear:
+                showClearDialog();
+                break;
+            case R.id.tv_checkout:
+                if (ConnectivityReceiver.isConnected()) {
+                    makeGetLimiterRequest();
+                } else {
+                    ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
+                }
+                break;
+            case R.id.tv_add_coupon:
+                String value = et_coupon.getText().toString().trim();
 
-            if (ConnectivityReceiver.isConnected()) {
-                makeGetLimiterRequest();
-            } else {
-                ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
+                if (value.isEmpty()) {
+                    Toast.makeText(getContext(), R.string.add_a_coupon_to_apply, Toast.LENGTH_SHORT).show();
+                } else {
+                    makeCouponRequest(value);
+                }
+                break;
+        }
+    }
+
+
+    private void makeCouponRequest(final String value) {
+        RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
+        service.getCoupons().enqueue(new Callback<CouponResponse>() {
+            @Override
+            public void onResponse(Call<CouponResponse> call, Response<CouponResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    CouponResponse cR = response.body();
+
+                    boolean isFound = false;
+
+                    for (Coupon coupon : cR.getData()) {
+                        if (coupon.getCoupon_title().equals(value)) {
+                            db.addCoupon(coupon);
+                            isFound = true;
+                            break;
+                        }
+                    }
+
+                    if (isFound) {
+                        updateData();
+                        Toast.makeText(getContext(), R.string.coupon_found, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), R.string.coupon_not_found, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                }
             }
 
-        }
+            @Override
+            public void onFailure(Call<CouponResponse> call, Throwable t) {
+                Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     // update UI

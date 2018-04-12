@@ -1,14 +1,21 @@
 package codecanyon.grocery.models;
 
-public class Coupon {
+import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
+
+public class Coupon extends SugarRecord {
     private String Coupon_value;
     private String Status;
     private String From_Date;
     private String Coupon_title;
     private String Minimum_order_Amount;
+    @Unique
     private String Id;
     private String To_Date;
     private String Times_Per_user;
+
+    public Coupon() {
+    }
 
     public String getCoupon_value() {
         return Coupon_value;
@@ -50,11 +57,11 @@ public class Coupon {
         Minimum_order_Amount = minimum_order_Amount;
     }
 
-    public String getId() {
+    public String getCouponId() {
         return Id;
     }
 
-    public void setId(String id) {
+    public void setCouponId(String id) {
         Id = id;
     }
 

@@ -198,5 +198,9 @@
     <string name="coupons">Coupons</string>
     <string name="flat">Flat</string>
     <string name="off">Off</string>
+    <string name="apply_coupon">Apply Coupon</string>
+    <string name="add_a_coupon_to_apply">Add a coupon to apply</string>
+    <string name="coupon_found">Coupon applied successfully</string>
+    <string name="coupon_not_found">Unable to find the coupon</string>
 
 </resources>

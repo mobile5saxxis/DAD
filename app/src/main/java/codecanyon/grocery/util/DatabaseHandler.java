@@ -1,19 +1,14 @@
 package codecanyon.grocery.util;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import codecanyon.grocery.models.Coupon;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.models.Stock;
 
@@ -187,6 +182,13 @@ public class DatabaseHandler {
                     }
                 }
             }
+
+            List<Coupon> coupons = Coupon.listAll(Coupon.class);
+
+            if (coupons != null && coupons.size() > 0) {
+                totalAmount = totalAmount - Integer.parseInt(coupons.get(0).getCoupon_value());
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -225,6 +227,7 @@ public class DatabaseHandler {
 //    }
 //
     public void clearCart() {
+        Coupon.deleteAll(Coupon.class);
         Product.deleteAll(Product.class);
     }
 
@@ -240,6 +243,11 @@ public class DatabaseHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void addCoupon(Coupon coupon) {
+        Coupon.deleteAll(Coupon.class);
+        Coupon.save(coupon);
     }
 //
 //    @Override
