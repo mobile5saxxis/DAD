@@ -83,8 +83,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         setHasOptionsMenu(true);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.edit_profile));
-
         sessionManagement = new SessionManagement(getActivity());
 
         et_phone = view.findViewById(R.id.et_pro_phone);
@@ -424,14 +422,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // TODO Add your menu entries here
         super.onCreateOptionsMenu(menu, inflater);
-
-        MenuItem cart = menu.findItem(R.id.action_cart);
-        cart.setVisible(false);
-        MenuItem change_pass = menu.findItem(R.id.action_change_password);
-        change_pass.setVisible(true);
-        MenuItem search = menu.findItem(R.id.action_search);
-        search.setVisible(false);
-
     }
 
     @Override

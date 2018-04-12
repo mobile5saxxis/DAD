@@ -89,8 +89,6 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_delivery_time, container, false);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.delivery));
-
         tv_date = view.findViewById(R.id.tv_deli_date);
         tv_time = view.findViewById(R.id.tv_deli_fromtime);
         tv_add_address = view.findViewById(R.id.tv_deli_add_address);

@@ -58,8 +58,6 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.search));
-
         et_search = view.findViewById(R.id.et_search);
         et_search.requestFocus();
         final InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -38,8 +38,6 @@ public class ThanksFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order_thanks, container, false);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.thank_you));
-
         // handle the touch event if true
         view.setFocusableInTouchMode(true);
         view.requestFocus();

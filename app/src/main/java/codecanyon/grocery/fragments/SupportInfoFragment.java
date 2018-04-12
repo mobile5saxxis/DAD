@@ -62,8 +62,6 @@ public class SupportInfoFragment extends Fragment {
         String geturl = getArguments().getString("url");
         String title = getArguments().getString("tv_subcat_title");
 
-        ((MainActivity) getActivity()).setTitle(title);
-
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {
             makeGetInfoRequest(geturl);

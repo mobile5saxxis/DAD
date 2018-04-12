@@ -66,8 +66,6 @@ public class ChangePasswordFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_change_password, container, false);
         setHasOptionsMenu(true);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.change_password));
-
         sessionManagement = new SessionManagement(getActivity());
 
         tv_new_pass = view.findViewById(R.id.tv_change_new_password);

@@ -56,8 +56,6 @@ public class MyOrderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_order, container, false);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.my_order));
-
         // handle the touch event if true
         view.setFocusableInTouchMode(true);
         view.requestFocus();
@@ -130,16 +128,12 @@ public class MyOrderFragment extends Fragment {
      * Method to make json array request where json response starts wtih
      */
     private void makeGetOrderRequest(String userid) {
-        DeliveryRequest dr = new DeliveryRequest();
-        dr.setUser_id(userid);
-
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-        service.getOrder(dr).enqueue(new Callback<List<MyOrder>>() {
+        service.getOrder(userid).enqueue(new Callback<List<MyOrder>>() {
             @Override
             public void onResponse(Call<List<MyOrder>> call, Response<List<MyOrder>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     my_orderList = response.body();
-
                     MyOderAdapter adapter = new MyOderAdapter(my_orderList);
                     rv_myorder.setAdapter(adapter);
                     adapter.notifyDataSetChanged();

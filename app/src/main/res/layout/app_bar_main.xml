@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/white"
+            android:background="@color/colorPrimary"
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
@@ -30,6 +30,7 @@
                 android:gravity="center_horizontal"
                 android:padding="12dp"
                 android:scaleType="centerCrop"
+                android:tint="@android:color/white"
                 android:src="@drawable/ic_home_logo" />
 
         </android.support.v7.widget.Toolbar>

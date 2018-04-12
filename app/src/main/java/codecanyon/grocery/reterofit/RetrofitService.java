@@ -107,7 +107,8 @@ public interface RetrofitService {
     Call<OffersResponse> getGetOffers();
 
     @POST(APIUrls.GET_ORDER_URL)
-    Call<List<MyOrder>> getOrder(@Body DeliveryRequest deliveryRequest);
+    @FormUrlEncoded
+    Call<List<MyOrder>> getOrder(@Field("user_id")String user_id);
 
     @GET(APIUrls.GET_PRODUCT_URL)
     Call<ProductResponse> getProducts(@Query("cat_id") String cat_id);
@@ -146,16 +147,23 @@ public interface RetrofitService {
                                    @Field("password") String password);
 
     @POST(APIUrls.ORDER_DETAIL_URL)
-    Call<List<MyOrderDetail>> orderDetail(@Body OrderRequest tr);
+    @FormUrlEncoded
+    Call<List<MyOrderDetail>> orderDetail(@Field("sale_id") String sale_id);
 
     @POST(APIUrls.DELETE_ORDER_URL)
-    Call<RequestResponse> deleteOrder(@Body OrderRequest tr);
+    @FormUrlEncoded
+    Call<RequestResponse> deleteOrder(@Field("sale_id") String sale_id,
+                                      @Field("user_id") String user_id);
 
     @POST(APIUrls.DELETE_ADDRESS_URL)
-    Call<RequestResponse> deleteAddress(@Body AddressDeleteRequest tr);
+    @FormUrlEncoded
+    Call<RequestResponse> deleteAddress(@Field("location_id") String location_id);
 
     @POST(APIUrls.JSON_RIGISTER_FCM)
-    Call<RequestResponse> registerFCM(@Body CheckLoginRequest tr);
+    @FormUrlEncoded
+    Call<RequestResponse> registerFCM(@Field("user_id") String user_id,
+                                      @Field("token") String token,
+                                      @Field("device") String device);
 
     @GET(APIUrls.GET_SLIDER_URL)
     Call<List<SliderImage>> getSliderImages();

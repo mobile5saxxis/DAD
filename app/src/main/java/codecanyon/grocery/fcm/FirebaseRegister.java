@@ -47,12 +47,8 @@ public class FirebaseRegister {
 
 
     private void checkLogin(String user_id, String token) {
-        CheckLoginRequest clr = new CheckLoginRequest();
-        clr.setUser_id(user_id);
-        clr.setToken(token);
-
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-        service.registerFCM(clr).enqueue(new Callback<RequestResponse>() {
+        service.registerFCM(user_id, token, "android").enqueue(new Callback<RequestResponse>() {
             @Override
             public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

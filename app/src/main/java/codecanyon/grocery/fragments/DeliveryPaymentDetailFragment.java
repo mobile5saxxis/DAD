@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +28,7 @@ import codecanyon.grocery.R;
 import codecanyon.grocery.models.AddOrderRequest;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.models.RequestResponse;
+import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
@@ -123,12 +125,39 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
         if (items.size() > 0) {
 
-            String value = new GsonBuilder().setLenient().create().toJson(items);
+            JSONArray passArray = new JSONArray();
+            for (Product product : items) {
+                JSONObject jObjP = new JSONObject();
+
+                try {
+                    jObjP.put("product_id", product.getProduct_id());
+                    jObjP.put("qty", product.getQuantity());
+
+                    if (product.getStocks() != null) {
+                        List<Stock> stocks = new Gson().fromJson(product.getStocks(), new TypeToken<List<Stock>>() {
+                        }.getType());
+
+                        for (Stock stock : stocks) {
+                            if (stock.getStockId() == product.getStockId()) {
+                                jObjP.put("unit_value", stock.getQuantity());
+                                jObjP.put("unit", stock.getStock());
+                                jObjP.put("price", stock.getStrikeprice());
+                                break;
+                            }
+                        }
+                    }
+
+
+                    passArray.put(jObjP);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
             getuser_id = sessionManagement.getUserDetails().get(APIUrls.KEY_ID);
 
             if (ConnectivityReceiver.isConnected()) {
-                makeAddOrderRequest(getdate, gettime, getuser_id, getlocation_id, value);
+                makeAddOrderRequest(getdate, gettime, getuser_id, getlocation_id, passArray.toString());
             }
         }
     }
@@ -154,7 +183,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
                     if (requestResponse.isResponce()) {
                         db_cart.clearCart();
-                        ((MainActivity) getActivity()).setCartCounter("" + db_cart.getCartCount());
+                        ((MainActivity) getActivity()).setCartCounter(db_cart.getCartCount());
 
                         Bundle args = new Bundle();
                         Fragment fm = new ThanksFragment();

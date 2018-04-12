@@ -55,8 +55,6 @@ public class ViewTimeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_time_list, container, false);
 
-        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.delivery_time));
-
         sessionManagement = new SessionManagement(getActivity());
 
         RecyclerView rv_time = view.findViewById(R.id.rv_times);

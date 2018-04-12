@@ -157,7 +157,7 @@ public class MyOrderDetaiFragment extends Fragment {
         OrderRequest or = new OrderRequest();
         or.setSale_id(sale_id);
 
-        service.orderDetail(or).enqueue(new Callback<List<MyOrderDetail>>() {
+        service.orderDetail(sale_id).enqueue(new Callback<List<MyOrderDetail>>() {
             @Override
             public void onResponse(Call<List<MyOrderDetail>> call, Response<List<MyOrderDetail>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -185,11 +185,7 @@ public class MyOrderDetaiFragment extends Fragment {
      */
     private void makeDeleteOrderRequest(String sale_id, String user_id) {
 
-        OrderRequest or = new OrderRequest();
-        or.setSale_id(sale_id);
-        or.setUser_id(sale_id);
-
-        service.deleteOrder(or).enqueue(new Callback<RequestResponse>() {
+        service.deleteOrder(sale_id, user_id).enqueue(new Callback<RequestResponse>() {
             @Override
             public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

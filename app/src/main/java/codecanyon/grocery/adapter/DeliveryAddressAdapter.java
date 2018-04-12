@@ -260,11 +260,8 @@ public class DeliveryAddressAdapter extends RecyclerSwipeAdapter<DeliveryAddress
      * Method to make json object request where json response starts wtih
      */
     private void makeDeleteAddressRequest(String location_id, final int position) {
-        AddressDeleteRequest adr = new AddressDeleteRequest();
-        adr.setLocation_id(location_id);
-
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-        service.deleteAddress(adr).enqueue(new Callback<RequestResponse>() {
+        service.deleteAddress(location_id).enqueue(new Callback<RequestResponse>() {
             @Override
             public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
