@@ -51,7 +51,10 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     private DatabaseHandler dbcart;
     private RetrofitService service;
 
-    public OfferAdapter() {
+    public OfferAdapter(List<Product> products, Context context) {
+        this.products = products;
+        this.context = context;
+        dbcart = new DatabaseHandler();
         service = RetrofitInstance.createService(RetrofitService.class);
     }
 
@@ -166,13 +169,6 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             }
         }
 
-    }
-
-
-    public OfferAdapter(List<Product> products, Context context) {
-        this.products = products;
-        this.context = context;
-        dbcart = new DatabaseHandler();
     }
 
     @NonNull

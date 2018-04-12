@@ -83,6 +83,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
             iv_subcat_remove = view.findViewById(R.id.iv_subcat_remove);
             spinner_subcat = view.findViewById(R.id.spinner_subcat);
 
+            iv_subcat_remove.setOnClickListener(this);
             iv_subcat_minus.setOnClickListener(this);
             iv_subcat_plus.setOnClickListener(this);
             tv_subcat_add.setOnClickListener(this);

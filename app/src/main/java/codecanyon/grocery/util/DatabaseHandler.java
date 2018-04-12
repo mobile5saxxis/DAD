@@ -177,7 +177,7 @@ public class DatabaseHandler {
 
                 for (Stock stock : stocks) {
                     if (stock.getStockId() == product.getStockId()) {
-                        totalAmount = Integer.parseInt(stock.getStrikeprice()) * product.getQuantity();
+                        totalAmount += Integer.parseInt(stock.getStrikeprice()) * product.getQuantity();
                         break;
                     }
                 }
@@ -186,7 +186,11 @@ public class DatabaseHandler {
             List<Coupon> coupons = Coupon.listAll(Coupon.class);
 
             if (coupons != null && coupons.size() > 0) {
-                totalAmount = totalAmount - Integer.parseInt(coupons.get(0).getCoupon_value());
+                Coupon coupon = coupons.get(0);
+
+                if (totalAmount >= Integer.parseInt(coupon.getCoupon_value())) {
+                    totalAmount = totalAmount - Integer.parseInt(coupon.getCoupon_value());
+                }
             }
 
         } catch (Exception e) {
