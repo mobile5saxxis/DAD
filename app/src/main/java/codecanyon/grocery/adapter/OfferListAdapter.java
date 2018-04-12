@@ -55,7 +55,7 @@ public class OfferListAdapter extends RecyclerView.Adapter<OfferListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull OfferListAdapter.MyViewHolder holder, int position) {
-        Product mList = modelList.get(position);
+        Product product = modelList.get(position);
 
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.ic_logonew)
@@ -63,12 +63,31 @@ public class OfferListAdapter extends RecyclerView.Adapter<OfferListAdapter.MyVi
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
+        String image = product.getProduct_image();
+
+        if (image.contains(",")) {
+            String[] images = image.split(",");
+
+            if (images.length > 0) {
+                image = images[0];
+            }
+        }
+
+        String imageValue = product.getProduct_image();
+
+        if (imageValue.contains(",")) {
+            String[] images = imageValue.split(",");
+
+            if (images.length > 0) {
+                imageValue = images[0];
+            }
+        }
+
         Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + mList.getProduct_image())
+                .load(APIUrls.IMG_PRODUCT_URL + imageValue.replace(" ","%20"))
                 .apply(requestOptions)
                 .into(holder.image);
-
-        holder.title.setText(mList.getProduct_name());
+        holder.title.setText(product.getProduct_name());
     }
 
 

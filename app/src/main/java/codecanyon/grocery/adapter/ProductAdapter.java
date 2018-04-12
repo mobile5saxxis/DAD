@@ -79,7 +79,7 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + image.split(",")[0])
+                .load(APIUrls.IMG_PRODUCT_URL + image)
                 .apply(requestOptions)
                 .into(iv_image);
 
@@ -185,7 +185,17 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
 
                     break;
                 case R.id.iv_subcat:
-                    showImage(product.getProduct_image());
+                    String image = product.getProduct_image();
+
+                    if (image.contains(",")) {
+                        String[] images = image.split(",");
+
+                        if (images.length > 0) {
+                            image = images[0];
+                        }
+                    }
+
+                    showImage(image);
                     break;
                 case R.id.rl_product:
                     String value = new Gson().toJson(product);
@@ -221,8 +231,18 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                     .error(R.drawable.ic_logonew)
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 
+            String image = product.getProduct_image();
+
+            if (image.contains(",")) {
+                String[] images = image.split(",");
+
+                if (images.length > 0) {
+                    image = images[0];
+                }
+            }
+
             Glide.with(context)
-                    .load(APIUrls.IMG_PRODUCT_URL + product.getProduct_image())
+                    .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
                     .apply(requestOptions)
                     .into(iv_subcat);
 

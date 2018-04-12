@@ -89,7 +89,7 @@ public class ProductDetails_fragment extends Fragment {
         tv_price.setText(stock);
 
         Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + image)
+                .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
                 .centerCrop()
                 .placeholder(R.drawable.logonew)
                 .crossFade()

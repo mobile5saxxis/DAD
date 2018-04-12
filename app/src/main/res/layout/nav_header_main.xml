@@ -60,7 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/space_5"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/activity_horizontal_margin"
             tools:text="Mo. 8530875124" />
 
     </LinearLayout>

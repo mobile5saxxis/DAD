@@ -60,7 +60,7 @@ public class MyOrderDetailAdapter extends RecyclerView.Adapter<MyOrderDetailAdap
         MyOrderDetail mList = modelList.get(position);
 
         Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + mList.getProduct_image())
+                .load(APIUrls.IMG_PRODUCT_URL + mList.getProduct_image().split(",")[0].replace(" ","%20"))
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_logonew).diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(holder.iv_img);
 

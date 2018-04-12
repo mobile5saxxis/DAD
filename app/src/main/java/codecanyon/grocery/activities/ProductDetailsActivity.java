@@ -1,5 +1,6 @@
 package codecanyon.grocery.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -9,10 +10,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -30,7 +38,7 @@ import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.DatabaseHandler;
 
-public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener, BaseSliderView.OnSliderClickListener {
     public static final String PRODUCT = "PRODUCT";
     public static final int PRODUCT_DETAIL = 5241;
     private DatabaseHandler dbcart;
@@ -38,6 +46,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private Product product;
     private Spinner spinner_stock;
     private boolean isUpdated;
+    private LinearLayout ll_add_content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +64,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
         dbcart = new DatabaseHandler();
 
+        ll_add_content = findViewById(R.id.ll_add_content);
         tv_content = findViewById(R.id.tv_content);
         tv_add = findViewById(R.id.tv_add);
         tv_add.setOnClickListener(this);
@@ -71,14 +81,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         sl_product.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         sl_product.setCustomAnimation(new DescriptionAnimation());
         sl_product.setDuration(4000);
+        sl_product.setOnClickListener(this);
 
         for (String imageUrl : product.getProduct_image().split(",")) {
             DefaultSliderView textSliderView = new DefaultSliderView(this);
 
             if (!imageUrl.trim().isEmpty()) {
                 textSliderView
-                        .image(APIUrls.IMG_PRODUCT_URL + imageUrl)
-                        .setScaleType(BaseSliderView.ScaleType.FitCenterCrop);
+                        .image(APIUrls.IMG_PRODUCT_URL + imageUrl.replace(" ", "%20"))
+                        .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
+                        .setOnSliderClickListener(this);
                 sl_product.addSlider(textSliderView);
             }
         }
@@ -103,6 +115,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         });
 
         if (dbcart.isInCart(product.getProduct_id())) {
+            ll_add_content.setVisibility(View.VISIBLE);
             tv_add.setText(R.string.tv_pro_update);
             tv_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
 
@@ -122,6 +135,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 }
             }
         } else {
+            ll_add_content.setVisibility(View.INVISIBLE);
             tv_add.setText(R.string.tv_pro_add);
         }
 
@@ -146,10 +160,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     qty2 = qty2 - 1;
                     tv_content.setText(String.valueOf(qty2));
                 }
-
-                if (qty2 == 0) {
-                    tv_add.setText(R.string.tv_pro_add);
-                }
                 break;
             case R.id.iv_plus:
                 int qty = Integer.valueOf(tv_content.getText().toString());
@@ -160,6 +170,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             case R.id.tv_add:
                 Stock stock = (Stock) spinner_stock.getSelectedItem();
                 int quantity = Integer.parseInt(tv_content.getText().toString().trim());
+                ll_add_content.setVisibility(View.VISIBLE);
 
                 if (quantity > 0) {
                     product.setStockId(stock.getStockId());
@@ -174,6 +185,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
                     if (p != null) {
                         dbcart.removeItemFromCart(p.getId());
+                        if (quantity == 0) {
+                            ll_add_content.setVisibility(View.INVISIBLE);
+                            tv_add.setText(R.string.tv_pro_add);
+                        }
                     }
                 }
 
@@ -199,5 +214,40 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         intent.putExtra(MainActivity.CART_UPDATED, isUpdated);
         setResult(PRODUCT_DETAIL, intent);
         finish();
+    }
+
+    private void showImage(String image) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.product_image_dialog);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.show();
+
+        ImageView iv_image_cancle = dialog.findViewById(R.id.iv_dialog_cancle);
+        ImageView iv_image = dialog.findViewById(R.id.iv_dialog_img);
+
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.ic_logonew)
+                .error(R.drawable.ic_logonew)
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
+
+        Glide.with(this)
+                .load(image)
+                .apply(requestOptions)
+                .into(iv_image);
+
+        iv_image_cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+        showImage(slider.getUrl());
     }
 }

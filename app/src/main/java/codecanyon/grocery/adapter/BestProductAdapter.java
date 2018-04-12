@@ -112,8 +112,18 @@ public class BestProductAdapter extends CommonRecyclerAdapter<Product> {
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 
+            String image = product.getProduct_image();
+
+            if (image.contains(",")) {
+                String[] images = image.split(",");
+
+                if (images.length > 0) {
+                    image = images[0];
+                }
+            }
+
             Glide.with(context)
-                    .load(APIUrls.IMG_PRODUCT_URL + product.getProduct_image())
+                    .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
                     .apply(requestOptions)
                     .into(iv_image);
 
@@ -157,7 +167,18 @@ public class BestProductAdapter extends CommonRecyclerAdapter<Product> {
                     context.startActivity(intent);
                     break;
                 case R.id.iv_image:
-                    showImage(getItem(position).getProduct_image());
+                    Product pro = getItem(position);
+                    String image = pro.getProduct_image();
+
+                    if (image.contains(",")) {
+                        String[] images = image.split(",");
+
+                        if (images.length > 0) {
+                            image = images[0];
+                        }
+                    }
+
+                    showImage(image);
                     break;
                 case R.id.iv_subcat_minus:
                     int qty = 0;
@@ -225,7 +246,7 @@ public class BestProductAdapter extends CommonRecyclerAdapter<Product> {
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + image)
+                .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
                 .apply(requestOptions)
                 .into(iv_image);
 

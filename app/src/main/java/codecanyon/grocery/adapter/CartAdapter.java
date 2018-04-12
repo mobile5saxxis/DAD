@@ -121,7 +121,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                     }
 
                     if (qty2 == 0) {
-                        tv_subcat_content.setText(R.string.tv_pro_add);
+                        tv_subcat_add.setText(R.string.tv_pro_add);
                     }
                     break;
                 case R.id.tv_subcat_add:
@@ -148,10 +148,12 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
                     break;
                 case R.id.rl_product:
+                    List<Stock> stocks = new Gson().fromJson(product.getStocks(), new TypeToken<List<Stock>>() {
+                    }.getType());
+                    product.setCustom_fields(stocks);
+                    String value = new Gson().toJson(product);
                     Intent intent = new Intent(context, ProductDetailsActivity.class);
-                    intent.putExtra("position", position);
-//                    intent.putExtra("selectedProduct", getItem(position));
-//                    intent.putExtra("total", tv_subcat_total.getText().toString());
+                    intent.putExtra(ProductDetailsActivity.PRODUCT, value);
                     context.startActivity(intent);
                     break;
             }
@@ -193,8 +195,18 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                     .error(R.drawable.ic_logonew)
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 
+            String image = product.getProduct_image();
+
+            if (image.contains(",")) {
+                String[] images = image.split(",");
+
+                if (images.length > 0) {
+                    image = images[0];
+                }
+            }
+
             Glide.with(context)
-                    .load(APIUrls.IMG_PRODUCT_URL + product.getProduct_image())
+                    .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
                     .apply(requestOptions)
                     .into(iv_subcat);
 

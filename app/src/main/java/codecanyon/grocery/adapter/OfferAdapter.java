@@ -84,7 +84,17 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 intent.putExtra(ProductDetailsActivity.PRODUCT, value);
                 context.startActivity(intent);
             } else if (id == R.id.iv_image) {
-                showImage(products.get(position).getProduct_image());
+                String image = products.get(position).getProduct_image();
+
+                if (image.contains(",")) {
+                    String[] images = image.split(",");
+
+                    if (images.length > 0) {
+                        image = images[0];
+                    }
+                }
+
+                showImage(image);
             } else if (id == R.id.iv_subcat_minus) {
 
                 int qty = 0;
@@ -167,8 +177,18 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 .error(R.drawable.ic_logonew)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
+        String image = product.getProduct_image();
+
+        if (image.contains(",")) {
+            String[] images = image.split(",");
+
+            if (images.length > 0) {
+                image = images[0];
+            }
+        }
+
         Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + product.getProduct_image())
+                .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
                 .apply(requestOptions)
                 .into(holder.image);
 
@@ -221,7 +241,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + image)
+                .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
                 .apply(requestOptions)
                 .into(iv_image);
 

@@ -19,8 +19,8 @@ public class ProductsHowToUseFragment extends Fragment {
     public static final String HOW_TO_USE = "HOW_TO_USE";
     private String how_to_use;
 
-    public static ProductsAboutFragment newInstance(String description) {
-        ProductsAboutFragment fragment = new ProductsAboutFragment();
+    public static ProductsHowToUseFragment newInstance(String description) {
+        ProductsHowToUseFragment fragment = new ProductsHowToUseFragment();
         Bundle args = new Bundle();
         args.putString(HOW_TO_USE, description);
         fragment.setArguments(args);
