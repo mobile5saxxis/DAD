@@ -65,6 +65,7 @@ public class APIUrls {
 
     public static final String GET_PRODUCT_URL = BASE_URL + "index.php/api/get_products";
 
+    public static final String GET_SLIDER_PRODUCT_URL = BASE_URL + "index.php/api/get_products";
 
     public static final String GET_ABOUT_URL = BASE_URL + "index.php/api/aboutus";
 

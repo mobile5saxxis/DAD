@@ -3,6 +3,7 @@ package codecanyon.grocery.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,7 +50,7 @@ import retrofit2.Response;
  * Created by Rajesh Dabhi on 22/6/2017.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements BaseSliderView.OnSliderClickListener {
 
     private SliderLayout sliderLayout;
     private RecyclerView rv_category;
@@ -201,10 +202,12 @@ public class HomeFragment extends Fragment {
 
                             textSliderView.description(sliderImage.getSlider_title())
                                     .image(APIUrls.IMG_SLIDER_URL + sliderImage.getSlider_image())
-                                    .setScaleType(BaseSliderView.ScaleType.Fit);
+                                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                                    .setOnSliderClickListener(HomeFragment.this);
 
                             textSliderView.bundle(new Bundle());
                             textSliderView.getBundle().putString("extra", sliderImage.getSlider_title());
+                            textSliderView.getBundle().putString("slider_id", sliderImage.getId());
 
                             sliderLayout.addSlider(textSliderView);
                         } catch (Exception e) {
@@ -326,4 +329,18 @@ public class HomeFragment extends Fragment {
         return false;
     }
 
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+        String sliderId = slider.getBundle().getString("slider_id");
+        String sliderTitle = slider.getBundle().getString("extra");
+
+        if (getActivity() != null) {
+            FragmentManager fM = getActivity().getSupportFragmentManager();
+            FragmentTransaction ft = fM.beginTransaction();
+
+            ft.replace(R.id.frame_layout, SliderProductFragment.newInstance(sliderId, sliderTitle), SliderProductFragment.class.getSimpleName())
+                    .addToBackStack(SliderProductFragment.class.getSimpleName());
+            ft.commit();
+        }
+    }
 }
