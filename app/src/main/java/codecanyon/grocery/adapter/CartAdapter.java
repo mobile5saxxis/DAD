@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -23,10 +24,16 @@ import java.util.List;
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.activities.ProductDetailsActivity;
+import codecanyon.grocery.models.Quantity;
 import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
+import codecanyon.grocery.reterofit.RetrofitInstance;
+import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.DatabaseHandler;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Rajesh Dabhi on 26/6/2017.
@@ -35,10 +42,12 @@ import codecanyon.grocery.util.DatabaseHandler;
 public class CartAdapter extends CommonRecyclerAdapter<Product> {
     private Context context;
     private DatabaseHandler dbcart;
+    private RetrofitService service;
 
     public CartAdapter(Context context) {
         this.context = context;
         dbcart = new DatabaseHandler();
+        service = RetrofitInstance.createService(RetrofitService.class);
     }
 
     @Override
@@ -87,7 +96,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
         public void onClick(View view) {
             int id = view.getId();
             int position = getAdapterPosition();
-            Product product = getItem(position);
+            final Product product = getItem(position);
 
             switch (id) {
                 case R.id.iv_subcat_remove:
@@ -126,27 +135,51 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                     break;
                 case R.id.tv_subcat_add:
 
-                    Stock stock = (Stock) spinner_subcat.getSelectedItem();
-                    int quantity = Integer.parseInt(tv_subcat_content.getText().toString().trim());
+                    final Stock stock = (Stock) spinner_subcat.getSelectedItem();
+                    final int qty3 = Integer.parseInt(tv_subcat_content.getText().toString().trim());
 
-                    if (quantity > 0) {
-                        product.setStockId(stock.getStockId());
-                        product.setQuantity(quantity);
+                    if (qty3 > 0) {
+                        service.getStockAvailability(product.getProduct_id()).enqueue(new Callback<Quantity>() {
+                            @Override
+                            public void onResponse(Call<Quantity> call, Response<Quantity> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    Quantity quantity = response.body();
 
-                        dbcart.setCart(product);
-                        tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                        updateintent();
+
+                                    if (qty3 <= quantity.getQuantity_per_user()) {
+                                        product.setStockId(stock.getStockId());
+                                        product.setQuantity(qty3);
+
+                                        dbcart.setCart(product);
+                                        tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                                        updateintent();
+                                    } else {
+                                        Toast.makeText(context, String.format("Only %s items are allowed for this item", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                } else {
+                                    Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                                }
+
+                                ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
+                            }
+
+                            @Override
+                            public void onFailure(Call<Quantity> call, Throwable t) {
+                                Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     } else {
                         Product p = dbcart.getProduct(product.getProduct_id());
 
                         if (p != null) {
                             dbcart.removeItemFromCart(p.getId());
                         }
+
+                        ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
                     }
-
-                    ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
-
                     break;
+
                 case R.id.rl_product:
                     List<Stock> stocks = new Gson().fromJson(product.getStocks(), new TypeToken<List<Stock>>() {
                     }.getType());
@@ -206,7 +239,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
             }
 
             Glide.with(context)
-                    .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
+                    .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ", "%20"))
                     .apply(requestOptions)
                     .into(iv_subcat);
 

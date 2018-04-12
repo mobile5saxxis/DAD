@@ -26,6 +26,7 @@ import codecanyon.grocery.models.OrderRequest;
 import codecanyon.grocery.models.PopularBrandsResponse;
 import codecanyon.grocery.models.ProductRequest;
 import codecanyon.grocery.models.ProductResponse;
+import codecanyon.grocery.models.Quantity;
 import codecanyon.grocery.models.RegisterRequest;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.models.SliderImage;
@@ -174,4 +175,7 @@ public interface RetrofitService {
 
     @GET(APIUrls.GET_COUPON_URL)
     Call<CouponResponse> getCoupons();
+
+    @GET(APIUrls.GET_STOCK_AVAILABILITY)
+    Call<Quantity> getStockAvailability(@Query("pid")int pid);
 }

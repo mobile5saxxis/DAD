@@ -20,6 +20,8 @@ import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.fragments.SubCategoryFragment;
 import codecanyon.grocery.models.Category;
 import codecanyon.grocery.reterofit.APIUrls;
+import codecanyon.grocery.reterofit.RetrofitInstance;
+import codecanyon.grocery.reterofit.RetrofitService;
 
 
 /**

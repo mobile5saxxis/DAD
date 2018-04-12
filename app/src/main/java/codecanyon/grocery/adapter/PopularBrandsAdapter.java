@@ -20,6 +20,8 @@ import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.fragments.PopularBrandsFragment;
 import codecanyon.grocery.models.PopularBrands;
 import codecanyon.grocery.reterofit.APIUrls;
+import codecanyon.grocery.reterofit.RetrofitInstance;
+import codecanyon.grocery.reterofit.RetrofitService;
 
 /**
  * Created by srikarn on 30-03-2018.

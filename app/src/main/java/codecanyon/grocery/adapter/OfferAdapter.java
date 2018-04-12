@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -28,10 +29,17 @@ import java.util.List;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.ProductDetailsActivity;
+import codecanyon.grocery.models.Offers;
+import codecanyon.grocery.models.Quantity;
 import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
+import codecanyon.grocery.reterofit.RetrofitInstance;
+import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.DatabaseHandler;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by srikarn on 26-03-2018.
@@ -41,7 +49,11 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     private List<Product> products;
     private Context context;
     private DatabaseHandler dbcart;
+    private RetrofitService service;
 
+    public OfferAdapter() {
+        service = RetrofitInstance.createService(RetrofitService.class);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView tv_title, tv_add, tv_content, tv_discount_price, tv_price;
@@ -114,24 +126,46 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 tv_content.setText(String.valueOf(qty));
 
             } else if (id == R.id.tv_add) {
-                Product product = products.get(position);
+                final Product product = products.get(position);
 
-                Stock stock = (Stock) spinner_quantity.getSelectedItem();
-                int quantity = Integer.parseInt(tv_content.getText().toString().trim());
+                final Stock stock = (Stock) spinner_quantity.getSelectedItem();
+                final int qty = Integer.parseInt(tv_content.getText().toString().trim());
 
-                if (quantity > 0) {
-                    product.setStockId(stock.getStockId());
-                    product.setStocks(new Gson().toJson(product.getCustom_fields()));
-                    product.setQuantity(quantity);
+                if (qty > 0) {
+                    service.getStockAvailability(product.getProduct_id()).enqueue(new Callback<Quantity>() {
+                        @Override
+                        public void onResponse(Call<Quantity> call, Response<Quantity> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                Quantity quantity = response.body();
 
-                    dbcart.setCart(product);
-                    tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
+
+                                if (qty <= quantity.getQuantity_per_user()) {
+                                    product.setStockId(stock.getStockId());
+                                    product.setStocks(new Gson().toJson(product.getCustom_fields()));
+                                    product.setQuantity(qty);
+
+                                    dbcart.setCart(product);
+                                    tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                                } else {
+                                    Toast.makeText(context, String.format("Only %s items are allowed for this item", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                            }
+
+                            ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
+                        }
+
+                        @Override
+                        public void onFailure(Call<Quantity> call, Throwable t) {
+                            Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-
-                ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
-
             }
         }
+
     }
 
 
@@ -188,7 +222,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         }
 
         Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
+                .load(APIUrls.IMG_PRODUCT_URL + image)
                 .apply(requestOptions)
                 .into(holder.image);
 
@@ -241,7 +275,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
+                .load(APIUrls.IMG_PRODUCT_URL + image)
                 .apply(requestOptions)
                 .into(iv_image);
 
