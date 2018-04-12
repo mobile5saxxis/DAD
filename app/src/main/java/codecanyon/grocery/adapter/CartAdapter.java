@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -205,8 +206,15 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     Stock stock = priceAdapter.getItem(position);
-                    tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
-                    tv_subcat_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
+
+                    if (TextUtils.isEmpty(stock.getStrikeprice())) {
+                        tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
+                        tv_subcat_price.setVisibility(View.GONE);
+                    } else {
+                        tv_subcat_price.setVisibility(View.VISIBLE);
+                        tv_subcat_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
+                        tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                    }
                 }
 
                 @Override

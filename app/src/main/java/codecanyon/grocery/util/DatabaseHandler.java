@@ -1,6 +1,7 @@
 package codecanyon.grocery.util;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -177,7 +178,14 @@ public class DatabaseHandler {
 
                 for (Stock stock : stocks) {
                     if (stock.getStockId() == product.getStockId()) {
-                        totalAmount += Integer.parseInt(stock.getStrikeprice()) * product.getQuantity();
+
+                        String price = stock.getStrikeprice();
+
+                        if (TextUtils.isEmpty(price)) {
+                            price = stock.getPrice_val();
+                        }
+
+                        totalAmount += Integer.parseInt(price) * product.getQuantity();
                         break;
                     }
                 }

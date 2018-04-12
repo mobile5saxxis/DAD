@@ -63,16 +63,6 @@ public class OfferListAdapter extends RecyclerView.Adapter<OfferListAdapter.MyVi
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
-        String image = product.getProduct_image();
-
-        if (image.contains(",")) {
-            String[] images = image.split(",");
-
-            if (images.length > 0) {
-                image = images[0];
-            }
-        }
-
         String imageValue = product.getProduct_image();
 
         if (imageValue.contains(",")) {

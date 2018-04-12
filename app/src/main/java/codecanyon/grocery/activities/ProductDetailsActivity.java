@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -104,8 +105,15 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Stock stock = priceAdapter.getItem(position);
-                tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
-                tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
+
+                if (TextUtils.isEmpty(stock.getStrikeprice())) {
+                    tv_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
+                    tv_price.setVisibility(View.GONE);
+                } else {
+                    tv_price.setVisibility(View.VISIBLE);
+                    tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
+                    tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                }
             }
 
             @Override

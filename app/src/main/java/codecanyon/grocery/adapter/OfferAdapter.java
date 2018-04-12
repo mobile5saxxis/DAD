@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -192,8 +193,15 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Stock stock = priceAdapter.getItem(position);
-                holder.tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
-                holder.tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
+
+                if (TextUtils.isEmpty(stock.getStrikeprice())) {
+                    holder.tv_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
+                    holder.tv_price.setVisibility(View.GONE);
+                } else {
+                    holder.tv_price.setVisibility(View.VISIBLE);
+                    holder.tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
+                    holder.tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                }
             }
 
             @Override
