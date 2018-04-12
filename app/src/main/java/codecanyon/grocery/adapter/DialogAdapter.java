@@ -11,12 +11,12 @@ import java.util.List;
  * Created by srikarn on 26-03-2018.
  */
 
-public class Dialog_adapter extends FragmentPagerAdapter {
+public class DialogAdapter extends FragmentPagerAdapter {
 
     List<Fragment> mFragmentCollection = new ArrayList<>();
     List<String> mTitleCollection = new ArrayList<>();
 
-    public Dialog_adapter(FragmentManager fm) {
+    public DialogAdapter(FragmentManager fm) {
         super(fm);
     }
 
