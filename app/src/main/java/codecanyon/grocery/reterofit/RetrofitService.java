@@ -11,6 +11,7 @@ import codecanyon.grocery.models.CategoryRequest;
 import codecanyon.grocery.models.CategoryResponse;
 import codecanyon.grocery.models.ChangePasswordRequest;
 import codecanyon.grocery.models.CheckLoginRequest;
+import codecanyon.grocery.models.CouponResponse;
 import codecanyon.grocery.models.DeliveryAddress;
 import codecanyon.grocery.models.DeliveryRequest;
 import codecanyon.grocery.models.DeliveryResponse;
@@ -167,4 +168,7 @@ public interface RetrofitService {
 
     @GET(APIUrls.GET_SLIDER_URL)
     Call<List<SliderImage>> getSliderImages();
+
+    @GET(APIUrls.GET_COUPON_URL)
+    Call<CouponResponse> getCoupons();
 }

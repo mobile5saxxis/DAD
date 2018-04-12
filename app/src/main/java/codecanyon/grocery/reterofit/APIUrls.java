@@ -49,6 +49,8 @@ public class APIUrls {
 
     public static final String GET_SLIDER_URL = BASE_URL + "index.php/api/get_sliders";
 
+    public static final String GET_COUPON_URL = BASE_URL + "index.php/api/get_all_Coupons";
+
     public static final String GET_BEST_PRODUCTS = BASE_URL + "index.php/api/get_products?bid=1";
 
     public static final String GET_BEST_PRODUCTS_LIST = BASE_URL + "index.php/api/brand_products";

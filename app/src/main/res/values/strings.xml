@@ -194,5 +194,9 @@
     <string name="no_of_items">No of items: %s</string>
     <string name="clear_cart">Clear cart</string>
     <string name="delivery_time">Delivery time</string>
+    <string name="shop_by_category">Shop By Category</string>
+    <string name="coupons">Coupons</string>
+    <string name="flat">Flat</string>
+    <string name="off">Off</string>
 
 </resources>

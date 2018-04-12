@@ -51,6 +51,7 @@ import codecanyon.grocery.R;
 import codecanyon.grocery.fcm.FirebaseRegister;
 import codecanyon.grocery.fragments.CartFragment;
 import codecanyon.grocery.fragments.CategoryFragment;
+import codecanyon.grocery.fragments.CouponFragment;
 import codecanyon.grocery.fragments.EditProfileFragment;
 import codecanyon.grocery.fragments.HomeFragment;
 import codecanyon.grocery.fragments.MyOrderFragment;
@@ -266,6 +267,15 @@ public class MainActivity extends AppCompatActivity
                 fM.beginTransaction()
                         .replace(R.id.frame_layout, fm_home, HomeFragment.class.getSimpleName())
                         .addToBackStack(HomeFragment.class.getSimpleName())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+
+            case R.id.nav_coupon:
+                Fragment couponFragment = new CouponFragment();
+                fM.beginTransaction()
+                        .replace(R.id.frame_layout, couponFragment, CouponFragment.class.getSimpleName())
+                        .addToBackStack(CouponFragment.class.getSimpleName())
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
                 break;

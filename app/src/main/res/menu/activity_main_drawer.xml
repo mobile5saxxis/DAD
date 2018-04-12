@@ -6,25 +6,17 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
             android:title="@string/nav_home" />
-        <!--<item
-            android:id="@+id/nav_recipe"
-            android:icon="@drawable/recipe_menu"
-            android:tv_title="Recipes" />-->
 
         <item
             android:id="@+id/nav_category"
             android:icon="@drawable/ic_category"
-            android:title="Shop By Category">
-            <!--<menu>
-                <item
-                    android:id="@+id/nav_fruits"
-                    android:tv_subcat_title="@string/nav_fruits"/>
-                <item
-                    android:id="@+id/FoodGrains"
-                    android:tv_subcat_title="@string/nav_foodgrain"/>
-            </menu>-->
+            android:title="@string/shop_by_category" />
 
-        </item>
+        <item
+            android:id="@+id/nav_coupon"
+            android:icon="@drawable/ic_coupon"
+            android:title="@string/coupons" />
+
         <item
             android:id="@+id/nav_user"
             android:title="@string/nav_user">
