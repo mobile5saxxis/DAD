@@ -56,6 +56,7 @@ public class SubCategoryFragment extends Fragment {
         final RelativeLayout rl_loading = view.findViewById(R.id.rl_loading);
         final TabLayout tab_layout = view.findViewById(R.id.tab_layout);
         final ViewPager view_pager = view.findViewById(R.id.view_pager);
+        view_pager.setOffscreenPageLimit(0);
 
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
         service.getSubCategories(categoryId).enqueue(new Callback<SubCategoryResponse>() {

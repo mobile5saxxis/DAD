@@ -114,6 +114,22 @@ public class MainActivity extends AppCompatActivity
         tv_name = header.findViewById(R.id.tv_header_name);
         tv_register = header.findViewById(R.id.tv_header_Register);
         tv_number = header.findViewById(R.id.tv_header_moblie);
+        findViewById(R.id.iv_profile).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sessionManagement.isLoggedIn()) {
+                    Fragment fragment = new EditProfileFragment();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frame_layout, fragment, EditProfileFragment.class.getSimpleName())
+                            .addToBackStack(EditProfileFragment.class.getSimpleName())
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                } else {
+                    Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(i);
+                }
+            }
+        });
 
         BottomNavigationMenuView bottomNavigationMenuView =
                 (BottomNavigationMenuView) navigation.getChildAt(0);

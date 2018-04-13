@@ -201,7 +201,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                             TextSliderView textSliderView = new TextSliderView(getActivity());
 
                             textSliderView.description(sliderImage.getSlider_title())
-                                    .image(APIUrls.IMG_SLIDER_URL + sliderImage.getSlider_image())
+                                    .image(APIUrls.IMG_SLIDER_URL + sliderImage.getSlider_image().replace(" ","%20"))
                                     .setScaleType(BaseSliderView.ScaleType.Fit)
                                     .setOnSliderClickListener(HomeFragment.this);
 

@@ -105,6 +105,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
                     if (product.getId() != null) {
                         dbcart.removeItemFromCart(product.getId());
+                        removeItem(position);
                         updateintent();
                     }
 
