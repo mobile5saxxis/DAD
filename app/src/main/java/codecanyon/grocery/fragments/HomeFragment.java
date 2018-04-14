@@ -118,8 +118,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         sliderLayout.setDuration(4000);
 
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_logonew)
-                .error(R.drawable.ic_logonew)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_placeholder)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true);

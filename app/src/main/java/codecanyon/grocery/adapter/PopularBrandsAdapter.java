@@ -69,8 +69,8 @@ public class PopularBrandsAdapter extends CommonRecyclerAdapter<PopularBrands> {
             PopularBrands mList = getItem(position);
 
             RequestOptions requestOptions = new RequestOptions()
-                    .placeholder(R.drawable.ic_logonew)
-                    .error(R.drawable.ic_logonew)
+                    .placeholder(R.drawable.ic_placeholder)
+                    .error(R.drawable.ic_placeholder)
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 
             Glide.with(context)

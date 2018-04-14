@@ -236,8 +236,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         ImageView iv_image = dialog.findViewById(R.id.iv_dialog_img);
 
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_logonew)
-                .error(R.drawable.ic_logonew)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(this)

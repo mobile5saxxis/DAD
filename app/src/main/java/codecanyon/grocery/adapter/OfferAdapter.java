@@ -151,7 +151,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                                     dbcart.setCart(product);
                                     tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
                                 } else {
-                                    Toast.makeText(context, String.format("Only %s items are allowed for this item", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, String.format(context.getString(R.string.only_items_allowed), String.valueOf(quantity.getQuantity_per_user())), Toast.LENGTH_SHORT).show();
                                 }
 
                             } else {
@@ -211,8 +211,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         });
 
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_logonew)
-                .error(R.drawable.ic_logonew)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         String image = product.getProduct_image();
@@ -274,8 +274,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         ImageView iv_image = dialog.findViewById(R.id.iv_dialog_img);
 
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_logonew)
-                .error(R.drawable.ic_logonew)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(context)

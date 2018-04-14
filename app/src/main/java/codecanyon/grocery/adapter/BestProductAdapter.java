@@ -125,8 +125,8 @@ public class BestProductAdapter extends CommonRecyclerAdapter<Product> {
             });
 
             RequestOptions requestOptions = new RequestOptions()
-                    .placeholder(R.drawable.ic_logonew)
-                    .error(R.drawable.ic_logonew)
+                    .placeholder(R.drawable.ic_placeholder)
+                    .error(R.drawable.ic_placeholder)
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 
@@ -280,8 +280,8 @@ public class BestProductAdapter extends CommonRecyclerAdapter<Product> {
         ImageView iv_image = dialog.findViewById(R.id.iv_dialog_img);
 
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_logonew)
-                .error(R.drawable.ic_logonew)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_placeholder)
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 

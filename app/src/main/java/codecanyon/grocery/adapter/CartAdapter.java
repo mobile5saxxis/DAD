@@ -234,8 +234,8 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
             }
 
             RequestOptions requestOptions = new RequestOptions()
-                    .placeholder(R.drawable.ic_logonew)
-                    .error(R.drawable.ic_logonew)
+                    .placeholder(R.drawable.ic_placeholder)
+                    .error(R.drawable.ic_placeholder)
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 
             String image = product.getProduct_image();

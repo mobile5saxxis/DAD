@@ -58,8 +58,8 @@ public class OfferListAdapter extends RecyclerView.Adapter<OfferListAdapter.MyVi
         Product product = modelList.get(position);
 
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_logonew)
-                .error(R.drawable.ic_logonew)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_placeholder)
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
