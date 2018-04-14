@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,9 +73,11 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
         private TextView tv_title, tv_add, tv_subcat_content, tv_discount_price, tv_price;
         private ImageView iv_image, iv_subcat_plus, iv_subcat_minus;
         private Spinner spinner_quantity;
+        private RelativeLayout rl_content;
 
         private BestProductViewHolder(View view) {
             super(view);
+            rl_content = view.findViewById(R.id.rl_content);
             tv_title = view.findViewById(R.id.tv_title);
             iv_image = view.findViewById(R.id.iv_image);
             tv_add = view.findViewById(R.id.tv_add);
@@ -166,7 +169,9 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                         }
                     }
                 }
+                rl_content.setVisibility(View.VISIBLE);
             } else {
+                rl_content.setVisibility(View.INVISIBLE);
                 tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
             }
         }
@@ -219,6 +224,8 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                     }
                     break;
                 case R.id.tv_add:
+                    rl_content.setVisibility(View.VISIBLE);
+
                     final Product product = getItem(position);
 
                     final Stock stock = (Stock) spinner_quantity.getSelectedItem();

@@ -192,7 +192,7 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                                         dbcart.setCart(product);
                                         tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
                                     } else {
-                                        Toast.makeText(context, String.format("Only %s items are allowed for this item", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, String.format("Only %s items allowed per user for this product", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
                                     }
 
                                 } else {

@@ -1,4 +1,4 @@
-package fcm;
+package codecanyon.grocery.fcm;
 
 /**
  * Created by subhashsanghani on 12/21/16.
@@ -16,6 +16,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 
@@ -68,10 +69,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             JSONObject object = new JSONObject(remoteMessage.getData());
             try {
-                sendNotification(object.getString("message"),object.getString("tv_subcat_title"),object.getString("image"),object.getString("created_at"));
+                sendNotification(object.getString("message"),object.getString("title"),object.getString("image"),object.getString("created_at"));
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
+            };
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         }
 
@@ -116,7 +117,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 PendingIntent.FLAG_ONE_SHOT);
         if (imageUrl != null && imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
 
-            Bitmap bitmap = getBitmapFromURL(imageUrl);
+            Bitmap bitmap = getBitmapfromUrl(imageUrl);
 
 
 
@@ -181,18 +182,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * Downloading push notification iv_category before displaying it in
      * the notification tray
      * */
-    public Bitmap getBitmapFromURL(String strURL) {
-        try {
-            URL url = new URL(strURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
+    public Bitmap getBitmapfromUrl(String imageUrl) {
+        if (TextUtils.isEmpty(imageUrl)) {
             return null;
+        } else {
+            try {
+                URL url = new URL(imageUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                return BitmapFactory.decodeStream(input);
+
+            } catch (Exception e) {
+                return null;
+            }
         }
     }
 

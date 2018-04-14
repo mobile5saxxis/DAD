@@ -27,6 +27,7 @@ import codecanyon.grocery.adapter.CartAdapter;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.Coupon;
+import codecanyon.grocery.models.CouponAvailableResponse;
 import codecanyon.grocery.models.CouponResponse;
 import codecanyon.grocery.models.LimitCheck;
 import codecanyon.grocery.models.Product;
@@ -142,29 +143,27 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
                     for (final Coupon coupon : cR.getData()) {
                         if (coupon.getCoupon_title().equals(value)) {
-                            db.addCoupon(coupon);
-                            isFound = true;
+                            service.getCouponAvailability(coupon.getCouponId(), sessionManagement.getUserDetails().get(APIUrls.KEY_ID)).enqueue(new Callback<CouponAvailableResponse>() {
+                                @Override
+                                public void onResponse(Call<CouponAvailableResponse> call, Response<CouponAvailableResponse> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        CouponAvailableResponse car = response.body();
+                                        if (car.isResponce() && car.getData().getCount() > 0) {
+                                            db.addCoupon(coupon);
+                                            isFound = true;
+                                        } else {
+                                            Toast.makeText(getContext(), R.string.unable_to_apply_coupon, Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(getContext(), R.string.unable_to_apply_coupon, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
 
-//                            service.getCouponAvailability(coupon.getCouponId(), sessionManagement.getUserDetails().get(APIUrls.KEY_ID)).enqueue(new Callback<String>() {
-//                                @Override
-//                                public void onResponse(Call<String> call, Response<String> response) {
-//                                    if (response.isSuccessful() && response.body() != null) {
-//                                        if (response.body().equals("0")) {
-//                                            db.addCoupon(coupon);
-//                                            isFound = true;
-//                                        } else {
-//                                            Toast.makeText(getContext(), R.string.unable_to_apply_coupon, Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    } else {
-//                                        Toast.makeText(getContext(), R.string.unable_to_apply_coupon, Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call<String> call, Throwable t) {
-//                                    Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
+                                @Override
+                                public void onFailure(Call<CouponAvailableResponse> call, Throwable t) {
+                                    Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                                }
+                            });
                             break;
                         }
                     }

@@ -16,17 +16,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="36dp"
         android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <ImageView
             android:id="@+id/iv_header_img"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:src="@drawable/logo"
-            app:civ_border_color="@color/gray"
-            app:civ_border_width="1dp" />
+            android:layout_marginBottom="24dp"
+            android:background="@android:color/white"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_home_logo" />
 
         <LinearLayout
             android:layout_width="match_parent"

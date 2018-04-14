@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,9 +64,11 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         public TextView tv_title, tv_add, tv_content, tv_discount_price, tv_price;
         public ImageView image, iv_plus, iv_minus;
         private Spinner spinner_quantity;
+        private RelativeLayout rl_content;
 
         public ViewHolder(View view) {
             super(view);
+            rl_content = view.findViewById(R.id.rl_content);
             tv_title = view.findViewById(R.id.tv_title);
             image = view.findViewById(R.id.iv_image);
             tv_add = view.findViewById(R.id.tv_add);
@@ -130,6 +133,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 tv_content.setText(String.valueOf(qty));
 
             } else if (id == R.id.tv_add) {
+                rl_content.setVisibility(View.VISIBLE);
+
                 final Product product = products.get(position);
 
                 final Stock stock = (Stock) spinner_quantity.getSelectedItem();
@@ -251,8 +256,11 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                     }
                 }
             }
+
+            holder.rl_content.setVisibility(View.VISIBLE);
         } else {
             holder.tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
+            holder.rl_content.setVisibility(View.INVISIBLE);
         }
     }
 

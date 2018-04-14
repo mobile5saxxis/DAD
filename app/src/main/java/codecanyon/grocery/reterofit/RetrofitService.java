@@ -11,6 +11,7 @@ import codecanyon.grocery.models.CategoryRequest;
 import codecanyon.grocery.models.CategoryResponse;
 import codecanyon.grocery.models.ChangePasswordRequest;
 import codecanyon.grocery.models.CheckLoginRequest;
+import codecanyon.grocery.models.CouponAvailableResponse;
 import codecanyon.grocery.models.CouponResponse;
 import codecanyon.grocery.models.DeliveryAddress;
 import codecanyon.grocery.models.DeliveryRequest;
@@ -183,5 +184,5 @@ public interface RetrofitService {
     Call<Quantity> getStockAvailability(@Query("pid") int pid);
 
     @GET(APIUrls.GET_APPLY_COUPON)
-    Call<String> getCouponAvailability(@Query("cid") String cid,@Query("udi") String udi);
+    Call<CouponAvailableResponse> getCouponAvailability(@Query("cid") String cid, @Query("udi") String udi);
 }
