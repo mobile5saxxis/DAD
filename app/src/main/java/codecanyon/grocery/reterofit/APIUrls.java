@@ -65,6 +65,8 @@ public class APIUrls {
 
     public static final String GET_OFFERS_URL = BASE_URL + "index.php/api/get_products?oid=1";
 
+    public static final String GET_NEW_ARRIVAL_URL = BASE_URL + "index.php/api/get_products?na_id=1";
+
     public static final String GET_PRODUCT_URL = BASE_URL + "index.php/api/get_products";
 
     public static final String GET_SLIDER_PRODUCT_URL = BASE_URL + "index.php/api/get_products";

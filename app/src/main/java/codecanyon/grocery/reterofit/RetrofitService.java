@@ -105,6 +105,9 @@ public interface RetrofitService {
     @POST(APIUrls.GET_PRODUCT_URL)
     Call<ProductResponse> getPopularBrands(@Query("bid") String bid);
 
+    @GET(APIUrls.GET_NEW_ARRIVAL_URL)
+    Call<ProductResponse> getNewArrivals();
+
     @POST(APIUrls.GET_OFFERS_URL)
     Call<OffersResponse> getGetOffers();
 

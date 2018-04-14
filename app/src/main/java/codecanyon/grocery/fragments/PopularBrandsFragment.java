@@ -24,8 +24,8 @@ import retrofit2.Response;
 
 public class PopularBrandsFragment extends Fragment {
 
-    public static final String POPULAR_BRAND_ID = "CATEGORY_ID";
-    public static final String POPULAR_BRAND_TITLE = "CATEGORY_TITLE";
+    public static final String POPULAR_BRAND_ID = "NEW_ARRIVAL_ID";
+    public static final String POPULAR_BRAND_TITLE = "NEW_ARRIVAL_TITLE";
     private TextView tv_no_of_items;
     private ProductAdapter productAdapter;
     private RetrofitService service;

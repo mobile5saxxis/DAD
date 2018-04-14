@@ -41,13 +41,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class BestProductAdapter extends CommonRecyclerAdapter<Product> {
+public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
 
     private Context context;
     private DatabaseHandler dbcart;
     private RetrofitService service;
 
-    public BestProductAdapter(Context context) {
+    public BestSellersAdapter(Context context) {
         this.context = context;
         dbcart = new DatabaseHandler();
         service = RetrofitInstance.createService(RetrofitService.class);

@@ -1,9 +1,11 @@
 package codecanyon.grocery.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,7 +29,8 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import java.util.List;
 
-import codecanyon.grocery.adapter.BestProductAdapter;
+import codecanyon.grocery.adapter.BestArrivalPager;
+import codecanyon.grocery.adapter.BestSellersAdapter;
 import codecanyon.grocery.adapter.CategoryHomeAdapter;
 import codecanyon.grocery.adapter.OfferAdapter;
 import codecanyon.grocery.adapter.PopularBrandsAdapter;
@@ -53,13 +56,9 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment implements BaseSliderView.OnSliderClickListener {
 
     private SliderLayout sliderLayout;
-    private RecyclerView rv_category;
-    private RecyclerView rv_best_products;
-    private RecyclerView rv_popular_brands;
     private RecyclerView rv_offers;
 
     private CategoryHomeAdapter categoryHomeAdapter;
-    private BestProductAdapter bestProductAdapter;
     private PopularBrandsAdapter popularBrandsAdapter;
     private OfferAdapter offerAdapter;
     private RetrofitService service;
@@ -84,13 +83,11 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         rl_loading.setVisibility(View.VISIBLE);
 
         sliderLayout = view.findViewById(R.id.sliderLayout);
-        rv_category = view.findViewById(R.id.rv_category);
-        rv_best_products = view.findViewById(R.id.rv_best_products);
-        rv_popular_brands = view.findViewById(R.id.rv_popular_brands);
+        RecyclerView rv_category = view.findViewById(R.id.rv_category);
+        RecyclerView rv_popular_brands = view.findViewById(R.id.rv_popular_brands);
         rv_offers = view.findViewById(R.id.rv_offers);
 
         rv_category.setNestedScrollingEnabled(false);
-        rv_best_products.setNestedScrollingEnabled(false);
         rv_popular_brands.setNestedScrollingEnabled(false);
         rv_offers.setNestedScrollingEnabled(false);
 
@@ -99,18 +96,21 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         ImageView iv_ad2 = view.findViewById(R.id.iv_ad2);
 
         rv_category.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        rv_best_products.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false));
         rv_popular_brands.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false));
         rv_offers.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false));
 
         categoryHomeAdapter = new CategoryHomeAdapter(getActivity());
         rv_category.setAdapter(categoryHomeAdapter);
 
-        bestProductAdapter = new BestProductAdapter(getActivity());
-        rv_best_products.setAdapter(bestProductAdapter);
-
         popularBrandsAdapter = new PopularBrandsAdapter(getActivity());
         rv_popular_brands.setAdapter(popularBrandsAdapter);
+
+        final TabLayout tab_layout = view.findViewById(R.id.tab_layout);
+        final ViewPager view_pager = view.findViewById(R.id.view_pager);
+        view_pager.setOffscreenPageLimit(0);
+        tab_layout.setupWithViewPager(view_pager);
+        BestArrivalPager bestArrivalPager=new BestArrivalPager(getChildFragmentManager(),getContext());
+        view_pager.setAdapter(bestArrivalPager);
 
         sliderLayout.setPresetTransformer(SliderLayout.Transformer.Accordion);
         sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
@@ -138,7 +138,6 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         if (ConnectivityReceiver.isConnected()) {
             makeGetSliderRequest();
             makeGetCategoryRequest();
-            makeGetBestProductsRequest();
             makeGetPopularBrandRequest();
             makeGetOfferRequest();
         }
@@ -245,27 +244,6 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             }
         });
     }
-
-
-    private void makeGetBestProductsRequest() {
-
-        service.getBestProducts().enqueue(new Callback<BestProductResponse>() {
-            @Override
-            public void onResponse(Call<BestProductResponse> call, Response<BestProductResponse> response) {
-                if (response.body() != null && response.isSuccessful()) {
-                    BestProductResponse cr = response.body();
-                    bestProductAdapter.addItems(cr.getData());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BestProductResponse> call, Throwable t) {
-                Toast.makeText(getActivity(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-    }
-
 
     private void makeGetPopularBrandRequest() {
 
