@@ -82,7 +82,7 @@ public interface RetrofitService {
     Call<RequestResponse> addOrder(@Field("date") String date,
                                    @Field("time") String time,
                                    @Field("user_id") String user_id,
-                                   @Field("location") String location, @Field("data") String data);
+                                   @Field("location") String location, @Field("data") String data, @Field("coupon_id") String coupon_id);
 
     @POST(APIUrls.GET_CATEGORY_URL)
     Call<CategoryResponse> getCategory();
@@ -113,7 +113,7 @@ public interface RetrofitService {
 
     @POST(APIUrls.GET_ORDER_URL)
     @FormUrlEncoded
-    Call<List<MyOrder>> getOrder(@Field("user_id")String user_id);
+    Call<List<MyOrder>> getOrder(@Field("user_id") String user_id);
 
     @GET(APIUrls.GET_PRODUCT_URL)
     Call<ProductResponse> getProducts(@Query("cat_id") String cat_id);
@@ -180,5 +180,5 @@ public interface RetrofitService {
     Call<CouponResponse> getCoupons();
 
     @GET(APIUrls.GET_STOCK_AVAILABILITY)
-    Call<Quantity> getStockAvailability(@Query("pid")int pid);
+    Call<Quantity> getStockAvailability(@Query("pid") int pid);
 }

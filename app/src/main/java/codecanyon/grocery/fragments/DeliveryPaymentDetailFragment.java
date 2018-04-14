@@ -26,6 +26,7 @@ import java.util.List;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.AddOrderRequest;
+import codecanyon.grocery.models.Coupon;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.models.Stock;
@@ -175,7 +176,16 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                 .baseUrl(APIUrls.BASE_URL)
                 .addConverterFactory((GsonConverterFactory.create(gson)));
 
-        builder.build().create(RetrofitService.class).addOrder(date, gettime, userid, location, value).enqueue(new Callback<RequestResponse>() {
+        String coupon = "0";
+
+        List<Coupon> coupons = Coupon.listAll(Coupon.class);
+
+        if (coupons != null && coupons.size() > 0) {
+            Coupon c = coupons.get(0);
+            coupon = c.getCouponId();
+        }
+
+        builder.build().create(RetrofitService.class).addOrder(date, gettime, userid, location, value, coupon).enqueue(new Callback<RequestResponse>() {
             @Override
             public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
                 if (response.body() != null & response.isSuccessful()) {
