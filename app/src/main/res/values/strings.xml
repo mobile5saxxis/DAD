@@ -203,5 +203,6 @@
     <string name="coupon_found">Coupon applied successfully</string>
     <string name="coupon_not_found">Unable to find the coupon</string>
     <string name="only_items_allowed">Only %s items are allowed for this item</string>
+    <string name="unable_to_apply_coupon">Unable to apply coupon</string>
 
 </resources>

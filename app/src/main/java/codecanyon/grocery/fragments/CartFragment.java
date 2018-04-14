@@ -30,6 +30,7 @@ import codecanyon.grocery.models.Coupon;
 import codecanyon.grocery.models.CouponResponse;
 import codecanyon.grocery.models.LimitCheck;
 import codecanyon.grocery.models.Product;
+import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.ConnectivityReceiver;
@@ -54,6 +55,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     private SessionManagement sessionManagement;
     private RetrofitService service;
     private EditText et_coupon;
+    private boolean isFound;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,7 +117,12 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                 if (value.isEmpty()) {
                     Toast.makeText(getContext(), R.string.add_a_coupon_to_apply, Toast.LENGTH_SHORT).show();
                 } else {
-                    makeCouponRequest(value);
+
+                    if (sessionManagement.isLoggedIn()) {
+                        makeCouponRequest(value);
+                    } else {
+                        startActivity(new Intent(getContext(), LoginActivity.class));
+                    }
                 }
                 break;
         }
@@ -123,19 +130,41 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
 
     private void makeCouponRequest(final String value) {
-        RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
+        final RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
+
         service.getCoupons().enqueue(new Callback<CouponResponse>() {
             @Override
             public void onResponse(Call<CouponResponse> call, Response<CouponResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     CouponResponse cR = response.body();
 
-                    boolean isFound = false;
+                    isFound = false;
 
-                    for (Coupon coupon : cR.getData()) {
+                    for (final Coupon coupon : cR.getData()) {
                         if (coupon.getCoupon_title().equals(value)) {
                             db.addCoupon(coupon);
                             isFound = true;
+
+//                            service.getCouponAvailability(coupon.getCouponId(), sessionManagement.getUserDetails().get(APIUrls.KEY_ID)).enqueue(new Callback<String>() {
+//                                @Override
+//                                public void onResponse(Call<String> call, Response<String> response) {
+//                                    if (response.isSuccessful() && response.body() != null) {
+//                                        if (response.body().equals("0")) {
+//                                            db.addCoupon(coupon);
+//                                            isFound = true;
+//                                        } else {
+//                                            Toast.makeText(getContext(), R.string.unable_to_apply_coupon, Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    } else {
+//                                        Toast.makeText(getContext(), R.string.unable_to_apply_coupon, Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<String> call, Throwable t) {
+//                                    Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
                             break;
                         }
                     }

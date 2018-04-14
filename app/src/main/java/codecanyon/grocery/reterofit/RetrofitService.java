@@ -181,4 +181,7 @@ public interface RetrofitService {
 
     @GET(APIUrls.GET_STOCK_AVAILABILITY)
     Call<Quantity> getStockAvailability(@Query("pid") int pid);
+
+    @GET(APIUrls.GET_APPLY_COUPON)
+    Call<String> getCouponAvailability(@Query("cid") String cid,@Query("udi") String udi);
 }

@@ -53,6 +53,8 @@ public class APIUrls {
 
     public static final String GET_STOCK_AVAILABILITY = BASE_URL + "index.php/api/product_as_per_stock_available";
 
+    public static final String GET_APPLY_COUPON = BASE_URL + "index.php/api/apply_coupon";
+
     public static final String GET_BEST_PRODUCTS = BASE_URL + "index.php/api/get_products?sid=1";
 
     public static final String GET_BEST_PRODUCTS_LIST = BASE_URL + "index.php/api/brand_products";

@@ -1,5 +1,7 @@
 package codecanyon.grocery.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
@@ -10,7 +12,9 @@ public class Coupon extends SugarRecord {
     private String Coupon_title;
     private String Minimum_order_Amount;
     @Unique
-    private String Id;
+    @SerializedName("Id")
+    @Expose
+    private String couponId;
     private String To_Date;
     private String Times_Per_user;
 
@@ -58,11 +62,11 @@ public class Coupon extends SugarRecord {
     }
 
     public String getCouponId() {
-        return Id;
+        return couponId;
     }
 
     public void setCouponId(String id) {
-        Id = id;
+        couponId = id;
     }
 
     public String getTo_Date() {
