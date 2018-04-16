@@ -316,8 +316,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             FragmentManager fM = getActivity().getSupportFragmentManager();
             FragmentTransaction ft = fM.beginTransaction();
 
-            ft.replace(R.id.frame_layout, SliderProductFragment.newInstance(sliderId, sliderTitle), SliderProductFragment.class.getSimpleName())
-                    .addToBackStack(SliderProductFragment.class.getSimpleName());
+            ft.replace(R.id.frame_layout, SubCategoryFragment.newInstance(sliderId, sliderTitle), SubCategoryFragment.class.getSimpleName())
+                    .addToBackStack(SubCategoryFragment.class.getSimpleName());
             ft.commit();
         }
     }

@@ -67,6 +67,22 @@
             android:name=".activities.ForgotActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.ProductDetailsActivity" />
+
+        <activity
+            android:name=".activities.OrderPaymentActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <data
+                    android:host="mydad.co.in"
+                    android:scheme="http" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>
