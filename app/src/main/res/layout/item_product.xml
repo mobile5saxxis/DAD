@@ -55,12 +55,23 @@
             android:textSize="16sp"
             tools:text="Add" />
 
-        <Spinner
-            android:id="@+id/spinner_subcat"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="-8dp"
-            android:layout_marginStart="-8dp" />
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/spinner_subcat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_spinner_border" />
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
