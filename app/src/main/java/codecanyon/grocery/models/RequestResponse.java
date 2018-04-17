@@ -5,6 +5,7 @@ public class RequestResponse {
     private String data;
     private String message;
     private String error;
+    private String order_id;
 
     public boolean isResponce() {
         return responce;
@@ -36,5 +37,13 @@ public class RequestResponse {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public String getOrder_id() {
+        return order_id;
+    }
+
+    public void setOrder_id(String order_id) {
+        this.order_id = order_id;
     }
 }

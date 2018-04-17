@@ -107,6 +107,8 @@ public class APIUrls {
 
     public static final String JSON_RIGISTER_FCM = BASE_URL + "index.php/api/register_fcm";
 
+    public static final String ONLINE_TRANSACTION = BASE_URL + "index.php/api/response_online_transcation";
+
     public static final String CHANGE_PASSWORD_URL = BASE_URL + "index.php/api/change_password";
 
     public static final String DELETE_ADDRESS_URL = BASE_URL + "index.php/api/delete_address";

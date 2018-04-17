@@ -83,7 +83,7 @@ public interface RetrofitService {
     Call<RequestResponse> addOrder(@Field("date") String date,
                                    @Field("time") String time,
                                    @Field("user_id") String user_id,
-                                   @Field("location") String location, @Field("data") String data, @Field("coupon_id") String coupon_id);
+                                   @Field("location") String location, @Field("data") String data, @Field("coupon_id") String coupon_id, @Field("payment_mode") String payment_mode);
 
     @POST(APIUrls.GET_CATEGORY_URL)
     Call<CategoryResponse> getCategory();
@@ -173,6 +173,12 @@ public interface RetrofitService {
     Call<RequestResponse> registerFCM(@Field("user_id") String user_id,
                                       @Field("token") String token,
                                       @Field("device") String device);
+
+    @POST(APIUrls.ONLINE_TRANSACTION)
+    @FormUrlEncoded
+    Call<RequestResponse> saveProductTransaction(@Field("PaymentId") String paymentId, @Field("AccountId") String accountId
+            , @Field("MerchantRefNo") String merchantRefNo, @Field("Amount") String amount, @Field("SecureHash")
+                                                String secureHash, @Field("order_id") String order_id);
 
     @GET(APIUrls.GET_SLIDER_URL)
     Call<List<SliderImage>> getSliderImages();

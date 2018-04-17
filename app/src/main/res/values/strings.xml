@@ -206,5 +206,15 @@
     <string name="unable_to_apply_coupon">Unable to apply coupon</string>
     <string name="host">mydad.co.in</string>
     <string name="payment_failure_message">Unable to process the request</string>
+    <string name="cash_on_delivery">Cash on Delivery</string>
+    <string name="pay_online">Pay Online</string>
+    <string name="ok">OK</string>
+    <string name="try_again">Try Again!</string>
+    <string name="cancal">Cancel</string>
+    <string name="success">Success!</string>
+    <string name="payment">Payment</string>
+    <string name="failed">Failed!</string>
+    <string name="purchase_has_been_failed_please_try_again">Purchase has been failed please try again</string>
+    <string name="purchase_has_been_success">Purchase has been success.</string>
 
 </resources>

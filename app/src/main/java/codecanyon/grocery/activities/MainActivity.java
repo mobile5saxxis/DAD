@@ -58,6 +58,7 @@ import codecanyon.grocery.fragments.MyOrderFragment;
 import codecanyon.grocery.fragments.OffersFragment;
 import codecanyon.grocery.fragments.SearchFragment;
 import codecanyon.grocery.fragments.SupportInfoFragment;
+import codecanyon.grocery.fragments.ThanksFragment;
 import codecanyon.grocery.models.Category;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;

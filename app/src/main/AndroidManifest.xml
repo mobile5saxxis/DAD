@@ -43,6 +43,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -66,22 +67,22 @@
         <activity
             android:name=".activities.ForgotActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".activities.ProductDetailsActivity" />
 
         <activity
-            android:name=".activities.OrderPaymentActivity"
+            android:name=".activities.PaymentSuccessActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <data
-                    android:host="mydad.co.in"
-                    android:scheme="http" />
+                    android:host="@string/host"
+                    android:scheme="codecanyon.grocery.activities" />
 
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-
         </activity>
     </application>
 

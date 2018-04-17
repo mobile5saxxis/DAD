@@ -3,7 +3,7 @@ package codecanyon.grocery.fragments;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ebs.android.sdk.Config;
+import com.ebs.android.sdk.EBSPayment;
+import com.ebs.android.sdk.PaymentRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -25,13 +28,11 @@ import java.util.List;
 
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
-import codecanyon.grocery.models.AddOrderRequest;
 import codecanyon.grocery.models.Coupon;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.reterofit.APIUrls;
-import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.ConnectivityReceiver;
 import codecanyon.grocery.util.DatabaseHandler;
@@ -42,6 +43,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static codecanyon.grocery.reterofit.APIUrls.KEY_EMAIL;
+import static codecanyon.grocery.reterofit.APIUrls.KEY_MOBILE;
+import static codecanyon.grocery.reterofit.APIUrls.KEY_NAME;
+
 /**
  * Created by Rajesh Dabhi on 29/6/2017.
  */
@@ -51,20 +56,17 @@ public class DeliveryPaymentDetailFragment extends Fragment {
     private static String TAG = DeliveryPaymentDetailFragment.class.getSimpleName();
 
     private TextView tv_timeslot, tv_address, tv_item, tv_total;
-    private Button btn_order;
 
-    private String getlocation_id = "";
-    private String gettime = "";
-    private String getdate = "";
-    private String getuser_id = "";
-    private int deli_charges;
+    private String location_id = "";
+    private String time = "";
+    private String date = "";
+    private String address = "";
+    private Double totalAmount;
 
     private DatabaseHandler db_cart;
     private SessionManagement sessionManagement;
-
-    public DeliveryPaymentDetailFragment() {
-        // Required empty public constructor
-    }
+    private final int ACC_ID = 27920;
+    private final String SECRET_KEY = "db07fb92e05f6657b3e80e286fdba4a5";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,31 +88,44 @@ public class DeliveryPaymentDetailFragment extends Fragment {
         //tv_subcat_total = (TextView) view.findViewById(R.id.textPrice);
         tv_total = view.findViewById(R.id.txtTotal);
 
-        btn_order = view.findViewById(R.id.buttonContinue);
+        AppCompatButton btn_cod = view.findViewById(R.id.btn_cod);
+        AppCompatButton btn_pay_online = view.findViewById(R.id.btn_pay_online);
 
-        getdate = getArguments().getString("getdate");
-        gettime = getArguments().getString("time");
-        getlocation_id = getArguments().getString("location_id");
-        deli_charges = Integer.parseInt(getArguments().getString("deli_charges"));
-        String getaddress = getArguments().getString("address");
+        date = getArguments().getString("getdate");
+        time = getArguments().getString("time");
+        location_id = getArguments().getString("location_id");
+        int charges = Integer.parseInt(getArguments().getString("deli_charges"));
+        address = getArguments().getString("address");
 
-        tv_timeslot.setText(String.format("%s %s", getdate, gettime));
-        tv_address.setText(getaddress);
+        tv_timeslot.setText(String.format("%s %s", date, time));
+        tv_address.setText(address);
 
-        Double total = Double.parseDouble(db_cart.getTotalAmount()) + deli_charges;
+        totalAmount = Double.parseDouble(db_cart.getTotalAmount()) + charges;
 
         tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
                 getResources().getString(R.string.amount) + db_cart.getTotalAmount() + "\n" +
-                getResources().getString(R.string.delivery_charge) + deli_charges + "\n" +
+                getResources().getString(R.string.delivery_charge) + charges + "\n" +
                 getResources().getString(R.string.total_amount) +
-                db_cart.getTotalAmount() + " + " + deli_charges + " = " + total + " " + getResources().getString(R.string.currency));
+                db_cart.getTotalAmount() + " + " + charges + " = " + totalAmount + " " + getResources().getString(R.string.currency));
 
-        btn_order.setOnClickListener(new View.OnClickListener() {
+        btn_cod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // check internet connection
                 if (ConnectivityReceiver.isConnected()) {
-                    attemptOrder();
+                    attemptOrder("1");
+                } else {
+                    ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
+                }
+            }
+        });
+
+        btn_pay_online.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // check internet connection
+                if (ConnectivityReceiver.isConnected()) {
+                    attemptOrder("2");
                 } else {
                     ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
                 }
@@ -120,7 +135,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
         return view;
     }
 
-    private void attemptOrder() {
+    private void attemptOrder(String paymentMode) {
 
         List<Product> items = db_cart.getCartAll();
 
@@ -155,10 +170,10 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                 }
             }
 
-            getuser_id = sessionManagement.getUserDetails().get(APIUrls.KEY_ID);
+            String user_id = sessionManagement.getUserDetails().get(APIUrls.KEY_ID);
 
             if (ConnectivityReceiver.isConnected()) {
-                makeAddOrderRequest(getdate, gettime, getuser_id, getlocation_id, passArray.toString());
+                makeAddOrderRequest(date, time, user_id, location_id, paymentMode, passArray.toString());
             }
         }
     }
@@ -166,8 +181,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
     /**
      * Method to make json object request where json response starts wtih
      */
-    private void makeAddOrderRequest(String date, String gettime, String userid,
-                                     String location, String value) {
+    private void makeAddOrderRequest(String date, String gettime, String userid, String location, String paymentMode, String value) {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -185,23 +199,67 @@ public class DeliveryPaymentDetailFragment extends Fragment {
             coupon = c.getCouponId();
         }
 
-        builder.build().create(RetrofitService.class).addOrder(date, gettime, userid, location, value, coupon).enqueue(new Callback<RequestResponse>() {
+        builder.build().create(RetrofitService.class).addOrder(date, gettime, userid, location, value, coupon, paymentMode).enqueue(new Callback<RequestResponse>() {
             @Override
             public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
                 if (response.body() != null & response.isSuccessful()) {
                     RequestResponse requestResponse = response.body();
 
                     if (requestResponse.isResponce()) {
-                        db_cart.clearCart();
-                        ((MainActivity) getActivity()).setCartCounter(db_cart.getCartCount());
+                        if (requestResponse.getOrder_id() == null) {
+                            db_cart.clearCart();
+                            ((MainActivity) getActivity()).setCartCounter(db_cart.getCartCount());
 
-                        Bundle args = new Bundle();
-                        Fragment fm = new ThanksFragment();
-                        args.putString("msg", requestResponse.getData());
-                        fm.setArguments(args);
-                        FragmentManager fragmentManager = getFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
-                                .addToBackStack(null).commit();
+                            Bundle args = new Bundle();
+                            Fragment fm = new ThanksFragment();
+                            args.putString("msg", requestResponse.getData());
+                            fm.setArguments(args);
+                            FragmentManager fragmentManager = getFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
+                                    .addToBackStack(null).commit();
+                        } else {
+
+                            PaymentRequest.getInstance().setAccountId(ACC_ID);
+                            PaymentRequest.getInstance().setSecureKey(SECRET_KEY);
+
+                            PaymentRequest.getInstance().setReferenceNo(requestResponse.getOrder_id());
+                            PaymentRequest.getInstance().setTransactionAmount(String.valueOf(totalAmount));
+
+                            HashMap<String, String> userDetails = sessionManagement.getUserDetails();
+                            PaymentRequest.getInstance().setBillingEmail(userDetails.get(KEY_EMAIL));
+
+                            PaymentRequest.getInstance().setFailureid("1");
+                            PaymentRequest.getInstance().setCurrency("INR");
+                            PaymentRequest.getInstance().setTransactionDescription(requestResponse.getOrder_id());
+
+                            PaymentRequest.getInstance().setBillingName(userDetails.get(KEY_NAME));
+                            PaymentRequest.getInstance().setBillingAddress(address);
+                            PaymentRequest.getInstance().setBillingPhone(userDetails.get(KEY_MOBILE));
+
+                            PaymentRequest.getInstance().setFailuremessage(
+                                    getResources().getString(R.string.payment_failure_message));
+                            PaymentRequest.getInstance().setShippingName(userDetails.get(KEY_NAME));
+                            PaymentRequest.getInstance().setShippingEmail(userDetails.get(KEY_EMAIL));
+                            PaymentRequest.getInstance().setShippingPhone(userDetails.get(KEY_MOBILE));
+                            PaymentRequest.getInstance().setLogEnabled("1");
+
+                            ArrayList<HashMap<String, String>> custom_post_parameters = new ArrayList<HashMap<String, String>>();
+                            HashMap<String, String> hashpostvalues = new HashMap<>();
+                            hashpostvalues.put("account_details", "saving");
+                            hashpostvalues.put("merchant_type", "gold");
+                            custom_post_parameters.add(hashpostvalues);
+
+                            PaymentRequest.getInstance()
+                                    .setCustomPostValues(custom_post_parameters);
+                            EBSPayment.getInstance().init(getContext(), ACC_ID, SECRET_KEY, Config.Mode.ENV_TEST,
+                                    Config.Encryption.ALGORITHM_MD5
+                                    , getString(R.string.host));
+
+                            Fragment fm = new HomeFragment();
+                            FragmentManager fragmentManager = getFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
+                                    .addToBackStack(null).commit();
+                        }
                     }
                 }
             }

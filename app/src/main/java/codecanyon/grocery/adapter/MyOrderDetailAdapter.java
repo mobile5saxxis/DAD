@@ -1,7 +1,6 @@
 package codecanyon.grocery.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import codecanyon.grocery.R;
-import codecanyon.grocery.activities.OrderPaymentActivity;
 import codecanyon.grocery.models.MyOrderDetail;
 import codecanyon.grocery.reterofit.APIUrls;
 
@@ -39,18 +37,6 @@ public class MyOrderDetailAdapter extends RecyclerView.Adapter<MyOrderDetailAdap
             tv_price = view.findViewById(R.id.tv_order_Detail_price);
             tv_qty = view.findViewById(R.id.tv_order_Detail_qty);
             iv_img = view.findViewById(R.id.iv_order_detail_img);
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MyOrderDetail myOrderDetail = modelList.get(getAdapterPosition());
-
-                    Intent intent = new Intent(context, OrderPaymentActivity.class);
-                    intent.putExtra(OrderPaymentActivity.ORDER_ID, "1");
-                    intent.putExtra(OrderPaymentActivity.PAYMENT_AMOUNT, "100");
-                    context.startActivity(intent);
-                }
-            });
         }
     }
 
