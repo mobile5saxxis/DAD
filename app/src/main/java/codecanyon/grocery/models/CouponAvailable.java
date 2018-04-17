@@ -5,6 +5,7 @@ public class CouponAvailable {
 
     private int Times_Per_user;
 
+
     public int getCount() {
         return count;
     }

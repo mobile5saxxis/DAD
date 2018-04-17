@@ -190,5 +190,5 @@ public interface RetrofitService {
     Call<Quantity> getStockAvailability(@Query("pid") int pid);
 
     @GET(APIUrls.GET_APPLY_COUPON)
-    Call<CouponAvailableResponse> getCouponAvailability(@Query("cid") String cid, @Query("udi") String udi);
+    Call<CouponAvailableResponse> getCouponAvailability(@Query("cid") String cid, @Query("uid") String uid);
 }

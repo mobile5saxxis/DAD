@@ -7,7 +7,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -100,13 +99,13 @@ public class DeliveryPaymentDetailFragment extends Fragment {
         tv_timeslot.setText(String.format("%s %s", date, time));
         tv_address.setText(address);
 
-        totalAmount = Double.parseDouble(db_cart.getTotalAmount()) + charges;
+        totalAmount = Double.parseDouble(db_cart.getDiscountTotalAmount()) + charges;
 
         tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
-                getResources().getString(R.string.amount) + db_cart.getTotalAmount() + "\n" +
+                getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
                 getResources().getString(R.string.delivery_charge) + charges + "\n" +
                 getResources().getString(R.string.total_amount) +
-                db_cart.getTotalAmount() + " + " + charges + " = " + totalAmount + " " + getResources().getString(R.string.currency));
+                db_cart.getDiscountTotalAmount() + " + " + charges + " = " + totalAmount + " " + getResources().getString(R.string.currency));
 
         btn_cod.setOnClickListener(new View.OnClickListener() {
             @Override

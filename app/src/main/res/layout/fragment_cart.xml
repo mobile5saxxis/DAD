@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="36dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -80,6 +81,29 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom"
+        android:background="@android:color/white"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/tv_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Sample" />
+
+        <TextView
+            android:id="@+id/tv_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            tools:text="Sample" />
+
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/tv_checkout"
         android:layout_width="wrap_content"
@@ -100,5 +124,6 @@
         android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        tools:text="PAY 200" />ṅ
+        tools:text="PAY 200" />
+
 </android.support.design.widget.CoordinatorLayout>

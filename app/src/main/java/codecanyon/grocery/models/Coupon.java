@@ -5,17 +5,19 @@ import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import java.util.Date;
+
 public class Coupon extends SugarRecord {
     private String Coupon_value;
     private String Status;
-    private String From_Date;
+    private Date From_Date;
     private String Coupon_title;
     private String Minimum_order_Amount;
     @Unique
     @SerializedName("Id")
     @Expose
     private String couponId;
-    private String To_Date;
+    private Date To_Date;
     private String Times_Per_user;
 
     public Coupon() {
@@ -35,14 +37,6 @@ public class Coupon extends SugarRecord {
 
     public void setStatus(String status) {
         Status = status;
-    }
-
-    public String getFrom_Date() {
-        return From_Date;
-    }
-
-    public void setFrom_Date(String from_Date) {
-        From_Date = from_Date;
     }
 
     public String getCoupon_title() {
@@ -69,11 +63,19 @@ public class Coupon extends SugarRecord {
         couponId = id;
     }
 
-    public String getTo_Date() {
+    public Date getFrom_Date() {
+        return From_Date;
+    }
+
+    public void setFrom_Date(Date from_Date) {
+        From_Date = from_Date;
+    }
+
+    public Date getTo_Date() {
         return To_Date;
     }
 
-    public void setTo_Date(String to_Date) {
+    public void setTo_Date(Date to_Date) {
         To_Date = to_Date;
     }
 

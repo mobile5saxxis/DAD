@@ -165,7 +165,7 @@ public class DatabaseHandler {
         return String.valueOf(qty);
     }
 
-    public String getTotalAmount() {
+    public String getDiscountTotalAmount() {
         int totalAmount = 0;
 
         try {
@@ -206,6 +206,52 @@ public class DatabaseHandler {
         }
 
         return String.valueOf(totalAmount);
+    }
+
+    public String getTotalAmount() {
+        int totalAmount = 0;
+
+        try {
+            List<Product> products = Product.listAll(Product.class);
+
+            for (Product product : products) {
+
+                List<Stock> stocks = new Gson().fromJson(product.getStocks(), new TypeToken<List<Stock>>() {
+                }.getType());
+
+                for (Stock stock : stocks) {
+                    if (stock.getStockId() == product.getStockId()) {
+
+                        String price = stock.getStrikeprice();
+
+                        if (TextUtils.isEmpty(price)) {
+                            price = stock.getPrice_val();
+                        }
+
+                        totalAmount += Integer.parseInt(price) * product.getQuantity();
+                        break;
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return String.valueOf(totalAmount);
+    }
+
+    public String getCouponAmount() {
+        String amount = "0";
+        List<Coupon> coupons = Coupon.listAll(Coupon.class);
+
+        if (coupons != null && coupons.size() > 0) {
+            Coupon coupon = coupons.get(0);
+
+            amount = coupon.getCoupon_value();
+        }
+
+        return amount;
     }
 
     public List<Product> getCartAll() {

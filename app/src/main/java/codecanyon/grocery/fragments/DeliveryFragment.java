@@ -35,7 +35,6 @@ import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.adapter.DeliveryAddressAdapter;
 import codecanyon.grocery.models.AddressResponse;
 import codecanyon.grocery.models.DeliveryAddress;
-import codecanyon.grocery.models.DeliveryRequest;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
@@ -101,7 +100,7 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
         //et_address = (EditText) view.findViewById(R.id.et_deli_address);
 
         db_cart = new DatabaseHandler();
-        tv_total.setText(String.format("%s", db_cart.getTotalAmount()));
+        tv_total.setText(String.format("%s", db_cart.getDiscountTotalAmount()));
         tv_item.setText(String.format("%s", db_cart.getCartCount()));
 
         // get session user data
@@ -343,9 +342,9 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
                 deli_charges = intent.getStringExtra("charge");
                 //Toast.makeText(getActivity(), deli_charges, Toast.LENGTH_SHORT).show();
 
-                Double total = Double.parseDouble(db_cart.getTotalAmount()) + Integer.parseInt(deli_charges);
+                Double total = Double.parseDouble(db_cart.getDiscountTotalAmount()) + Integer.parseInt(deli_charges);
 
-                tv_total.setText("" + db_cart.getTotalAmount() + " + " + deli_charges + " = " + total);
+                tv_total.setText("" + db_cart.getDiscountTotalAmount() + " + " + deli_charges + " = " + total);
             }
         }
     };

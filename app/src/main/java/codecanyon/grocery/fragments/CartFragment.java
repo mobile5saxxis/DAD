@@ -18,8 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 
 import codecanyon.grocery.activities.LoginActivity;
@@ -57,6 +56,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     private RetrofitService service;
     private EditText et_coupon;
     private boolean isFound;
+    private TextView tv_item, tv_total;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,13 +86,16 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
         cartAdapter.addItems(products);
 
-        updateData();
-
         et_coupon = view.findViewById(R.id.et_coupon);
         view.findViewById(R.id.tv_add_coupon).setOnClickListener(this);
         service = RetrofitInstance.createService(RetrofitService.class);
         tv_cart_clear.setOnClickListener(this);
         tv_checkout.setOnClickListener(this);
+
+        tv_item = view.findViewById(R.id.tv_item);
+        tv_total = view.findViewById(R.id.tv_total);
+
+        updateData();
 
         return view;
     }
@@ -131,8 +134,6 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
 
     private void makeCouponRequest(final String value) {
-        final RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-
         service.getCoupons().enqueue(new Callback<CouponResponse>() {
             @Override
             public void onResponse(Call<CouponResponse> call, Response<CouponResponse> response) {
@@ -143,36 +144,42 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
                     for (final Coupon coupon : cR.getData()) {
                         if (coupon.getCoupon_title().equals(value)) {
-                            service.getCouponAvailability(coupon.getCouponId(), sessionManagement.getUserDetails().get(APIUrls.KEY_ID)).enqueue(new Callback<CouponAvailableResponse>() {
-                                @Override
-                                public void onResponse(Call<CouponAvailableResponse> call, Response<CouponAvailableResponse> response) {
-                                    if (response.isSuccessful() && response.body() != null) {
-                                        CouponAvailableResponse car = response.body();
-                                        if (car.isResponce() && car.getData().getCount() > 0) {
-                                            db.addCoupon(coupon);
-                                            isFound = true;
+
+                            Date todayDate = new Date();
+
+                            if (todayDate.after(coupon.getFrom_Date()) && todayDate.before(coupon.getTo_Date()) && coupon.getStatus().equals("0")) {
+                                Toast.makeText(getContext(), R.string.coupon_expired, Toast.LENGTH_SHORT).show();
+                            } else {
+                                service.getCouponAvailability(coupon.getCouponId(), sessionManagement.getUserDetails().get(APIUrls.KEY_ID)).enqueue(new Callback<CouponAvailableResponse>() {
+                                    @Override
+                                    public void onResponse(Call<CouponAvailableResponse> call, Response<CouponAvailableResponse> response) {
+                                        if (response.isSuccessful() && response.body() != null) {
+                                            CouponAvailableResponse car = response.body();
+                                            if (car.isResponce() && car.getData().getCount() > 0) {
+                                                db.addCoupon(coupon);
+                                                isFound = true;
+                                                et_coupon.setText("");
+                                                Toast.makeText(getContext(), R.string.coupon_found, Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getContext(), String.format("Coupon allowed only %s time for user", car.getData().getTimes_Per_user()), Toast.LENGTH_SHORT).show();
+                                            }
                                         } else {
                                             Toast.makeText(getContext(), R.string.unable_to_apply_coupon, Toast.LENGTH_SHORT).show();
                                         }
-                                    } else {
-                                        Toast.makeText(getContext(), R.string.unable_to_apply_coupon, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
 
-                                @Override
-                                public void onFailure(Call<CouponAvailableResponse> call, Throwable t) {
-                                    Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                        if (isFound) {
+                                            updateData();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<CouponAvailableResponse> call, Throwable t) {
+                                        Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                             break;
                         }
-                    }
-
-                    if (isFound) {
-                        updateData();
-                        Toast.makeText(getContext(), R.string.coupon_found, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), R.string.coupon_not_found, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
@@ -189,9 +196,17 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
     // update UI
     private void updateData() {
-        tv_checkout.setText(String.format("PAY \u20B9 %s", db.getTotalAmount()));
+        tv_checkout.setText(String.format("PAY \u20B9 %s", db.getDiscountTotalAmount()));
         tv_cart_count.setText(String.format("%s (%s)", getString(R.string.checkout), db.getCartCount()));
         ((MainActivity) getActivity()).setCartCounter("" + db.getCartCount());
+
+        if (db.getCouponAmount().equals("0")) {
+            tv_total.setText(String.format("Total: %s", db.getDiscountTotalAmount()));
+        } else {
+            tv_total.setText(String.format("Total: %s - %s = %s", db.getTotalAmount(), db.getCouponAmount(), db.getDiscountTotalAmount()));
+        }
+
+        tv_item.setText(String.format("items: %s", db.getCartCount()));
     }
 
     private void showClearDialog() {
@@ -229,7 +244,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Call<List<LimitCheck>> call, Response<List<LimitCheck>> response) {
                 if (response.body() != null && response.isSuccessful()) {
-                    Double total_amount = Double.parseDouble(db.getTotalAmount());
+                    Double total_amount = Double.parseDouble(db.getDiscountTotalAmount());
 
                     boolean isSmall = false;
                     boolean isBig = false;
@@ -279,7 +294,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 //                    public void onResponse(JSONArray response) {
 //                        Log.d(TAG, response.toString());
 //
-//                        Double total_amount = Double.parseDouble(db.getTotalAmount());
+//                        Double total_amount = Double.parseDouble(db.getDiscountTotalAmount());
 //
 //                        try {
 //                            // Parsing json array response
