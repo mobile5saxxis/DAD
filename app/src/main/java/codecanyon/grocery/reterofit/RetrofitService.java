@@ -151,8 +151,8 @@ public interface RetrofitService {
     @POST(APIUrls.REGISTER_URL)
     @FormUrlEncoded
     Call<RequestResponse> register(@Field("user_name") String name,
-                                   @Field("user_mobile") String email,
-                                   @Field("user_email") String phoneNo,
+                                   @Field("user_email") String email,
+                                   @Field("user_mobile") String phoneNo,
                                    @Field("password") String password);
 
     @POST(APIUrls.ORDER_DETAIL_URL)
