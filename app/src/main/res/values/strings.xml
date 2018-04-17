@@ -204,7 +204,7 @@
     <string name="coupon_not_found">Unable to find the coupon</string>
     <string name="only_items_allowed">Only %s items allowed per user for this product</string>
     <string name="unable_to_apply_coupon">Unable to apply coupon</string>
-    <string name="host">mydad.co.in</string>
+    <string name="host">mydad.in</string>
     <string name="payment_failure_message">Unable to process the request</string>
     <string name="cash_on_delivery">Cash on Delivery</string>
     <string name="pay_online">Pay Online</string>

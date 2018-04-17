@@ -177,7 +177,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                             if (stock.getStock().equals("0")) {
                                 Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(context, String.format("Only %s left", stock.getStock()), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
                             }
                         }
                     } else {
