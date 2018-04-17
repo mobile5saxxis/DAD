@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <TextView
             android:id="@+id/tv_search_bar"
             android:layout_width="match_parent"
@@ -102,7 +103,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
 
                     <TextView
                         android:id="@+id/textView5"
@@ -115,15 +117,20 @@
                         android:textColor="@color/colorPrimary"
                         android:textSize="18sp" />
 
+
                     <TextView
                         android:id="@+id/tv_see_all_offers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                        android:layout_marginRight="@dimen/activity_horizontal_margin"
-                        android:text="@string/see_all" />
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/rounded_corner_textview"
+                        android:gravity="center_vertical"
+                        android:padding="8dp"
+                        android:text="@string/see_all"
+                        android:textColor="@android:color/white" />
                 </RelativeLayout>
 
 
