@@ -1,6 +1,7 @@
-package codecanyon.grocery.activities;
+package codecanyon.grocery;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import codecanyon.grocery.R;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
+import codecanyon.grocery.util.DatabaseHandler;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,9 +45,6 @@ public class PaymentSuccessActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_success);
-
-        Toolbar toolbar_payment = findViewById(R.id.toolbar_payment);
-        setSupportActionBar(toolbar_payment);
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -105,6 +104,7 @@ public class PaymentSuccessActivity extends AppCompatActivity implements View.On
                     }
                 });
 
+                new DatabaseHandler().clearCart();
                 tv_status.setText(R.string.success);
                 tv_message.setText(R.string.purchase_has_been_success);
                 btn_payment_success.setVisibility(View.VISIBLE);
