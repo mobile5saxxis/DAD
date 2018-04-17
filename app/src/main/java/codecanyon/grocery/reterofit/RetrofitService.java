@@ -22,6 +22,7 @@ import codecanyon.grocery.models.LoginRequest;
 import codecanyon.grocery.models.LoginResponse;
 import codecanyon.grocery.models.MyOrder;
 import codecanyon.grocery.models.MyOrderDetail;
+import codecanyon.grocery.models.MyOrderResponse;
 import codecanyon.grocery.models.OffersResponse;
 import codecanyon.grocery.models.OrderRequest;
 import codecanyon.grocery.models.PopularBrandsResponse;
@@ -114,7 +115,7 @@ public interface RetrofitService {
 
     @POST(APIUrls.GET_ORDER_URL)
     @FormUrlEncoded
-    Call<List<MyOrder>> getOrder(@Field("user_id") String user_id);
+    Call<MyOrderResponse> getOrder(@Field("user_id") String user_id);
 
     @GET(APIUrls.GET_PRODUCT_URL)
     Call<ProductResponse> getProducts(@Query("cat_id") String cat_id);
@@ -178,7 +179,7 @@ public interface RetrofitService {
     @FormUrlEncoded
     Call<RequestResponse> saveProductTransaction(@Field("PaymentId") String paymentId, @Field("AccountId") String accountId
             , @Field("MerchantRefNo") String merchantRefNo, @Field("Amount") String amount, @Field("SecureHash")
-                                                String secureHash, @Field("order_id") String order_id);
+                                                         String secureHash, @Field("order_id") String order_id);
 
     @GET(APIUrls.GET_SLIDER_URL)
     Call<List<SliderImage>> getSliderImages();

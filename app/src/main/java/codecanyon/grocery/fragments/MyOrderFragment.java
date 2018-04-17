@@ -19,6 +19,7 @@ import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.DeliveryRequest;
 import codecanyon.grocery.models.MyOrder;
+import codecanyon.grocery.models.MyOrderResponse;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
@@ -38,8 +39,7 @@ public class MyOrderFragment extends Fragment {
     private static String TAG = MyOrderFragment.class.getSimpleName();
 
     private RecyclerView rv_myorder;
-
-    private List<MyOrder> my_orderList = new ArrayList<>();
+    private MyOderAdapter adapter;
 
     public MyOrderFragment() {
         // Required empty public constructor
@@ -77,6 +77,8 @@ public class MyOrderFragment extends Fragment {
 
         rv_myorder = view.findViewById(R.id.rv_myorder);
         rv_myorder.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new MyOderAdapter();
+        rv_myorder.setAdapter(adapter);
 
         SessionManagement sessionManagement = new SessionManagement(getActivity());
         String user_id = sessionManagement.getUserDetails().get(APIUrls.KEY_ID);
@@ -92,13 +94,14 @@ public class MyOrderFragment extends Fragment {
         rv_myorder.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_myorder, new RecyclerTouchListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                String sale_id = my_orderList.get(position).getSale_id();
-                String date = my_orderList.get(position).getOn_date();
-                String time = my_orderList.get(position).getDelivery_time_from() + "-" +
-                        my_orderList.get(position).getDelivery_time_to();
-                String total = my_orderList.get(position).getTotal_amount();
-                String status = my_orderList.get(position).getStatus();
-                String deli_charge = my_orderList.get(position).getDelivery_charge();
+                MyOrder myOrder = adapter.getItem(position);
+                String sale_id = myOrder.getSale_id();
+                String date = myOrder.getOn_date();
+                String time = myOrder.getDelivery_time_from() + "-" +
+                        myOrder.getDelivery_time_to();
+                String total = myOrder.getTotal_amount();
+                String status = myOrder.getStatus();
+                String deli_charge = myOrder.getDelivery_charge();
 
                 Bundle args = new Bundle();
                 Fragment fm = new MyOrderDetaiFragment();
@@ -129,23 +132,23 @@ public class MyOrderFragment extends Fragment {
      */
     private void makeGetOrderRequest(String userid) {
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-        service.getOrder(userid).enqueue(new Callback<List<MyOrder>>() {
+        service.getOrder(userid).enqueue(new Callback<MyOrderResponse>() {
             @Override
-            public void onResponse(Call<List<MyOrder>> call, Response<List<MyOrder>> response) {
+            public void onResponse(Call<MyOrderResponse> call, Response<MyOrderResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    my_orderList = response.body();
-                    MyOderAdapter adapter = new MyOderAdapter(my_orderList);
-                    rv_myorder.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+                    MyOrderResponse myOrderResponse = response.body();
 
-                    if (my_orderList.isEmpty()) {
+                    adapter.addItems(myOrderResponse.getData());
+
+                    if (myOrderResponse.getData().isEmpty()) {
                         Toast.makeText(getActivity(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
                     }
+
                 }
             }
 
             @Override
-            public void onFailure(Call<List<MyOrder>> call, Throwable t) {
+            public void onFailure(Call<MyOrderResponse> call, Throwable t) {
                 Toast.makeText(getActivity(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
             }
         });

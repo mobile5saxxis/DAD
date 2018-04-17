@@ -5,12 +5,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.MyOrder;
+import codecanyon.grocery.reterofit.APIUrls;
 
 /**
  * Created by Rajesh Dabhi on 29/6/2017.
@@ -22,8 +29,13 @@ public class MyOderAdapter extends RecyclerView.Adapter<MyOderAdapter.MyViewHold
 
     private Context context;
 
+    public MyOderAdapter() {
+        modelList = new ArrayList<>();
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tv_orderno, tv_status, tv_date, tv_time, tv_price, tv_item;
+        private ImageView iv_product;
 
         public MyViewHolder(View view) {
             super(view);
@@ -33,11 +45,17 @@ public class MyOderAdapter extends RecyclerView.Adapter<MyOderAdapter.MyViewHold
             tv_time = view.findViewById(R.id.tv_order_time);
             tv_price = view.findViewById(R.id.tv_order_price);
             tv_item = view.findViewById(R.id.tv_order_item);
+            iv_product = view.findViewById(R.id.iv_product);
         }
     }
 
-    public MyOderAdapter(List<MyOrder> modelList) {
-        this.modelList = modelList;
+    public void addItems(List<MyOrder> modelList) {
+        this.modelList.addAll(modelList);
+        notifyDataSetChanged();
+    }
+
+    public MyOrder getItem(int position) {
+        return modelList.get(position);
     }
 
     @Override
@@ -73,6 +91,26 @@ public class MyOderAdapter extends RecyclerView.Adapter<MyOderAdapter.MyViewHold
         holder.tv_time.setText(String.format("%s%s-%s", context.getResources().getString(R.string.time), mList.getDelivery_time_from(), mList.getDelivery_time_to()));
         holder.tv_price.setText(String.format("%s%s", context.getResources().getString(R.string.currency), mList.getTotal_amount()));
         holder.tv_item.setText(String.format("%s%s", context.getResources().getString(R.string.tv_cart_item), mList.getTotal_items()));
+
+        String image = mList.getProduct_image();
+
+        if (image.contains(",")) {
+            String[] images = image.split(",");
+
+            if (images.length > 0) {
+                image = images[0];
+            }
+        }
+
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_placeholder)
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
+
+        Glide.with(context)
+                .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ", "%20"))
+                .apply(requestOptions)
+                .into(holder.iv_product);
     }
 
     @Override
