@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/lite_gray">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                     android:id="@+id/view_pager"
                     android:layout_width="match_parent"
                     android:layout_height="270dp"
-                    android:background="@color/clouds" />
+                    android:background="@color/lite_gray" />
 
                 <ImageView
                     android:id="@+id/iv_ad1"
