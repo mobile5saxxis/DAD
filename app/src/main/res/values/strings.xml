@@ -216,5 +216,6 @@
     <string name="failed">Failed!</string>
     <string name="purchase_has_been_failed_please_try_again">Purchase has been failed please try again</string>
     <string name="purchase_has_been_success">Purchase has been success.</string>
+    <string name="product_out_of_stock">Product is out of stock</string>
 
 </resources>

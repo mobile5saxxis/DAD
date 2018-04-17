@@ -132,7 +132,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private  void simpleteNotification(String title, String message, String timeStamp, PendingIntent pendingIntent){
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notification)
+                .setSmallIcon(R.drawable.ic_logonew)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)
@@ -166,7 +166,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Notification notification = new Notification.Builder(this)
                 .setContentTitle(message)
                 .setContentText(title)
-                .setSmallIcon(R.drawable.ic_logo_2)
+                .setSmallIcon(R.drawable.ic_logonew)
                 .setLargeIcon(bitmap)
                 .setStyle(new Notification.BigPictureStyle()
                         .bigPicture(bitmap))

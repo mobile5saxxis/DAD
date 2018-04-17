@@ -142,36 +142,44 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                     final int qty3 = Integer.parseInt(tv_subcat_content.getText().toString().trim());
 
                     if (qty3 > 0) {
-                        service.getStockAvailability(product.getProduct_id()).enqueue(new Callback<Quantity>() {
-                            @Override
-                            public void onResponse(Call<Quantity> call, Response<Quantity> response) {
-                                if (response.isSuccessful() && response.body() != null) {
-                                    Quantity quantity = response.body();
+                        if (Integer.parseInt(stock.getStock()) >= qty3) {
+                            service.getStockAvailability(product.getProduct_id()).enqueue(new Callback<Quantity>() {
+                                @Override
+                                public void onResponse(Call<Quantity> call, Response<Quantity> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        Quantity quantity = response.body();
 
 
-                                    if (qty3 <= quantity.getQuantity_per_user()) {
-                                        product.setStockId(stock.getStockId());
-                                        product.setQuantity(qty3);
+                                        if (qty3 <= quantity.getQuantity_per_user()) {
+                                            product.setStockId(stock.getStockId());
+                                            product.setQuantity(qty3);
 
-                                        dbcart.setCart(product);
-                                        tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                                        updateintent();
+                                            dbcart.setCart(product);
+                                            tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                                            updateintent();
+                                        } else {
+                                            Toast.makeText(context, String.format("Only %s items allowed per user for this product", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                                        }
+
                                     } else {
-                                        Toast.makeText(context, String.format("Only %s items allowed per user for this product", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
                                     }
 
-                                } else {
-                                    Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                                    ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
                                 }
 
-                                ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
+                                @Override
+                                public void onFailure(Call<Quantity> call, Throwable t) {
+                                    Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            if (stock.getStock().equals("0")) {
+                                Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, String.format("Only %s left", stock.getStock()), Toast.LENGTH_SHORT).show();
                             }
-
-                            @Override
-                            public void onFailure(Call<Quantity> call, Throwable t) {
-                                Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        }
                     } else {
                         Product p = dbcart.getProduct(product.getProduct_id());
 
