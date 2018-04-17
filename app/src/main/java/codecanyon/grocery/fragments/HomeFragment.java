@@ -109,7 +109,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         final ViewPager view_pager = view.findViewById(R.id.view_pager);
         view_pager.setOffscreenPageLimit(0);
         tab_layout.setupWithViewPager(view_pager);
-        BestArrivalPager bestArrivalPager=new BestArrivalPager(getChildFragmentManager(),getContext());
+        BestArrivalPager bestArrivalPager = new BestArrivalPager(getChildFragmentManager(), getContext());
         view_pager.setAdapter(bestArrivalPager);
 
         sliderLayout.setPresetTransformer(SliderLayout.Transformer.Accordion);
@@ -157,6 +157,17 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             }
         });
 
+        view.findViewById(R.id.tv_see_all_offers).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment offersFragment = new OffersFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, offersFragment, OffersFragment.class.getSimpleName())
+                        .addToBackStack(OffersFragment.class.getSimpleName())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+            }
+        });
+
 //        rv_popular_brands.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_category, new RecyclerTouchListener.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(View view, int position) {
@@ -200,7 +211,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                             TextSliderView textSliderView = new TextSliderView(getActivity());
 
                             textSliderView.description(sliderImage.getSlider_title())
-                                    .image(APIUrls.IMG_SLIDER_URL + sliderImage.getSlider_image().replace(" ","%20"))
+                                    .image(APIUrls.IMG_SLIDER_URL + sliderImage.getSlider_image().replace(" ", "%20"))
                                     .setScaleType(BaseSliderView.ScaleType.Fit)
                                     .setOnSliderClickListener(HomeFragment.this);
 
@@ -316,8 +327,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             FragmentManager fM = getActivity().getSupportFragmentManager();
             FragmentTransaction ft = fM.beginTransaction();
 
-            ft.replace(R.id.frame_layout, SubCategoryFragment.newInstance(sliderId, sliderTitle), SubCategoryFragment.class.getSimpleName())
-                    .addToBackStack(SubCategoryFragment.class.getSimpleName());
+            ft.replace(R.id.frame_layout, SliderProductFragment.newInstance(sliderId, sliderTitle), SliderProductFragment.class.getSimpleName())
+                    .addToBackStack(SliderProductFragment.class.getSimpleName());
             ft.commit();
         }
     }

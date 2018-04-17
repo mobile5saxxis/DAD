@@ -135,7 +135,6 @@ public class DeliveryPaymentDetailFragment extends Fragment {
     }
 
     private void attemptOrder(String paymentMode) {
-
         List<Product> items = db_cart.getCartAll();
 
         if (items.size() > 0) {
@@ -157,11 +156,11 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                                 jObjP.put("unit_value", stock.getQuantity());
                                 jObjP.put("unit", stock.getStock());
                                 jObjP.put("price", stock.getStrikeprice());
+                                jObjP.put("unit_id", stock.getStockId());
                                 break;
                             }
                         }
                     }
-
 
                     passArray.put(jObjP);
                 } catch (JSONException e) {
@@ -251,7 +250,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                             PaymentRequest.getInstance()
                                     .setCustomPostValues(custom_post_parameters);
                             EBSPayment.getInstance().init(getContext(), ACC_ID, SECRET_KEY, Config.Mode.ENV_TEST,
-                                    Config.Encryption.ALGORITHM_MD5
+                                    Config.Encryption.ALGORITHM_SHA512
                                     , getString(R.string.host));
 
                             Fragment fm = new HomeFragment();

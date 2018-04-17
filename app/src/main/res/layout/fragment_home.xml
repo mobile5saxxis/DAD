@@ -54,7 +54,6 @@
                     android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/clouds"
                     android:gravity="center"
                     android:padding="@dimen/space_6"
                     android:text="@string/shop_category_name"
@@ -82,7 +81,6 @@
                     android:id="@+id/tab_layout"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
-                    android:background="@color/clouds"
                     app:tabGravity="center"
                     app:tabIndicatorColor="@color/colorPrimary"
                     app:tabMode="fixed"
@@ -102,16 +100,32 @@
                     android:background="@android:color/white"
                     android:minHeight="150dp" />
 
-                <TextView
-                    android:id="@+id/textView5"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/clouds"
-                    android:gravity="center"
-                    android:padding="@dimen/space_6"
-                    android:text="@string/this_weeks_offers"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp" />
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:padding="@dimen/space_6"
+                        android:text="@string/this_weeks_offers"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tv_see_all_offers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:text="@string/see_all" />
+                </RelativeLayout>
+
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_offers"
@@ -124,7 +138,6 @@
                     android:id="@+id/textView6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/clouds"
                     android:gravity="center"
                     android:padding="@dimen/space_6"
                     android:text="@string/popular_brands"

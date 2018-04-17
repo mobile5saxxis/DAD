@@ -218,5 +218,6 @@
     <string name="purchase_has_been_success">Purchase has been success.</string>
     <string name="product_out_of_stock">Product is out of stock</string>
     <string name="coupon_expired">Coupon has expired</string>
+    <string name="see_all">See all</string>
 
 </resources>

@@ -108,17 +108,19 @@ public class ProductFragment extends Fragment {
                 if (response.body() != null && response.isSuccessful()) {
                     ProductResponse pr = response.body();
 
-                    productAdapter.addItems(pr.getData());
+                    if (getActivity() != null && !getActivity().isFinishing()) {
+                        productAdapter.addItems(pr.getData());
 
-                    tv_no_of_items.setText(String.format(getString(R.string.no_of_items), String.valueOf(pr.getData().size())));
+                        tv_no_of_items.setText(String.format(getString(R.string.no_of_items), String.valueOf(pr.getData().size())));
 
-                    if (getContext() != null) {
-                        if (pr.getData().isEmpty()) {
-                            Toast.makeText(getContext(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
+                        if (getContext() != null) {
+                            if (pr.getData().isEmpty()) {
+                                Toast.makeText(getContext(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
 
-                    rl_progress.setVisibility(View.GONE);
+                        rl_progress.setVisibility(View.GONE);
+                    }
                 }
             }
 

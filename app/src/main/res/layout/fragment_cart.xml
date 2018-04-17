@@ -37,6 +37,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/rounded_corner_textview"
                 android:padding="8dp"
+                android:textSize="12sp"
                 android:text="@string/clear_cart"
                 android:textColor="@android:color/white" />
         </RelativeLayout>
@@ -69,6 +70,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/rounded_corner_textview"
                 android:padding="8dp"
+                android:textSize="12sp"
                 android:text="@string/apply_coupon"
                 android:textColor="@android:color/white" />
 
@@ -118,12 +120,12 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
         android:paddingBottom="12dp"
-        android:paddingLeft="36dp"
-        android:paddingRight="36dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
         android:paddingTop="12dp"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:textSize="16sp"
         tools:text="PAY 200" />
 
 </android.support.design.widget.CoordinatorLayout>
