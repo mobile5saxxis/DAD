@@ -70,7 +70,7 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
     }
 
     public class BestProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView tv_title, tv_add, tv_subcat_content, tv_discount_price, tv_price;
+        private TextView tv_title, tv_add, tv_subcat_content, tv_discount_price, tv_price,tv_discount;
         private ImageView iv_image, iv_subcat_plus, iv_subcat_minus;
         private Spinner spinner_quantity;
         private RelativeLayout rl_content;
@@ -84,6 +84,7 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
             iv_subcat_plus = view.findViewById(R.id.iv_subcat_plus);
             iv_subcat_minus = view.findViewById(R.id.iv_subcat_minus);
             tv_subcat_content = view.findViewById(R.id.tv_subcat_content);
+            tv_discount = view.findViewById(R.id.tv_discount);
 
             iv_subcat_minus.setOnClickListener(this);
             iv_subcat_plus.setOnClickListener(this);
@@ -114,7 +115,14 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                     if (TextUtils.isEmpty(stock.getStrikeprice())) {
                         tv_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
                         tv_price.setVisibility(View.GONE);
+                        tv_discount.setVisibility(View.GONE);
                     } else {
+                        float price = Integer.parseInt(stock.getPrice_val());
+                        float discountPrice = Integer.parseInt(stock.getStrikeprice());
+                        int result = (int) Math.ceil(((price - discountPrice) / price) * 100);
+
+                        tv_discount.setVisibility(View.VISIBLE);
+                        tv_discount.setText(result + "%" + "\noff");
                         tv_price.setVisibility(View.VISIBLE);
                         tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
                         tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));

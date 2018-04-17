@@ -7,14 +7,35 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <com.daimajia.slider.library.SliderLayout
-        android:id="@+id/sl_product"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:paddingTop="@dimen/activity_horizontal_margin"
-        app:auto_cycle="true"
-        app:indicator_visibility="visible"
-        app:pager_animation_span="4000" />
+        android:layout_height="match_parent">
+
+        <com.daimajia.slider.library.SliderLayout
+            android:id="@+id/sl_product"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:paddingTop="@dimen/activity_horizontal_margin"
+            app:auto_cycle="true"
+            app:indicator_visibility="visible"
+            app:pager_animation_span="4000" />
+
+        <TextView
+            android:id="@+id/tv_discount"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:background="@drawable/circle_imageview_plus"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="10sp"
+            tools:text="15%\noff" />
+    </RelativeLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"

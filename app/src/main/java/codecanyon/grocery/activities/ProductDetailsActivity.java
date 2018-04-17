@@ -65,6 +65,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
         dbcart = new DatabaseHandler();
 
+        final TextView tv_discount = findViewById(R.id.tv_discount);
         ll_add_content = findViewById(R.id.ll_add_content);
         tv_content = findViewById(R.id.tv_content);
         tv_add = findViewById(R.id.tv_add);
@@ -109,7 +110,14 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 if (TextUtils.isEmpty(stock.getStrikeprice())) {
                     tv_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
                     tv_price.setVisibility(View.GONE);
+                    tv_discount.setVisibility(View.GONE);
                 } else {
+                    float price = Integer.parseInt(stock.getPrice_val());
+                    float discountPrice = Integer.parseInt(stock.getStrikeprice());
+                    int result = (int) Math.ceil(((price - discountPrice) / price) * 100);
+
+                    tv_discount.setVisibility(View.VISIBLE);
+                    tv_discount.setText(result + "%" + "\noff");
                     tv_price.setVisibility(View.VISIBLE);
                     tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
                     tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));

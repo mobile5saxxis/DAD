@@ -65,13 +65,14 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
     }
 
     class ProductHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tv_subcat_title, tv_subcat_price, tv_subcat_content, tv_subcat_add, tv_subcat_discount_price;
+        public TextView tv_subcat_title, tv_subcat_price, tv_subcat_content, tv_subcat_add, tv_subcat_discount_price,tv_discount;
         public ImageView iv_subcat, iv_subcat_plus, iv_subcat_minus, iv_subcat_remove;
         public Spinner spinner_subcat;
 
         private ProductHolder(View view) {
             super(view);
 
+            tv_discount = view.findViewById(R.id.tv_discount);
             tv_subcat_title = view.findViewById(R.id.tv_subcat_title);
             tv_subcat_discount_price = view.findViewById(R.id.tv_subcat_discount_price);
             tv_subcat_price = view.findViewById(R.id.tv_subcat_price);
@@ -219,7 +220,14 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                     if (TextUtils.isEmpty(stock.getStrikeprice())) {
                         tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
                         tv_subcat_price.setVisibility(View.GONE);
+                        tv_discount.setVisibility(View.GONE);
                     } else {
+                        float price = Integer.parseInt(stock.getPrice_val());
+                        float discountPrice = Integer.parseInt(stock.getStrikeprice());
+                        int result = (int) Math.ceil(((price - discountPrice) / price) * 100);
+
+                        tv_discount.setVisibility(View.VISIBLE);
+                        tv_discount.setText(result + "%" + "\noff");
                         tv_subcat_price.setVisibility(View.VISIBLE);
                         tv_subcat_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
                         tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));

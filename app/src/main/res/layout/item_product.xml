@@ -20,17 +20,30 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="36dp"
+        android:layout_marginStart="36dp"
         android:src="@drawable/ic_logonew" />
+
+    <TextView
+        android:id="@+id/tv_discount"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@drawable/circle_imageview_plus"
+        android:gravity="center"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        tools:text="15%\noff"
+        android:textColor="@android:color/white"
+        android:textSize="10sp" />
 
     <ImageView
         android:id="@+id/iv_subcat_remove"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginLeft="17dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_centerVertical="true"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
     <LinearLayout

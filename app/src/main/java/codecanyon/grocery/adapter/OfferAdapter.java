@@ -61,7 +61,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tv_title, tv_add, tv_content, tv_discount_price, tv_price;
+        public TextView tv_title, tv_add, tv_content, tv_discount_price, tv_price, tv_discount;
         public ImageView image, iv_plus, iv_minus;
         private Spinner spinner_quantity;
         private RelativeLayout rl_content;
@@ -75,6 +75,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             iv_plus = view.findViewById(R.id.iv_subcat_plus);
             iv_minus = view.findViewById(R.id.iv_subcat_minus);
             tv_content = view.findViewById(R.id.tv_subcat_content);
+            tv_discount = view.findViewById(R.id.tv_discount);
 
             iv_minus.setOnClickListener(this);
             iv_plus.setOnClickListener(this);
@@ -210,7 +211,14 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 if (TextUtils.isEmpty(stock.getStrikeprice())) {
                     holder.tv_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
                     holder.tv_price.setVisibility(View.GONE);
+                    holder.tv_discount.setVisibility(View.GONE);
                 } else {
+                    float price = Integer.parseInt(stock.getPrice_val());
+                    float discountPrice = Integer.parseInt(stock.getStrikeprice());
+                    int result = (int) Math.ceil(((price - discountPrice) / price) * 100);
+
+                    holder.tv_discount.setVisibility(View.VISIBLE);
+                    holder.tv_discount.setText(result + "%" + "\noff");
                     holder.tv_price.setVisibility(View.VISIBLE);
                     holder.tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
                     holder.tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
