@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,7 +168,13 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                             if (stock.getStockId() == product.getStockId()) {
                                 jObjP.put("unit_value", stock.getQuantity());
                                 jObjP.put("unit", stock.getStock());
-                                jObjP.put("price", stock.getStrikeprice());
+
+                                if (TextUtils.isEmpty(stock.getStrikeprice())) {
+                                    jObjP.put("price", stock.getPrice_val());
+                                } else {
+                                    jObjP.put("price", stock.getStrikeprice());
+                                }
+
                                 jObjP.put("unit_id", stock.getStockId());
                                 break;
                             }
