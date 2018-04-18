@@ -13,17 +13,37 @@
     android:padding="8dp"
     android:paddingBottom="@dimen/space_4">
 
-    <ImageView
-        android:id="@+id/iv_subcat"
+    <RelativeLayout
+        android:id="@+id/rl_image"
         android:layout_width="72dp"
         android:layout_height="96dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_logonew" />
+        android:layout_marginStart="36dp">
+
+        <ImageView
+            android:id="@+id/iv_subcat"
+            android:layout_width="72dp"
+            android:layout_height="96dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_logonew" />
+
+        <TextView
+            android:id="@+id/tv_out_of_stock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="#80000000"
+            android:gravity="center"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:text="@string/out_of_stock"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_discount"
@@ -49,11 +69,12 @@
         android:id="@+id/ll_titles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_toEndOf="@+id/iv_subcat"
+        android:layout_toEndOf="@+id/rl_image"
         android:layout_toLeftOf="@+id/ll_add_cart"
-        android:layout_toRightOf="@+id/iv_subcat"
+        android:layout_toRightOf="@+id/rl_image"
         android:layout_toStartOf="@+id/ll_add_cart"
         android:orientation="vertical">
 
@@ -117,6 +138,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:orientation="vertical">
 
         <LinearLayout
@@ -168,7 +190,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/iv_subcat"
+        android:layout_below="@+id/rl_image"
         android:layout_marginTop="8dp"
         android:background="@color/clouds" />
 </RelativeLayout>

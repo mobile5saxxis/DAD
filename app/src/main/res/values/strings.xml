@@ -218,5 +218,6 @@
     <string name="product_out_of_stock">Product is out of stock</string>
     <string name="coupon_expired">Coupon has expired</string>
     <string name="see_all">See all</string>
+    <string name="out_of_stock">Out of Stock</string>
 
 </resources>

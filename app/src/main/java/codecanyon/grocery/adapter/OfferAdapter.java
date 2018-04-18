@@ -61,13 +61,15 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tv_title, tv_add, tv_content, tv_discount_price, tv_price, tv_discount;
+        public TextView tv_title, tv_add, tv_content, tv_discount_price, tv_price, tv_discount,tv_out_of_stock;
         public ImageView image, iv_plus, iv_minus;
         private Spinner spinner_quantity;
         private RelativeLayout rl_content;
 
         public ViewHolder(View view) {
             super(view);
+
+            tv_out_of_stock = view.findViewById(R.id.tv_out_of_stock);
             rl_content = view.findViewById(R.id.rl_content);
             tv_title = view.findViewById(R.id.tv_title);
             image = view.findViewById(R.id.iv_image);
@@ -222,6 +224,12 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                     holder.tv_price.setVisibility(View.VISIBLE);
                     holder.tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
                     holder.tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                }
+
+                if (stock.getStock().equals("0")) {
+                    holder.tv_out_of_stock.setVisibility(View.VISIBLE);
+                } else {
+                    holder.tv_out_of_stock.setVisibility(View.GONE);
                 }
             }
 

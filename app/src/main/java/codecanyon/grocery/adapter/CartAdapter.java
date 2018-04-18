@@ -65,13 +65,14 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
     }
 
     class ProductHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tv_subcat_title, tv_subcat_price, tv_subcat_content, tv_subcat_add, tv_subcat_discount_price,tv_discount;
+        public TextView tv_subcat_title, tv_subcat_price, tv_subcat_content, tv_subcat_add, tv_subcat_discount_price, tv_discount, tv_out_of_stock;
         public ImageView iv_subcat, iv_subcat_plus, iv_subcat_minus, iv_subcat_remove;
         public Spinner spinner_subcat;
 
         private ProductHolder(View view) {
             super(view);
 
+            tv_out_of_stock = view.findViewById(R.id.tv_out_of_stock);
             tv_discount = view.findViewById(R.id.tv_discount);
             tv_subcat_title = view.findViewById(R.id.tv_subcat_title);
             tv_subcat_discount_price = view.findViewById(R.id.tv_subcat_discount_price);
@@ -231,6 +232,12 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                         tv_subcat_price.setVisibility(View.VISIBLE);
                         tv_subcat_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
                         tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                    }
+
+                    if (stock.getStock().equals("0")) {
+                        tv_out_of_stock.setVisibility(View.VISIBLE);
+                    } else {
+                        tv_out_of_stock.setVisibility(View.GONE);
                     }
                 }
 

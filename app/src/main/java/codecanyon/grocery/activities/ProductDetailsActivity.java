@@ -73,6 +73,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         findViewById(R.id.iv_plus).setOnClickListener(this);
         findViewById(R.id.iv_minus).setOnClickListener(this);
 
+        final TextView tv_out_of_stock = findViewById(R.id.tv_out_of_stock);
         TextView tv_title = findViewById(R.id.tv_title);
         final TextView tv_discount_price = findViewById(R.id.tv_discount_price);
         final TextView tv_price = findViewById(R.id.tv_price);
@@ -121,6 +122,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     tv_price.setVisibility(View.VISIBLE);
                     tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
                     tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                }
+
+                if (stock.getStock().equals("0")) {
+                    tv_out_of_stock.setVisibility(View.VISIBLE);
+                } else {
+                    tv_out_of_stock.setVisibility(View.GONE);
                 }
             }
 

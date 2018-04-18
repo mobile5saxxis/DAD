@@ -70,13 +70,15 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
     }
 
     public class BestProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView tv_title, tv_add, tv_subcat_content, tv_discount_price, tv_price,tv_discount;
+        private TextView tv_title, tv_add, tv_subcat_content, tv_discount_price, tv_price,tv_discount,tv_out_of_stock;
         private ImageView iv_image, iv_subcat_plus, iv_subcat_minus;
         private Spinner spinner_quantity;
         private RelativeLayout rl_content;
 
         private BestProductViewHolder(View view) {
             super(view);
+
+            tv_out_of_stock = view.findViewById(R.id.tv_out_of_stock);
             rl_content = view.findViewById(R.id.rl_content);
             tv_title = view.findViewById(R.id.tv_title);
             iv_image = view.findViewById(R.id.iv_image);
@@ -126,6 +128,12 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                         tv_price.setVisibility(View.VISIBLE);
                         tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
                         tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                    }
+
+                    if (stock.getStock().equals("0")) {
+                        tv_out_of_stock.setVisibility(View.VISIBLE);
+                    } else {
+                        tv_out_of_stock.setVisibility(View.GONE);
                     }
                 }
 
