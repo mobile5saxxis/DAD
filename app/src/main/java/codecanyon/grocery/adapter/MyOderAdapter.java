@@ -87,9 +87,9 @@ public class MyOderAdapter extends RecyclerView.Adapter<MyOderAdapter.MyViewHold
             holder.tv_status.setTextColor(context.getResources().getColor(R.color.color_3));
         }
 
-        holder.tv_date.setText(String.format("%s%s", context.getResources().getString(R.string.date), mList.getOn_date()));
-        holder.tv_time.setText(String.format("%s%s-%s", context.getResources().getString(R.string.time), mList.getDelivery_time_from(), mList.getDelivery_time_to()));
-        holder.tv_price.setText(String.format("%s%s", context.getResources().getString(R.string.currency), mList.getTotal_amount()));
+        holder.tv_date.setText(String.format("%s %s", context.getResources().getString(R.string.date), mList.getOn_date()));
+        holder.tv_time.setText(String.format("%s %s-%s", context.getResources().getString(R.string.time), mList.getDelivery_time_from(), mList.getDelivery_time_to()));
+        holder.tv_price.setText(String.format("%s: %s", context.getResources().getString(R.string.currency), mList.getTotal_amount()));
         holder.tv_item.setText(String.format("%s%s", context.getResources().getString(R.string.tv_cart_item), mList.getTotal_items()));
 
         String image = mList.getProduct_image();

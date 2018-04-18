@@ -121,13 +121,13 @@
     <string name="password_too_short">Password Too short</string>
     <string name="invalide_email_address">Invalide Email Address</string>
     <string name="no_internet">Sorry! Not connected to internet</string>
-    <string name="order_no">Order No.:\u0020</string>
+    <string name="order_no">Order No :</string>
     <string name="pending">Pending</string>
     <string name="confirm">Confirm</string>
     <string name="delivered">Delivered</string>
     <string name="cancle">Cancle</string>
-    <string name="date">Date:\u0020</string>
-    <string name="time">Time:\u0020</string>
+    <string name="date">Date:</string>
+    <string name="time">Time:</string>
     <string name="search_msg">Search Vegetables, Fruit etc</string>
     <string name="change_password">Change Password</string>
     <string name="old_password">Old Password (Required)</string>
