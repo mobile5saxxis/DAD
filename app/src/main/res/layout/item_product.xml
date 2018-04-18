@@ -15,8 +15,8 @@
 
     <ImageView
         android:id="@+id/iv_subcat"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="72dp"
+        android:layout_height="96dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
@@ -39,13 +39,11 @@
 
     <ImageView
         android:id="@+id/iv_subcat_remove"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_delete" />
 
     <LinearLayout
         android:id="@+id/ll_titles"
@@ -73,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Spinner
+            <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spinner_subcat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
