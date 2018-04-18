@@ -101,7 +101,6 @@
     <string name="delivery">Delivery</string>
     <string name="delivery_date">"Delivery Date: </string>
     <string name="please_select_date">Please select date</string>
-    <string name="no_rcord_found">No record found</string>
     <string name="connection_time_out">Connection Time out</string>
     <string name="add_delivery_address">Add Delivery Address</string>
     <string name="order_now">Order Now</string>

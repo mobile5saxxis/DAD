@@ -103,12 +103,6 @@ public class OffersFragment extends Fragment {
 
                     tv_no_of_items.setText(String.format("%s (%s)", getString(R.string.offer_name), or.getData().size()));
 
-                    if (getContext() != null) {
-                        if (or.getData().isEmpty()) {
-                            Toast.makeText(getContext(), R.string.no_rcord_found, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
                     rl_progress.setVisibility(View.GONE);
                 }
             }

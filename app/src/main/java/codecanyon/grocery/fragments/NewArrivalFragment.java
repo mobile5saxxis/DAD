@@ -83,12 +83,6 @@ public class NewArrivalFragment extends Fragment {
 
                 newArrivalAdapter.addItems(pr.getData());
 
-                if (getContext() != null) {
-                    if (pr.getData().isEmpty()) {
-                        Toast.makeText(getContext(), R.string.no_rcord_found, Toast.LENGTH_SHORT).show();
-                    }
-                }
-
                 rl_progress.setVisibility(View.GONE);
             }
 
@@ -109,12 +103,6 @@ public class NewArrivalFragment extends Fragment {
                 if (response.body() != null && response.isSuccessful()) {
                     BestProductResponse cr = response.body();
                     newArrivalAdapter.addItems(cr.getData());
-
-                    if (getContext() != null) {
-                        if (cr.getData().isEmpty()) {
-                            Toast.makeText(getContext(), R.string.no_rcord_found, Toast.LENGTH_SHORT).show();
-                        }
-                    }
 
                     rl_progress.setVisibility(View.GONE);
                 }

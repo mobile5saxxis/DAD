@@ -166,10 +166,6 @@ public class MyOrderDetaiFragment extends Fragment {
                     MyOrderDetailAdapter adapter = new MyOrderDetailAdapter(my_orderDetailList);
                     rv_detail_order.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-
-                    if (my_orderDetailList.isEmpty()) {
-                        Toast.makeText(getActivity(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
-                    }
                 }
             }
 

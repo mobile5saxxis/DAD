@@ -133,12 +133,6 @@ public class SoCityFragment extends Fragment {
                     adapter = new SocityAdapter(soCityList);
                     rv_socity.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-
-                    if (soCityList.isEmpty()) {
-                        if (getActivity() != null) {
-                            Toast.makeText(getActivity(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
-                        }
-                    }
                 }
             }
 

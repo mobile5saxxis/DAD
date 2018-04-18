@@ -139,11 +139,6 @@ public class MyOrderFragment extends Fragment {
                     MyOrderResponse myOrderResponse = response.body();
 
                     adapter.addItems(myOrderResponse.getData());
-
-                    if (myOrderResponse.getData().isEmpty()) {
-                        Toast.makeText(getActivity(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
-                    }
-
                 }
             }
 

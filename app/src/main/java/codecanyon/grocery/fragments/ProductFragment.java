@@ -113,12 +113,6 @@ public class ProductFragment extends Fragment {
 
                         tv_no_of_items.setText(String.format(getString(R.string.no_of_items), String.valueOf(pr.getData().size())));
 
-                        if (getContext() != null) {
-                            if (pr.getData().isEmpty()) {
-                                Toast.makeText(getContext(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
                         rl_progress.setVisibility(View.GONE);
                     }
                 }

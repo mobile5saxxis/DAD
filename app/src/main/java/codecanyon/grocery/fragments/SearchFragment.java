@@ -126,12 +126,6 @@ public class SearchFragment extends Fragment {
                     ProductResponse pr = response.body();
 
                     adapter_product.addItems(pr.getData());
-
-                    if (getContext() != null) {
-                        if (pr.getData().isEmpty()) {
-                            Toast.makeText(getContext(), getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
-                        }
-                    }
                 }
             }
 
