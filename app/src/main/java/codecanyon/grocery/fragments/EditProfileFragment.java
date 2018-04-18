@@ -201,7 +201,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             focusView = et_phone;
             cancel = true;
         } else if (!isPhoneValid(getphone)) {
-            tv_phone.setText(getResources().getString(R.string.phone_too_short));
+            tv_phone.setText(getResources().getString(R.string.invalid_phone_number));
             tv_phone.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_phone;
             cancel = true;

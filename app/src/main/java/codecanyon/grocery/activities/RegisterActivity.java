@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,21 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import codecanyon.grocery.R;
-import codecanyon.grocery.models.RegisterRequest;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.ConnectivityReceiver;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -92,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
             focusView = et_phone;
             cancel = true;
         } else if (!isPhoneValid(getphone)) {
-            tv_phone.setText(getResources().getString(R.string.phone_too_short));
+            tv_phone.setText(getResources().getString(R.string.invalid_phone_number));
             tv_phone.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_phone;
             cancel = true;
@@ -144,8 +135,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
 
     private boolean isPasswordValid(String password) {
@@ -154,8 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean isPhoneValid(String phoneno) {
-        //TODO: Replace this with your own logic
-        return phoneno.length() > 9;
+        return (!TextUtils.isEmpty(phoneno) && Patterns.PHONE.matcher(phoneno).matches() && phoneno.length() == 10);
     }
 
     /**

@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import codecanyon.grocery.R;
-import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.models.AddDeliveryRequest;
 import codecanyon.grocery.models.DeliveryResponse;
 import codecanyon.grocery.models.RequestResponse;
@@ -168,7 +167,7 @@ public class AddDeliveryAddressFragment extends Fragment implements View.OnClick
             focusView = et_phone;
             cancel = true;
         } else if (!isPhoneValid(getphone)) {
-            tv_phone.setText(getResources().getString(R.string.phone_too_short));
+            tv_phone.setText(getResources().getString(R.string.invalid_phone_number));
             tv_phone.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_phone;
             cancel = true;

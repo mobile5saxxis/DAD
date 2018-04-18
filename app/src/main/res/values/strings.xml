@@ -109,7 +109,7 @@
     <string name="please_enter_pincode">Please enter pincode</string>
     <string name="receiver_mobile_number">Receiver Mobile Number(Required)</string>
     <string name="receiver_name_req">Receiver Name(Required)</string>
-    <string name="phone_too_short">Phone Too short</string>
+    <string name="invalid_phone_number">Invalid phone number</string>
     <string name="please_add_address">Please add address</string>
     <string name="please_select_address">Please select address</string>
     <string name="please_select_date_time">Please select date and time</string>
