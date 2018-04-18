@@ -99,13 +99,25 @@ public class DeliveryPaymentDetailFragment extends Fragment {
         tv_timeslot.setText(String.format("%s %s", date, time));
         tv_address.setText(address);
 
-        totalAmount = Double.parseDouble(db_cart.getDiscountTotalAmount()) + charges;
+        double amount = Double.parseDouble(db_cart.getDiscountTotalAmount());
 
-        tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
-                getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
-                getResources().getString(R.string.delivery_charge) + charges + "\n" +
-                getResources().getString(R.string.total_amount) +
-                db_cart.getDiscountTotalAmount() + " + " + charges + " = " + totalAmount + " " + getResources().getString(R.string.currency));
+        if (amount >= 500) {
+            totalAmount = amount;
+
+            tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
+                    getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
+                    getResources().getString(R.string.total_amount) +
+                    db_cart.getDiscountTotalAmount() + " " + getResources().getString(R.string.currency));
+
+        } else {
+            totalAmount = amount + charges;
+
+            tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
+                    getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
+                    getResources().getString(R.string.delivery_charge) + charges + "\n" +
+                    getResources().getString(R.string.total_amount) +
+                    db_cart.getDiscountTotalAmount() + " + " + charges + " = " + totalAmount + " " + getResources().getString(R.string.currency));
+        }
 
         btn_cod.setOnClickListener(new View.OnClickListener() {
             @Override
