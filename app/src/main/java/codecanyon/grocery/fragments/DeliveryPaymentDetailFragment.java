@@ -217,41 +217,118 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                                     .addToBackStack(null).commit();
                         } else {
 
+
+                            PaymentRequest.getInstance().setTransactionAmount(
+                                    String.format("%.2f", totalAmount));
+
+                            /** Mandatory */
+
                             PaymentRequest.getInstance().setAccountId(ACC_ID);
                             PaymentRequest.getInstance().setSecureKey(SECRET_KEY);
 
-                            PaymentRequest.getInstance().setReferenceNo(requestResponse.getOrder_id());
-                            PaymentRequest.getInstance().setTransactionAmount(String.valueOf(totalAmount));
+                            // Reference No
+                            PaymentRequest.getInstance().setReferenceNo("223");
+                            /** Mandatory */
 
-                            HashMap<String, String> userDetails = sessionManagement.getUserDetails();
-                            PaymentRequest.getInstance().setBillingEmail(userDetails.get(KEY_EMAIL));
+                            // Email Id
+                            //PaymentRequest.getInstance().setBillingEmail("test_tag@testmail.com");
+
+                            PaymentRequest.getInstance().setBillingEmail("test@testmail.com");
+                            /** Mandatory */
 
                             PaymentRequest.getInstance().setFailureid("1");
+
+                            // PaymentRequest.getInstance().setFailuremessage(getResources().getString(R.string.payment_failure_message));
+                            // System.out.println("FAILURE MESSAGE"+getResources().getString(R.string.payment_failure_message));
+
+                            /** Mandatory */
+
+                            // Currency
                             PaymentRequest.getInstance().setCurrency("INR");
-                            PaymentRequest.getInstance().setTransactionDescription(requestResponse.getOrder_id());
+                            /** Mandatory */
 
-                            PaymentRequest.getInstance().setBillingName(userDetails.get(KEY_NAME));
-                            PaymentRequest.getInstance().setBillingAddress(address);
-                            PaymentRequest.getInstance().setBillingPhone(userDetails.get(KEY_MOBILE));
+                            /** Optional */
+                            // Your Reference No or Order Id for this transaction
+                            PaymentRequest.getInstance().setTransactionDescription(
+                                    "Test Transaction");
 
-                            PaymentRequest.getInstance().setFailuremessage(
-                                    getResources().getString(R.string.payment_failure_message));
-                            PaymentRequest.getInstance().setShippingName(userDetails.get(KEY_NAME));
-                            PaymentRequest.getInstance().setShippingEmail(userDetails.get(KEY_EMAIL));
-                            PaymentRequest.getInstance().setShippingPhone(userDetails.get(KEY_MOBILE));
+                            /** Billing Details */
+                            PaymentRequest.getInstance().setBillingName("Test_Name");
+                            /** Optional */
+                            PaymentRequest.getInstance().setBillingAddress("North Mada Street");
+                            /** Optional */
+                            PaymentRequest.getInstance().setBillingCity("Chennai");
+                            /** Optional */
+                            PaymentRequest.getInstance().setBillingPostalCode("600019");
+                            /** Optional */
+                            PaymentRequest.getInstance().setBillingState("Tamilnadu");
+                            /** Optional */
+                            PaymentRequest.getInstance().setBillingCountry("IND");
+                            /** Optional */
+                            PaymentRequest.getInstance().setBillingPhone("01234567890");
+                            /** Optional */
+
+                            /** Shipping Details */
+                            PaymentRequest.getInstance().setShippingName("Test_Name");
+                            /** Optional */
+                            PaymentRequest.getInstance().setShippingAddress("North Mada Street");
+                            /** Optional */
+                            PaymentRequest.getInstance().setShippingCity("Chennai");
+                            /** Optional */
+                            PaymentRequest.getInstance().setShippingPostalCode("600019");
+                            /** Optional */
+                            PaymentRequest.getInstance().setShippingState("Tamilnadu");
+                            /** Optional */
+                            PaymentRequest.getInstance().setShippingCountry("IND");
+                            /** Optional */
+                            PaymentRequest.getInstance().setShippingEmail("test@testmail.com");
+                            /** Optional */
+                            PaymentRequest.getInstance().setShippingPhone("01234567890");
+                            /** Optional */
+
                             PaymentRequest.getInstance().setLogEnabled("1");
 
+
+                            /**
+                             * Payment option configuration
+                             */
+
+                            /** Optional */
+                            PaymentRequest.getInstance().setHidePaymentOption(false);
+
+                            /** Optional */
+                            PaymentRequest.getInstance().setHideCashCardOption(false);
+
+                            /** Optional */
+                            PaymentRequest.getInstance().setHideCreditCardOption(false);
+
+                            /** Optional */
+                            PaymentRequest.getInstance().setHideDebitCardOption(false);
+
+                            /** Optional */
+                            PaymentRequest.getInstance().setHideNetBankingOption(false);
+
+                            /** Optional */
+                            PaymentRequest.getInstance().setHideStoredCardOption(false);
+
+                            /**
+                             * Initialise parameters for dyanmic values sending from merchant
+                             */
+
                             ArrayList<HashMap<String, String>> custom_post_parameters = new ArrayList<HashMap<String, String>>();
-                            HashMap<String, String> hashpostvalues = new HashMap<>();
+                            HashMap<String, String> hashpostvalues = new HashMap<String, String>();
                             hashpostvalues.put("account_details", "saving");
                             hashpostvalues.put("merchant_type", "gold");
                             custom_post_parameters.add(hashpostvalues);
 
                             PaymentRequest.getInstance()
                                     .setCustomPostValues(custom_post_parameters);
-                            EBSPayment.getInstance().init(getContext(), ACC_ID, SECRET_KEY, Config.Mode.ENV_TEST,
-                                    Config.Encryption.ALGORITHM_SHA512
-                                    , getString(R.string.host));
+                            /** Optional-Set dyanamic values */
+
+                            // PaymentRequest.getInstance().setFailuremessage(getResources().getString(R.string.payment_failure_message));
+
+                            EBSPayment.getInstance().init(getContext(), ACC_ID, SECRET_KEY,
+                                    Config.Mode.ENV_TEST, Config.Encryption.ALGORITHM_SHA512, getString(R.string.host));
 
                             Fragment fm = new HomeFragment();
                             FragmentManager fragmentManager = getFragmentManager();

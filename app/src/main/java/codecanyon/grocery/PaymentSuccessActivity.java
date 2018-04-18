@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import codecanyon.grocery.R;
+import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
@@ -30,6 +31,8 @@ import codecanyon.grocery.util.DatabaseHandler;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static codecanyon.grocery.activities.ProductDetailsActivity.PRODUCT_DETAIL;
 
 public class PaymentSuccessActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -128,7 +131,7 @@ public class PaymentSuccessActivity extends AppCompatActivity implements View.On
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 break;
         }
 
@@ -137,23 +140,20 @@ public class PaymentSuccessActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_cancel:
             case R.id.btn_payment_success:
-                finish();
+                onBackPressed();
                 break;
             case R.id.btn_retry:
                 Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
                 finish();
                 startActivity(intent);
-                break;
-            case R.id.btn_cancel:
-                finish();
                 break;
         }
     }

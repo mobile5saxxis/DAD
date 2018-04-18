@@ -403,6 +403,8 @@ public class MainActivity extends AppCompatActivity
         // by doing this, the activity will be notified each time a new message arrives
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(APIUrls.PUSH_NOTIFICATION));
+
+        setCartCounter(String.valueOf(dbcart.getCartCount()));
     }
 
     @Override
