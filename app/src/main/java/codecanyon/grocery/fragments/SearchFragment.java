@@ -77,7 +77,7 @@ public class SearchFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String value = et_search.getText().toString().trim();
 
-                if (!value.isEmpty() && value.length() > 2) {
+                if (!value.isEmpty()) {
                     makeGetProductRequest(value);
                 }
             }
