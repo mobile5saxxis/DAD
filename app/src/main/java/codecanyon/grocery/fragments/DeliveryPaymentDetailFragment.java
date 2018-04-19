@@ -216,7 +216,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
             coupon = c.getCouponId();
         }
 
-        builder.build().create(RetrofitService.class).addOrder(date, gettime, userid, location, value, coupon, paymentMode).enqueue(new Callback<RequestResponse>() {
+        builder.build().create(RetrofitService.class).addOrder(date, gettime, userid, location, value, coupon, paymentMode, totalAmount).enqueue(new Callback<RequestResponse>() {
             @Override
             public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
                 if (response.body() != null & response.isSuccessful()) {
