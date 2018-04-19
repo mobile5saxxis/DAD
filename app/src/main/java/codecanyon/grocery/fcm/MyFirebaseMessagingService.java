@@ -3,6 +3,7 @@ package codecanyon.grocery.fcm;
 /**
  * Created by subhashsanghani on 12/21/16.
  */
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,7 +24,6 @@ import android.util.Patterns;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
 
 
 import org.json.JSONException;
@@ -69,10 +70,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             JSONObject object = new JSONObject(remoteMessage.getData());
             try {
-                sendNotification(object.getString("message"),object.getString("title"),object.getString("image"),object.getString("created_at"));
+                sendNotification(object.getString("message"), object.getString("title"), object.getString("image"), object.getString("created_at"));
             } catch (JSONException e) {
                 e.printStackTrace();
-            };
+            }
+            ;
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         }
 
@@ -110,7 +112,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
     */
 
-    private void sendNotification(String message,String title, String imageUrl, String created_at) {
+    private void sendNotification(String message, String title, String imageUrl, String created_at) {
         Intent intent = new Intent(this, SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -120,24 +122,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Bitmap bitmap = getBitmapfromUrl(imageUrl);
 
 
-
-            showBigNotification(bitmap,title,message,created_at,pendingIntent);
-        }else{
-            simpleteNotification(title,message,created_at,pendingIntent);
+            showBigNotification(bitmap, title, message, created_at, pendingIntent);
+        } else {
+            simpleteNotification(title, message, created_at, pendingIntent);
         }
 
 
-
     }
-    private  void simpleteNotification(String title, String message, String timeStamp, PendingIntent pendingIntent){
+
+    private void simpleteNotification(String title, String message, String timeStamp, PendingIntent pendingIntent) {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_logonew)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            notificationBuilder.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            notificationBuilder.setSmallIcon(R.drawable.ic_new_notification);
+        } else {
+            notificationBuilder.setSmallIcon(R.drawable.ic_logonew);
+        }
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -145,6 +152,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
 
     }
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void showBigNotification(Bitmap bitmap, String title, String message, String timeStamp, PendingIntent resultPendingIntent) {
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
@@ -163,25 +171,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setLargeIcon(bitmap)
                 .setContentText(message)
                 .build();*/
-        Notification notification = new Notification.Builder(this)
+        Notification.Builder notificationBuilder = new Notification.Builder(this)
                 .setContentTitle(message)
                 .setContentText(title)
-                .setSmallIcon(R.drawable.ic_logonew)
                 .setLargeIcon(bitmap)
                 .setStyle(new Notification.BigPictureStyle()
                         .bigPicture(bitmap))
-                .setContentIntent(resultPendingIntent)
-                .build();
+                .setContentIntent(resultPendingIntent);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            notificationBuilder.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            notificationBuilder.setSmallIcon(R.drawable.ic_new_notification);
+        } else {
+            notificationBuilder.setSmallIcon(R.drawable.ic_logonew);
+        }
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(1, notification);
+        notificationManager.notify(1, notificationBuilder.build());
     }
+
     /**
      * Downloading push notification iv_category before displaying it in
      * the notification tray
-     * */
+     */
     public Bitmap getBitmapfromUrl(String imageUrl) {
         if (TextUtils.isEmpty(imageUrl)) {
             return null;
@@ -199,8 +213,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
         }
     }
-
-
 
 
     public static long getTimeMilliSec(String timeStamp) {
