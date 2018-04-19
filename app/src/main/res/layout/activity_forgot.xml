@@ -4,14 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context="codecanyon.grocery.activities.ForgotActivity">
-
-    <ImageView
-        android:id="@+id/loginImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:src="@color/colorPrimary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,14 +17,18 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="fill_parent"
-            android:layout_height="150dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:src="@drawable/logo"
-            android:textAlignment="center" />
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_home_logo"
+                android:textAlignment="center" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_login_email"
@@ -59,11 +57,11 @@
             android:id="@+id/btnContinue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
             android:background="@color/colorPrimary"
             android:text="@string/btn_send"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:layout_marginTop="@dimen/space_10"/>
+            android:textSize="18sp" />
 
     </LinearLayout>
 

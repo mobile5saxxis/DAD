@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context="codecanyon.grocery.activities.RegisterActivity">
 
     <RelativeLayout
@@ -13,27 +14,27 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="120dp"
+            android:layout_height="80dp"
             android:layout_centerInParent="true"
             android:src="@drawable/ic_home_logo"
             android:textAlignment="center" />
     </RelativeLayout>
 
     <ScrollView
-        android:layout_below="@+id/relativeLayout"
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relativeLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/space_5"
+            android:orientation="vertical"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:orientation="vertical">
+            android:paddingTop="@dimen/activity_vertical_margin">
 
             <TextView
                 android:id="@+id/textView"
@@ -86,9 +87,9 @@
                 android:id="@+id/tv_reg_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_10"
                 android:text="@string/et_login_phone_hint"
-                android:textSize="14sp"
-                android:layout_marginTop="@dimen/space_10"/>
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/et_reg_phone"
@@ -98,7 +99,7 @@
                 android:background="@drawable/xml_textbox_bg"
                 android:ems="10"
                 android:inputType="phone"
-                android:maxLength="15" />
+                android:maxLength="10" />
 
             <!--<TextView
                 android:layout_width="wrap_content"
@@ -138,9 +139,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/xml_textbox_bg"
+                android:ems="10"
                 android:inputType="textPassword"
-                android:maxLength="10"
-                android:ems="10"/>
+                android:maxLength="10" />
 
             <Button
                 android:id="@+id/btnRegister"
