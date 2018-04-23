@@ -45,8 +45,8 @@
                 android:id="@+id/tv_discount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_margin="4dp"
                 android:background="@drawable/circle_imageview_plus"
                 android:gravity="center"
@@ -122,50 +122,49 @@
                 android:id="@+id/rl_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:layout_marginTop="6dp">
 
                 <ImageView
-                    android:id="@+id/iv_subcat_plus"
+                    android:id="@+id/iv_subcat_minus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_more" />
+                    android:src="@drawable/ic_less" />
 
                 <TextView
                     android:id="@+id/tv_subcat_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:text="@string/_0"
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:id="@+id/iv_subcat_minus"
+                    android:id="@+id/iv_subcat_plus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_less" />
+                    android:src="@drawable/ic_more" />
+
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_add"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_add"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/space_6"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="@dimen/space_8"
-                    android:background="@drawable/rounded_corner_textview"
-                    android:gravity="center"
-                    android:padding="6dp"
-                    android:text="@string/tv_pro_add"
-                    android:textColor="@color/white" />
-            </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_corner_textview"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/tv_pro_add"
+                android:textColor="@color/white"
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>

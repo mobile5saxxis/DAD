@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -32,6 +34,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.List;
 
 import codecanyon.grocery.R;
+import codecanyon.grocery.adapter.OfferAdapter;
 import codecanyon.grocery.adapter.PriceAdapter;
 import codecanyon.grocery.adapter.SectionPagerAdapter;
 import codecanyon.grocery.models.Product;
@@ -39,8 +42,11 @@ import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.DatabaseHandler;
 
+import static codecanyon.grocery.adapter.ProductAdapter.ProductViewHolder.ADD_CLICK_MSG;
+
 public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener, BaseSliderView.OnSliderClickListener {
     public static final String PRODUCT = "PRODUCT";
+    public static final String CONTENT = "CONTENT";
     public static final int PRODUCT_DETAIL = 5241;
     private DatabaseHandler dbcart;
     private TextView tv_add, tv_content;
@@ -48,6 +54,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private Spinner spinner_stock;
     private boolean isUpdated;
     private LinearLayout ll_add_content;
+    private AddProductHandler handler;
+    private final static int DELAY_TIME = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +69,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         }
 
         String value = getIntent().getStringExtra(PRODUCT);
+        String content = getIntent().getStringExtra(CONTENT);
         product = new Gson().fromJson(value, Product.class);
 
+        handler = new AddProductHandler(product);
         dbcart = new DatabaseHandler();
 
         final TextView tv_discount = findViewById(R.id.tv_discount);
         ll_add_content = findViewById(R.id.ll_add_content);
         tv_content = findViewById(R.id.tv_content);
+        tv_content.setText(content);
         tv_add = findViewById(R.id.tv_add);
         tv_add.setOnClickListener(this);
         findViewById(R.id.iv_plus).setOnClickListener(this);
@@ -138,7 +149,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         });
 
         if (dbcart.isInCart(product.getProduct_id())) {
-            ll_add_content.setVisibility(View.VISIBLE);
+//            ll_add_content.setVisibility(View.VISIBLE);
             tv_add.setText(R.string.tv_pro_update);
             tv_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
 
@@ -158,7 +169,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 }
             }
         } else {
-            ll_add_content.setVisibility(View.INVISIBLE);
+//            ll_add_content.setVisibility(View.INVISIBLE);
             tv_add.setText(R.string.tv_pro_add);
         }
 
@@ -183,39 +194,49 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     qty2 = qty2 - 1;
                     tv_content.setText(String.valueOf(qty2));
                 }
+
+                handler.removeMessages(ADD_CLICK_MSG);
+                handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
                 break;
             case R.id.iv_plus:
                 int qty = Integer.valueOf(tv_content.getText().toString());
                 qty = qty + 1;
 
                 tv_content.setText(String.valueOf(qty));
+
+                handler.removeMessages(ADD_CLICK_MSG);
+                handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
                 break;
             case R.id.tv_add:
-                Stock stock = (Stock) spinner_stock.getSelectedItem();
-                int quantity = Integer.parseInt(tv_content.getText().toString().trim());
-                ll_add_content.setVisibility(View.VISIBLE);
-
-                if (quantity > 0) {
-                    product.setStockId(stock.getStockId());
-                    product.setStocks(new Gson().toJson(product.getCustom_fields()));
-                    product.setQuantity(quantity);
-
-                    dbcart.setCart(product);
-                    tv_add.setText(R.string.tv_pro_update);
-                    isUpdated = true;
-                } else {
-                    Product p = dbcart.getProduct(product.getProduct_id());
-
-                    if (p != null) {
-                        dbcart.removeItemFromCart(p.getId());
-                        if (quantity == 0) {
-                            ll_add_content.setVisibility(View.INVISIBLE);
-                            tv_add.setText(R.string.tv_pro_add);
-                        }
-                    }
-                }
-
+                handler.removeMessages(ADD_CLICK_MSG);
+                handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
                 break;
+        }
+    }
+
+    private synchronized void addProduct() {
+        Stock stock = (Stock) spinner_stock.getSelectedItem();
+        int quantity = Integer.parseInt(tv_content.getText().toString().trim());
+        ll_add_content.setVisibility(View.VISIBLE);
+
+        if (quantity > 0) {
+            product.setStockId(stock.getStockId());
+            product.setStocks(new Gson().toJson(product.getCustom_fields()));
+            product.setQuantity(quantity);
+
+            dbcart.setCart(product);
+            tv_add.setText(R.string.tv_pro_update);
+            isUpdated = true;
+        } else {
+            Product p = dbcart.getProduct(product.getProduct_id());
+
+            if (p != null) {
+                dbcart.removeItemFromCart(p.getId());
+                if (quantity == 0) {
+                    ll_add_content.setVisibility(View.INVISIBLE);
+                    tv_add.setText(R.string.tv_pro_add);
+                }
+            }
         }
     }
 
@@ -272,5 +293,29 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     @Override
     public void onSliderClick(BaseSliderView slider) {
         showImage(slider.getUrl());
+    }
+
+    private class AddProductHandler extends Handler {
+
+        private Product product;
+
+        AddProductHandler(Product product) {
+            this.product = product;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+
+                case ADD_CLICK_MSG:
+
+                    addProduct();
+
+                    break;
+            }
+        }
     }
 }

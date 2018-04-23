@@ -112,7 +112,7 @@ public class SubCategory {
                 ", status='" + status + '\'' +
                 ", description='" + description + '\'' +
                 ", leval='" + leval + '\'' +
-                ", image='" + image + '\'' +
+                ", iv_image='" + image + '\'' +
                 ", parent='" + parent + '\'' +
                 ", slug='" + slug + '\'' +
                 ", PCount='" + PCount + '\'' +

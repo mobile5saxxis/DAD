@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -41,6 +43,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static codecanyon.grocery.adapter.ProductAdapter.ProductViewHolder.ADD_CLICK_MSG;
+
 
 public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
 
@@ -70,10 +74,12 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
     }
 
     public class BestProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView tv_title, tv_add, tv_subcat_content, tv_discount_price, tv_price,tv_discount,tv_out_of_stock;
+        private TextView tv_title, tv_add, tv_subcat_content, tv_discount_price, tv_price, tv_discount, tv_out_of_stock;
         private ImageView iv_image, iv_subcat_plus, iv_subcat_minus;
         private Spinner spinner_quantity;
         private RelativeLayout rl_content;
+        private AddProductHandler handler;
+        private final static int DELAY_TIME = 1000;
 
         private BestProductViewHolder(View view) {
             super(view);
@@ -98,14 +104,14 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
             tv_price = view.findViewById(R.id.tv_price);
             tv_price.setPaintFlags(tv_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-            CardView cardView = view.findViewById(R.id.card_view_bestproducts);
-            cardView.setOnClickListener(this);
+            tv_title.setOnClickListener(this);
 
         }
 
-        public void bind(int position) {
+        private void bind(int position) {
             Product product = getItem(position);
 
+            handler = new AddProductHandler(product);
             final PriceAdapter priceAdapter = new PriceAdapter(context, product.getCustom_fields());
             spinner_quantity.setAdapter(priceAdapter);
 
@@ -185,9 +191,9 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                         }
                     }
                 }
-                rl_content.setVisibility(View.VISIBLE);
+//                rl_content.setVisibility(View.VISIBLE);
             } else {
-                rl_content.setVisibility(View.INVISIBLE);
+//                rl_content.setVisibility(View.INVISIBLE);
                 tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
             }
         }
@@ -198,11 +204,13 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
             int position = getAdapterPosition();
 
             switch (id) {
-                case R.id.card_view_bestproducts:
+                case R.id.tv_title:
+                    String content = tv_subcat_content.getText().toString();
                     Product product1 = getItem(position);
                     String value = new Gson().toJson(product1);
                     Intent intent = new Intent(context, ProductDetailsActivity.class);
                     intent.putExtra(ProductDetailsActivity.PRODUCT, value);
+                    intent.putExtra(ProductDetailsActivity.CONTENT, content);
                     context.startActivity(intent);
                     break;
                 case R.id.iv_image:
@@ -228,6 +236,9 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                         qty = qty - 1;
                         tv_subcat_content.setText(String.valueOf(qty));
                     }
+
+                    handler.removeMessages(ADD_CLICK_MSG);
+                    handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
                     break;
                 case R.id.iv_subcat_plus:
                     int qty2 = Integer.valueOf(tv_subcat_content.getText().toString());
@@ -238,62 +249,92 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                     if (qty2 == 0) {
                         tv_add.setText(R.string.tv_pro_add);
                     }
+
+                    handler.removeMessages(ADD_CLICK_MSG);
+                    handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
                     break;
                 case R.id.tv_add:
-                    rl_content.setVisibility(View.VISIBLE);
+//                    rl_content.setVisibility(View.VISIBLE);
 
-                    final Product product = getItem(position);
-
-                    final Stock stock = (Stock) spinner_quantity.getSelectedItem();
-                    final int qty3 = Integer.parseInt(tv_subcat_content.getText().toString().trim());
-
-                    if (qty3 > 0) {
-                        if (Integer.parseInt(stock.getStock()) >= qty3) {
-                            service.getStockAvailability(product.getProduct_id()).enqueue(new Callback<Quantity>() {
-                                @Override
-                                public void onResponse(Call<Quantity> call, Response<Quantity> response) {
-                                    if (response.isSuccessful() && response.body() != null) {
-                                        Quantity quantity = response.body();
-
-
-                                        if (qty3 <= quantity.getQuantity_per_user()) {
-                                            product.setStockId(stock.getStockId());
-                                            product.setStocks(new Gson().toJson(product.getCustom_fields()));
-                                            product.setQuantity(qty3);
-
-                                            dbcart.setCart(product);
-                                            tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                                        }
-
-                                    } else {
-                                        Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
-                                }
-
-                                @Override
-                                public void onFailure(Call<Quantity> call, Throwable t) {
-                                    Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            if (stock.getStock().equals("0")) {
-                                Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(context, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } else {
-                        Product p = dbcart.getProduct(product.getProduct_id());
-
-                        if (p != null) {
-                            dbcart.removeItemFromCart(p.getId());
-                        }
-
-                        ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
-                    }
+                    handler.removeMessages(ADD_CLICK_MSG);
+                    handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
                     break;
+            }
+        }
+
+        private synchronized void addProduct(final Product product) {
+            final Stock stock = (Stock) spinner_quantity.getSelectedItem();
+            final int qty3 = Integer.parseInt(tv_subcat_content.getText().toString().trim());
+
+            if (qty3 > 0) {
+                if (Integer.parseInt(stock.getStock()) >= qty3) {
+                    service.getStockAvailability(product.getProduct_id()).enqueue(new Callback<Quantity>() {
+                        @Override
+                        public void onResponse(Call<Quantity> call, Response<Quantity> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                Quantity quantity = response.body();
+
+
+                                if (qty3 <= quantity.getQuantity_per_user()) {
+                                    product.setStockId(stock.getStockId());
+                                    product.setStocks(new Gson().toJson(product.getCustom_fields()));
+                                    product.setQuantity(qty3);
+
+                                    dbcart.setCart(product);
+                                    tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                                }
+
+                            } else {
+                                Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                            }
+
+                            ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
+                        }
+
+                        @Override
+                        public void onFailure(Call<Quantity> call, Throwable t) {
+                            Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    if (stock.getStock().equals("0")) {
+                        Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } else {
+                Product p = dbcart.getProduct(product.getProduct_id());
+
+                if (p != null) {
+                    dbcart.removeItemFromCart(p.getId());
+                }
+
+                ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
+            }
+        }
+
+        private class AddProductHandler extends Handler {
+
+            private Product product;
+
+            AddProductHandler(Product product) {
+                this.product = product;
+            }
+
+            @Override
+            public void handleMessage(Message msg) {
+
+                super.handleMessage(msg);
+
+                switch (msg.what) {
+
+                    case ADD_CLICK_MSG:
+
+                        addProduct(product);
+
+                        break;
+                }
             }
         }
     }

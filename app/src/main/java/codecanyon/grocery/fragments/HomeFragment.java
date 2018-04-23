@@ -120,6 +120,9 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         popularBrandsAdapter = new PopularBrandsAdapter(getActivity());
         rv_popular_brands.setAdapter(popularBrandsAdapter);
 
+        offerAdapter = new OfferAdapter(getActivity());
+        rv_offers.setAdapter(offerAdapter);
+
         final TabLayout tab_layout = view.findViewById(R.id.tab_layout);
         final ViewPager view_pager = view.findViewById(R.id.view_pager);
         view_pager.setOffscreenPageLimit(0);
@@ -182,32 +185,6 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                         .commit();
             }
         });
-
-//        rv_popular_brands.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_category, new RecyclerTouchListener.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//
-//                String getid = popularBrands_List.get(position).getId();
-//                String gettitle = "Flipkart";
-//                Boolean isCategory = false;
-//                Bundle args = new Bundle();
-//                Fragment fm = new ProductFragment();
-//                args.putString("cat_id", getid);
-//                args.putString("cat_title", gettitle);
-//                args.putBoolean("isCategory", isCategory);
-//                fm.setArguments(args);
-//                FragmentManager fragmentManager = getFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
-//                        .addToBackStack(null).commit();
-//
-//
-//            }
-//
-//            @Override
-//            public void onLongItemClick(View view, int position) {
-//
-//            }
-//        }));
 
 
         return view;
@@ -298,10 +275,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             public void onResponse(Call<OffersResponse> call, Response<OffersResponse> response) {
                 if (response.body() != null && response.isSuccessful()) {
                     OffersResponse cr = response.body();
-
-                    offerAdapter = new OfferAdapter(cr.getData(), getActivity());
-                    rv_offers.setAdapter(offerAdapter);
-                    offerAdapter.notifyDataSetChanged();
+                    offerAdapter.addItems(cr.getData());
                 }
             }
 

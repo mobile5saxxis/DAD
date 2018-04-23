@@ -37,9 +37,9 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/rounded_corner_textview"
                 android:padding="8dp"
-                android:textSize="12sp"
                 android:text="@string/clear_cart"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -70,16 +70,17 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/rounded_corner_textview"
                 android:padding="8dp"
-                android:textSize="12sp"
                 android:text="@string/apply_coupon"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
 
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_cart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingBottom="48dp" />
 
     </LinearLayout>
 
