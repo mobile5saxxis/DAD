@@ -22,56 +22,47 @@ import codecanyon.grocery.reterofit.APIUrls;
  * Created by Rajesh Dabhi on 30/6/2017.
  */
 
-public class MyOrderDetailAdapter extends RecyclerView.Adapter<MyOrderDetailAdapter.MyViewHolder> {
+public class MyOrderDetailAdapter extends CommonRecyclerAdapter<MyOrderDetail> {
 
-    private List<MyOrderDetail> modelList;
     private Context context;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tv_title, tv_price, tv_qty;
-        public ImageView iv_img;
+    @Override
+    public RecyclerView.ViewHolder onCreateBasicItemViewHolder(ViewGroup parent, int viewType) {
+        context = parent.getContext();
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_my_order_detail, parent, false);
+        return new MyOderDetailViewHolder(itemView);
+    }
 
-        public MyViewHolder(View view) {
+    @Override
+    public void onBindBasicItemView(RecyclerView.ViewHolder holder, int position) {
+        MyOderDetailViewHolder viewHolder = (MyOderDetailViewHolder) holder;
+        viewHolder.bind(position);
+    }
+
+    public class MyOderDetailViewHolder extends RecyclerView.ViewHolder {
+        private TextView tv_title, tv_price, tv_qty;
+        private ImageView iv_img;
+
+        private MyOderDetailViewHolder(View view) {
             super(view);
             tv_title = view.findViewById(R.id.tv_order_Detail_title);
             tv_price = view.findViewById(R.id.tv_order_Detail_price);
             tv_qty = view.findViewById(R.id.tv_order_Detail_qty);
             iv_img = view.findViewById(R.id.iv_order_detail_img);
         }
+
+        public void bind(int position) {
+            MyOrderDetail myOrderDetail = getItem(position);
+
+            Glide.with(context)
+                    .load(APIUrls.IMG_PRODUCT_URL + myOrderDetail.getProduct_image().split(",")[0].replace(" ", "%20"))
+                    .apply(RequestOptions.placeholderOf(R.drawable.ic_placeholder).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(iv_img);
+
+            tv_title.setText(myOrderDetail.getProduct_name());
+            tv_price.setText(myOrderDetail.getPrice());
+            tv_qty.setText(myOrderDetail.getQty());
+        }
     }
-
-    public MyOrderDetailAdapter(List<MyOrderDetail> modelList) {
-        this.modelList = modelList;
-    }
-
-    @Override
-    public MyOrderDetailAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_my_order_detail, parent, false);
-
-        context = parent.getContext();
-
-        return new MyOrderDetailAdapter.MyViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(MyOrderDetailAdapter.MyViewHolder holder, int position) {
-        MyOrderDetail mList = modelList.get(position);
-
-        Glide.with(context)
-                .load(APIUrls.IMG_PRODUCT_URL + mList.getProduct_image().split(",")[0].replace(" ", "%20"))
-                .apply(RequestOptions.placeholderOf(R.drawable.ic_logonew).diskCacheStrategy(DiskCacheStrategy.ALL))
-                .into(holder.iv_img);
-
-        holder.tv_title.setText(mList.getProduct_name());
-        holder.tv_price.setText(mList.getPrice());
-        holder.tv_qty.setText(mList.getQty());
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return modelList.size();
-    }
-
 }

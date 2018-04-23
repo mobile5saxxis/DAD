@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,24 +13,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import codecanyon.grocery.adapter.MyOrderDetailAdapter;
-import codecanyon.grocery.DADApp;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
 import codecanyon.grocery.models.MyOrderDetail;
+import codecanyon.grocery.models.MyOrderDetailResponse;
+import codecanyon.grocery.models.MyOrderResponse;
 import codecanyon.grocery.models.OrderRequest;
 import codecanyon.grocery.models.RequestResponse;
 import codecanyon.grocery.reterofit.APIUrls;
@@ -51,18 +40,9 @@ public class MyOrderDetaiFragment extends Fragment {
 
     private static String TAG = MyOrderDetaiFragment.class.getSimpleName();
 
-    private TextView tv_date, tv_time, tv_total, tv_delivery_charge,tv_discount_amount;
-    private Button btn_cancle;
-    private RecyclerView rv_detail_order;
     private RetrofitService service;
-
     private String sale_id;
-
-    private List<MyOrderDetail> my_orderDetailList = new ArrayList<>();
-
-    public MyOrderDetaiFragment() {
-        // Required empty public constructor
-    }
+    private MyOrderDetailAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,15 +56,17 @@ public class MyOrderDetaiFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_order_detail, container, false);
 
         service = RetrofitInstance.createService(RetrofitService.class);
-        tv_date = view.findViewById(R.id.tv_order_Detail_date);
-        tv_time = view.findViewById(R.id.tv_order_Detail_time);
-        tv_delivery_charge = view.findViewById(R.id.tv_order_Detail_deli_charge);
-        tv_total = view.findViewById(R.id.tv_order_Detail_total);
-        btn_cancle = view.findViewById(R.id.btn_order_detail_cancle);
-        rv_detail_order = view.findViewById(R.id.rv_order_detail);
-        tv_discount_amount = view.findViewById(R.id.tv_discount_amount);
+        TextView tv_date = view.findViewById(R.id.tv_order_Detail_date);
+        TextView tv_time = view.findViewById(R.id.tv_order_Detail_time);
+        TextView tv_delivery_charge = view.findViewById(R.id.tv_order_Detail_deli_charge);
+        TextView tv_total = view.findViewById(R.id.tv_order_Detail_total);
+        Button btn_cancel = view.findViewById(R.id.btn_order_detail_cancle);
+        TextView tv_discount_amount = view.findViewById(R.id.tv_discount_amount);
 
+        RecyclerView rv_detail_order = view.findViewById(R.id.rv_order_detail);
         rv_detail_order.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new MyOrderDetailAdapter();
+        rv_detail_order.setAdapter(adapter);
 
         sale_id = getArguments().getString("sale_id");
         String total_rs = getArguments().getString("total");
@@ -92,12 +74,12 @@ public class MyOrderDetaiFragment extends Fragment {
         String time = getArguments().getString("time");
         String status = getArguments().getString("status");
         String deli_charge = getArguments().getString("deli_charge");
-        String discount_amount= getArguments().getString("discount_amount");
+        String discount_amount = getArguments().getString("discount_amount");
 
         if (status.equals("0")) {
-            btn_cancle.setVisibility(View.VISIBLE);
+            btn_cancel.setVisibility(View.VISIBLE);
         } else {
-            btn_cancle.setVisibility(View.GONE);
+            btn_cancel.setVisibility(View.GONE);
         }
 
         tv_total.setText(total_rs);
@@ -113,7 +95,7 @@ public class MyOrderDetaiFragment extends Fragment {
             ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
         }
 
-        btn_cancle.setOnClickListener(new View.OnClickListener() {
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDeleteDialog();
@@ -160,20 +142,16 @@ public class MyOrderDetaiFragment extends Fragment {
         OrderRequest or = new OrderRequest();
         or.setSale_id(sale_id);
 
-        service.orderDetail(sale_id).enqueue(new Callback<List<MyOrderDetail>>() {
+        service.orderDetail(sale_id).enqueue(new Callback<MyOrderDetailResponse>() {
             @Override
-            public void onResponse(Call<List<MyOrderDetail>> call, Response<List<MyOrderDetail>> response) {
+            public void onResponse(Call<MyOrderDetailResponse> call, Response<MyOrderDetailResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    my_orderDetailList = response.body();
-
-                    MyOrderDetailAdapter adapter = new MyOrderDetailAdapter(my_orderDetailList);
-                    rv_detail_order.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+                    adapter.addItems(response.body().getData());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<MyOrderDetail>> call, Throwable t) {
+            public void onFailure(Call<MyOrderDetailResponse> call, Throwable t) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
             }
         });

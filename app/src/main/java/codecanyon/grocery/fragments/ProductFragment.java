@@ -107,19 +107,19 @@ public class ProductFragment extends Fragment {
                                 rl_progress.setVisibility(View.VISIBLE);
                                 productAdapter.resetItems();
                                 makeGetProductRequest("htol");
-                                tv_sort.setText("Price High");
+                                tv_sort.setText(R.string.price_high);
                                 return true;
                             case lowToHigh:
                                 rl_progress.setVisibility(View.VISIBLE);
                                 productAdapter.resetItems();
                                 makeGetProductRequest("ltoh");
-                                tv_sort.setText("Price Low");
+                                tv_sort.setText(R.string.price_low);
                                 return true;
                             case aToZ:
                                 rl_progress.setVisibility(View.VISIBLE);
                                 productAdapter.resetItems();
                                 makeGetProductRequest("alpha");
-                                tv_sort.setText("A to Z");
+                                tv_sort.setText(R.string.a_to_z);
                                 return true;
                         }
 

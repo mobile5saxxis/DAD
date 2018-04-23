@@ -53,12 +53,13 @@
 
         <Button
             android:id="@+id/btn_order_detail_cancle"
-            android:layout_width="130dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginBottom="@dimen/space_5"
-            android:layout_marginTop="@dimen/space_5"
+            android:layout_margin="8dp"
             android:background="@drawable/rounded_corner_textview"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:text="@string/tv_order_cancle"
             android:textColor="#ffffff"
             android:textSize="12sp" />

@@ -2,6 +2,7 @@ package codecanyon.grocery.reterofit;
 
 import java.util.List;
 
+import codecanyon.grocery.models.AdResponse;
 import codecanyon.grocery.models.AddDeliveryRequest;
 import codecanyon.grocery.models.AddOrderRequest;
 import codecanyon.grocery.models.AddressDeleteRequest;
@@ -23,6 +24,7 @@ import codecanyon.grocery.models.LoginRequest;
 import codecanyon.grocery.models.LoginResponse;
 import codecanyon.grocery.models.MyOrder;
 import codecanyon.grocery.models.MyOrderDetail;
+import codecanyon.grocery.models.MyOrderDetailResponse;
 import codecanyon.grocery.models.MyOrderResponse;
 import codecanyon.grocery.models.OffersResponse;
 import codecanyon.grocery.models.OrderRequest;
@@ -129,6 +131,10 @@ public interface RetrofitService {
     @GET(APIUrls.GET_PRODUCT_URL)
     Call<ProductResponse> search(@Query("search") String search);
 
+    @GET(APIUrls.GET_AD_URL)
+    Call<AdResponse> getAdResponse(@Query("id") String id);
+
+
     @GET(APIUrls.GET_LIMITE_SETTING_URL)
     Call<List<LimitCheck>> limitCheck();
 
@@ -161,7 +167,7 @@ public interface RetrofitService {
 
     @POST(APIUrls.ORDER_DETAIL_URL)
     @FormUrlEncoded
-    Call<List<MyOrderDetail>> orderDetail(@Field("sale_id") String sale_id);
+    Call<MyOrderDetailResponse> orderDetail(@Field("sale_id") String sale_id);
 
     @POST(APIUrls.DELETE_ORDER_URL)
     @FormUrlEncoded

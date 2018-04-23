@@ -6,23 +6,23 @@ package codecanyon.grocery.models;
 
 public class MyOrder {
 
-    String sale_id;
-    String user_id;
-    String on_date;
-    String delivery_time_from;
-    String delivery_time_to;
-    String status;
-    String note;
-    String is_paid;
-    String total_amount;
-    String total_kg;
-    String total_items;
-    String socity_id;
-    String delivery_address;
-    String location_id;
-    String delivery_charge;
-    String product_image;
-    String discount_amount;
+    private String sale_id;
+    private String user_id;
+    private String on_date;
+    private String delivery_time_from;
+    private  String delivery_time_to;
+    private String status;
+    private String note;
+    private String is_paid;
+    private String total_amount;
+    private String total_kg;
+    private String total_items;
+    private String socity_id;
+    private String delivery_address;
+    private String location_id;
+    private String delivery_charge;
+    private String product_image;
+    private String discount_amount;
 
     public String getProduct_image() {
         return product_image;

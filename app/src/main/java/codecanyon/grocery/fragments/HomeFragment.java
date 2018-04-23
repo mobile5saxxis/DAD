@@ -110,6 +110,36 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         ImageView iv_ad1 = view.findViewById(R.id.iv_ad1);
         ImageView iv_ad2 = view.findViewById(R.id.iv_ad2);
 
+        iv_ad1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment adFragment = AdFragment.newInstance("5");
+                FragmentManager fM = getFragmentManager();
+
+                if (fM != null) {
+                    fM.beginTransaction()
+                            .replace(R.id.frame_layout, adFragment, AdFragment.class.getSimpleName())
+                            .commit();
+                }
+
+            }
+        });
+
+        iv_ad2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment adFragment = AdFragment.newInstance("4");
+                FragmentManager fM = getFragmentManager();
+
+                if (fM != null) {
+                    fM.beginTransaction()
+                            .replace(R.id.frame_layout, adFragment, AdFragment.class.getSimpleName())
+                            .commit();
+                }
+
+            }
+        });
+
         rv_category.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         rv_popular_brands.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false));
         rv_offers.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false));
