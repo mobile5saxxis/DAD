@@ -221,5 +221,6 @@
     <string name="out_of_stock">Out of Stock</string>
     <string name="coupon_amount">Coupon Amount :</string>
     <string name="saving_amount">Saving Amount :</string>
+    <string name="sort_by">Sort By</string>
 
 </resources>

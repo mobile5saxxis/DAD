@@ -46,6 +46,8 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
+import retrofit2.http.QueryName;
 import retrofit2.http.Url;
 
 /**
@@ -119,7 +121,7 @@ public interface RetrofitService {
     Call<MyOrderResponse> getOrder(@Field("user_id") String user_id);
 
     @GET(APIUrls.GET_PRODUCT_URL)
-    Call<ProductResponse> getProducts(@Query("cat_id") String cat_id);
+    Call<ProductResponse> getProducts(@Query("cat_id") String cat_id, @Query("sort") String sort);
 
     @GET(APIUrls.GET_SLIDER_PRODUCT_URL)
     Call<ProductResponse> getSliderProducts(@Query("slider_id") String slider_id);

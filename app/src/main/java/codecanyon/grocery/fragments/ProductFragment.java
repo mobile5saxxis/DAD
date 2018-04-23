@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,13 +37,12 @@ public class ProductFragment extends Fragment {
 
     public static final String SUB_CATEGORY_ID = "CATEGORY_ID";
     public static final String SUB_CATEGORY_TITLE = "CATEGORY_TITLE";
-    private RecyclerView rv_category;
     private TextView tv_no_of_items;
     private ProductAdapter productAdapter;
     private RetrofitService service;
-    private String subCategoryId, categoryTitle;
+    private String subCategoryId;
     private RelativeLayout rl_progress;
-
+    private TextView tv_sort;
 
     public static ProductFragment newInstance(String categoryId, String categoryTitle) {
         ProductFragment productFragment = new ProductFragment();
@@ -61,7 +61,7 @@ public class ProductFragment extends Fragment {
 
         if (getArguments() != null) {
             subCategoryId = getArguments().getString(SUB_CATEGORY_ID);
-            categoryTitle = getArguments().getString(SUB_CATEGORY_TITLE);
+            String categoryTitle = getArguments().getString(SUB_CATEGORY_TITLE);
         }
     }
 
@@ -74,15 +74,60 @@ public class ProductFragment extends Fragment {
         productAdapter = new ProductAdapter(getContext());
 
         tv_no_of_items = view.findViewById(R.id.tv_no_of_items);
+        tv_sort = view.findViewById(R.id.tv_sort);
 
         rl_progress = view.findViewById(R.id.rl_progress);
-        rv_category = view.findViewById(R.id.rv_popular_brands);
+        RecyclerView rv_category = view.findViewById(R.id.rv_popular_brands);
         rv_category.setLayoutManager(new LinearLayoutManager(getContext()));
         rv_category.setAdapter(productAdapter);
 
         if (ConnectivityReceiver.isConnected()) {
-            makeGetProductRequest();
+            makeGetProductRequest("");
         }
+
+        view.findViewById(R.id.ll_sort).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int highToLow = 1245;
+                final int lowToHigh = 1246;
+                final int aToZ = 1247;
+
+                PopupMenu menu = new PopupMenu(getContext(), v);
+                menu.getMenu().add(0, highToLow, 0, "Price High to Low");
+                menu.getMenu().add(0, lowToHigh, 0, "Price Low to High");
+                menu.getMenu().add(0, aToZ, 0, "Order By A to Z");
+                menu.show();
+
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        switch (item.getItemId()) {
+                            case highToLow:
+                                rl_progress.setVisibility(View.VISIBLE);
+                                productAdapter.resetItems();
+                                makeGetProductRequest("htol");
+                                tv_sort.setText("Price High");
+                                return true;
+                            case lowToHigh:
+                                rl_progress.setVisibility(View.VISIBLE);
+                                productAdapter.resetItems();
+                                makeGetProductRequest("ltoh");
+                                tv_sort.setText("Price Low");
+                                return true;
+                            case aToZ:
+                                rl_progress.setVisibility(View.VISIBLE);
+                                productAdapter.resetItems();
+                                makeGetProductRequest("alpha");
+                                tv_sort.setText("A to Z");
+                                return true;
+                        }
+
+                        return false;
+                    }
+                });
+            }
+        });
 
         return view;
     }
@@ -101,8 +146,8 @@ public class ProductFragment extends Fragment {
     }
 
 
-    private void makeGetProductRequest() {
-        service.getProducts(subCategoryId).enqueue(new Callback<ProductResponse>() {
+    private void makeGetProductRequest(String sortBy) {
+        service.getProducts(subCategoryId, sortBy).enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if (response.body() != null && response.isSuccessful()) {
@@ -126,40 +171,5 @@ public class ProductFragment extends Fragment {
             }
         });
     }
-
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO Add your menu entries here
-        super.onCreateOptionsMenu(menu, inflater);
-
-        MenuItem search = menu.findItem(R.id.action_search);
-        search.setVisible(false);
-        MenuItem check = menu.findItem(R.id.action_change_password);
-        check.setVisible(false);
-
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-
-        *//*searchView.setBackgroundColor(getResources().getColor(R.color.white));
-        EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchEditText.setTextColor(Color.WHITE);
-        searchEditText.setHintTextColor(Color.GRAY);*//*
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                productAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-    }*/
-
 
 }
