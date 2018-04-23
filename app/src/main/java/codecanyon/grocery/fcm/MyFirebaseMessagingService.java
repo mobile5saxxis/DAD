@@ -132,12 +132,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void simpleteNotification(String title, String message, String timeStamp, PendingIntent pendingIntent) {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        long[] vibrate = {0, 100, 200, 300};
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .setVibrate(vibrate);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notificationBuilder.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
@@ -155,29 +158,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void showBigNotification(Bitmap bitmap, String title, String message, String timeStamp, PendingIntent resultPendingIntent) {
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        long[] vibrate = {0, 100, 200, 300};
+
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
         bigPictureStyle.setBigContentTitle(title);
         bigPictureStyle.setSummaryText(Html.fromHtml(message).toString());
         bigPictureStyle.bigPicture(bitmap);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 
-        /*Notification notification;
-        notification = mBuilder.setSmallIcon(R.drawable.ic_launcher).setTicker(tv_subcat_title)
-                .setAutoCancel(true)
-                .setContentTitle(tv_subcat_title)
-                .setContentIntent(resultPendingIntent)
-                .setStyle(bigPictureStyle)
-                .setWhen(getTimeMilliSec(timeStamp))
-                .setLargeIcon(bitmap)
-                .setContentText(message)
-                .build();*/
         Notification.Builder notificationBuilder = new Notification.Builder(this)
                 .setContentTitle(message)
                 .setContentText(title)
                 .setLargeIcon(bitmap)
                 .setStyle(new Notification.BigPictureStyle()
                         .bigPicture(bitmap))
-                .setContentIntent(resultPendingIntent);
+                .setContentIntent(resultPendingIntent)
+                .setSound(uri)
+                .setVibrate(vibrate);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notificationBuilder.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
