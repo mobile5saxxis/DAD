@@ -47,7 +47,7 @@
                 android:background="@drawable/xml_textbox_bg"
                 android:ems="10"
                 android:inputType="number"
-                android:maxLength="15" />
+                android:maxLength="10" />
 
             <TextView
                 android:id="@+id/tv_add_adres_pin"

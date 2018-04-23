@@ -125,7 +125,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ll_add_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -138,6 +138,7 @@
                 android:id="@+id/ll_add_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -175,9 +176,10 @@
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
                 android:text="@string/tv_pro_add"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:visibility="gone" />
 
-        </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
     <android.support.design.widget.TabLayout

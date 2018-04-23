@@ -102,6 +102,7 @@ public class MyOrderFragment extends Fragment {
                 String total = myOrder.getTotal_amount();
                 String status = myOrder.getStatus();
                 String deli_charge = myOrder.getDelivery_charge();
+                String discount_amount = myOrder.getDiscount_amount();
 
                 Bundle args = new Bundle();
                 Fragment fm = new MyOrderDetaiFragment();
@@ -111,6 +112,7 @@ public class MyOrderFragment extends Fragment {
                 args.putString("total", total);
                 args.putString("status", status);
                 args.putString("deli_charge", deli_charge);
+                args.putString("discount_amount", discount_amount);
                 fm.setArguments(args);
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)

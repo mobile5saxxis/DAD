@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity
 
             Glide.with(this)
                     .load(APIUrls.IMG_PROFILE_URL + getimage)
-                    .apply(RequestOptions.placeholderOf(R.drawable.logo))
+                    .apply(RequestOptions.placeholderOf(R.drawable.ic_home_logo))
                     .into(iv_profile);
 
             tv_number.setText(email);

@@ -62,6 +62,8 @@ public class DeliveryPaymentDetailFragment extends Fragment {
     private String date = "";
     private String address = "";
     private Double totalAmount;
+    private String coupon = "0";
+    private String couponValue;
 
     private DatabaseHandler db_cart;
     private SessionManagement sessionManagement;
@@ -96,28 +98,56 @@ public class DeliveryPaymentDetailFragment extends Fragment {
         location_id = getArguments().getString("location_id");
         int charges = Integer.parseInt(getArguments().getString("deli_charges"));
         address = getArguments().getString("address");
+        String min_charge = getArguments().getString("min_charge");
 
         tv_timeslot.setText(String.format("%s %s", date, time));
         tv_address.setText(address);
 
+        List<Coupon> coupons = Coupon.listAll(Coupon.class);
+
+        if (coupons != null && coupons.size() > 0) {
+            Coupon c = coupons.get(0);
+            coupon = c.getCouponId();
+            couponValue = c.getCoupon_value();
+        }
+
         double amount = Double.parseDouble(db_cart.getDiscountTotalAmount());
 
-        if (amount >= 500) {
+        if (amount >= Integer.parseInt(min_charge)) {
             totalAmount = amount;
 
-            tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
-                    getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
-                    getResources().getString(R.string.total_amount) +
-                    db_cart.getDiscountTotalAmount() + " " + getResources().getString(R.string.currency));
-
+            if (couponValue == null) {
+                tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
+                        getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
+                        getResources().getString(R.string.total_amount) +
+                        db_cart.getDiscountTotalAmount() + " " + getResources().getString(R.string.currency) + "\n" +
+                        getResources().getString(R.string.saving_amount) + db_cart.getSavedAmount());
+            } else {
+                tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
+                        getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
+                        getResources().getString(R.string.coupon_amount) + couponValue + "\n" +
+                        getResources().getString(R.string.total_amount) + db_cart.getDiscountTotalAmount() + " " + getResources().getString(R.string.currency) + "\n" +
+                        getResources().getString(R.string.saving_amount) + db_cart.getSavedAmount());
+            }
         } else {
             totalAmount = amount + charges;
 
-            tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
-                    getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
-                    getResources().getString(R.string.delivery_charge) + charges + "\n" +
-                    getResources().getString(R.string.total_amount) +
-                    db_cart.getDiscountTotalAmount() + " + " + charges + " = " + totalAmount + " " + getResources().getString(R.string.currency));
+            if (couponValue == null) {
+                tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
+                        getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
+                        getResources().getString(R.string.delivery_charge) + charges + "\n" +
+                        getResources().getString(R.string.total_amount) +
+                        db_cart.getDiscountTotalAmount() + " + " + charges + " = " + totalAmount + " " + getResources().getString(R.string.currency) + "\n" +
+                        getResources().getString(R.string.saving_amount) + db_cart.getSavedAmount());
+            } else {
+                tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
+                        getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
+                        getResources().getString(R.string.coupon_amount) + couponValue + "\n" +
+                        getResources().getString(R.string.delivery_charge) + charges + "\n" +
+                        getResources().getString(R.string.total_amount) +
+                        db_cart.getDiscountTotalAmount() + " + " + charges + " = " + totalAmount + " " + getResources().getString(R.string.currency) + "\n" +
+                        getResources().getString(R.string.saving_amount) + db_cart.getSavedAmount());
+            }
         }
 
         btn_cod.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +155,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
             public void onClick(View view) {
                 // check internet connection
                 if (ConnectivityReceiver.isConnected()) {
-                    attemptOrder("1");
+                    attemptOrder(1);
                 } else {
                     ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
                 }
@@ -137,7 +167,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
             public void onClick(View view) {
                 // check internet connection
                 if (ConnectivityReceiver.isConnected()) {
-                    attemptOrder("2");
+                    attemptOrder(2);
                 } else {
                     ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
                 }
@@ -147,7 +177,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
         return view;
     }
 
-    private void attemptOrder(String paymentMode) {
+    private void attemptOrder(int paymentMode) {
         List<Product> items = db_cart.getCartAll();
 
         if (items.size() > 0) {
@@ -198,7 +228,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
     /**
      * Method to make json object request where json response starts wtih
      */
-    private void makeAddOrderRequest(String date, String gettime, String userid, String location, String paymentMode, String value) {
+    private void makeAddOrderRequest(String date, String gettime, String userid, String location, int paymentMode, String value) {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -207,18 +237,9 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                 .baseUrl(APIUrls.BASE_URL)
                 .addConverterFactory((GsonConverterFactory.create(gson)));
 
-        String coupon = "0";
-
-        List<Coupon> coupons = Coupon.listAll(Coupon.class);
-
-        if (coupons != null && coupons.size() > 0) {
-            Coupon c = coupons.get(0);
-            coupon = c.getCouponId();
-        }
-
         builder.build().
                 create(RetrofitService.class).
-                addOrder(date, gettime, userid, location, value, coupon, paymentMode, totalAmount).
+                addOrder(date, gettime, userid, location, value, coupon, paymentMode).
                 enqueue(new Callback<RequestResponse>() {
                     @Override
                     public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
@@ -357,6 +378,10 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                                     fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
                                             .addToBackStack(null).commit();
                                 }
+                            } else {
+                                RequestResponse rr = response.body();
+
+                                Toast.makeText(getActivity(), rr.getError(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

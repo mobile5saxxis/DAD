@@ -14,6 +14,7 @@ import codecanyon.grocery.models.CheckLoginRequest;
 import codecanyon.grocery.models.CouponAvailableResponse;
 import codecanyon.grocery.models.CouponResponse;
 import codecanyon.grocery.models.DeliveryAddress;
+import codecanyon.grocery.models.DeliveryCharge;
 import codecanyon.grocery.models.DeliveryRequest;
 import codecanyon.grocery.models.DeliveryResponse;
 import codecanyon.grocery.models.ForgotPasswordRequest;
@@ -84,7 +85,7 @@ public interface RetrofitService {
     Call<RequestResponse> addOrder(@Field("date") String date,
                                    @Field("time") String time,
                                    @Field("user_id") String user_id,
-                                   @Field("location") String location, @Field("data") String data, @Field("coupon_id") String coupon_id, @Field("payment_mode") String payment_mode,@Field("total_amount")double total_amount);
+                                   @Field("location") String location, @Field("data") String data, @Field("coupon_id") String coupon_id, @Field("payment_mode") int payment_mode);
 
     @POST(APIUrls.GET_CATEGORY_URL)
     Call<CategoryResponse> getCategory();
@@ -192,4 +193,7 @@ public interface RetrofitService {
 
     @GET(APIUrls.GET_APPLY_COUPON)
     Call<CouponAvailableResponse> getCouponAvailability(@Query("cid") String cid, @Query("uid") String uid);
+
+    @GET(APIUrls.GET_DELIVERY_CHARGE)
+    Call<DeliveryCharge> getDeliveryCharge();
 }

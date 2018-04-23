@@ -166,7 +166,13 @@ public class RegisterActivity extends AppCompatActivity {
                         startActivity(i);
                         finish();
                     } else {
-                        Toast.makeText(RegisterActivity.this, requestResponse.getError(), Toast.LENGTH_SHORT).show();
+                        String error = requestResponse.getError();
+
+                        if (error.toLowerCase().contains("email") && error.toLowerCase().contains("unique")) {
+                            error = "Email is already registered";
+                        }
+
+                        Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();
                     }
 
                 }

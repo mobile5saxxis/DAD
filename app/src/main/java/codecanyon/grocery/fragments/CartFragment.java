@@ -30,6 +30,7 @@ import codecanyon.grocery.R;
 import codecanyon.grocery.models.Coupon;
 import codecanyon.grocery.models.CouponAvailableResponse;
 import codecanyon.grocery.models.CouponResponse;
+import codecanyon.grocery.models.DeliveryCharge;
 import codecanyon.grocery.models.LimitCheck;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
@@ -163,6 +164,8 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
                             if (todayDate.after(coupon.getFrom_Date()) && todayDate.before(coupon.getTo_Date()) && coupon.getStatus().equals("0")) {
                                 Toast.makeText(getContext(), R.string.coupon_expired, Toast.LENGTH_SHORT).show();
+                            } else if (Double.parseDouble(db.getDiscountTotalAmount()) < Double.parseDouble(coupon.getMinimum_order_Amount())) {
+                                Toast.makeText(getContext(), "Minimum order amount for coupon is " + coupon.getMinimum_order_Amount(), Toast.LENGTH_SHORT).show();
                             } else {
                                 service.getCouponAvailability(coupon.getCouponId(), sessionManagement.getUserDetails().get(APIUrls.KEY_ID)).enqueue(new Callback<CouponAvailableResponse>() {
                                     @Override
@@ -280,12 +283,30 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
                     if (!isSmall && !isBig) {
                         if (sessionManagement.isLoggedIn()) {
-                            Bundle args = new Bundle();
-                            Fragment fm = new DeliveryFragment();
-                            fm.setArguments(args);
-                            FragmentManager fragmentManager = getFragmentManager();
-                            fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
-                                    .addToBackStack(null).commit();
+                            service.getDeliveryCharge().enqueue(new Callback<DeliveryCharge>() {
+                                @Override
+                                public void onResponse(Call<DeliveryCharge> call, Response<DeliveryCharge> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        DeliveryCharge deliveryCharge = response.body();
+
+                                        if (deliveryCharge.isResponce()) {
+                                            Bundle args = new Bundle();
+                                            args.putString("min_charge", deliveryCharge.getAmount());
+                                            args.putString("charge", deliveryCharge.getCharge_rs());
+                                            Fragment fm = new DeliveryFragment();
+                                            fm.setArguments(args);
+                                            FragmentManager fragmentManager = getFragmentManager();
+                                            fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
+                                                    .addToBackStack(null).commit();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<DeliveryCharge> call, Throwable t) {
+                                    Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         } else {
                             Intent i = new Intent(getActivity(), LoginActivity.class);
                             startActivity(i);

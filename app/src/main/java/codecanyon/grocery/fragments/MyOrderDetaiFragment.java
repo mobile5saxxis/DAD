@@ -51,7 +51,7 @@ public class MyOrderDetaiFragment extends Fragment {
 
     private static String TAG = MyOrderDetaiFragment.class.getSimpleName();
 
-    private TextView tv_date, tv_time, tv_total, tv_delivery_charge;
+    private TextView tv_date, tv_time, tv_total, tv_delivery_charge,tv_discount_amount;
     private Button btn_cancle;
     private RecyclerView rv_detail_order;
     private RetrofitService service;
@@ -82,6 +82,7 @@ public class MyOrderDetaiFragment extends Fragment {
         tv_total = view.findViewById(R.id.tv_order_Detail_total);
         btn_cancle = view.findViewById(R.id.btn_order_detail_cancle);
         rv_detail_order = view.findViewById(R.id.rv_order_detail);
+        tv_discount_amount = view.findViewById(R.id.tv_discount_amount);
 
         rv_detail_order.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -91,6 +92,7 @@ public class MyOrderDetaiFragment extends Fragment {
         String time = getArguments().getString("time");
         String status = getArguments().getString("status");
         String deli_charge = getArguments().getString("deli_charge");
+        String discount_amount= getArguments().getString("discount_amount");
 
         if (status.equals("0")) {
             btn_cancle.setVisibility(View.VISIBLE);
@@ -102,6 +104,7 @@ public class MyOrderDetaiFragment extends Fragment {
         tv_date.setText(getResources().getString(R.string.date) + date);
         tv_time.setText(getResources().getString(R.string.time) + time);
         tv_delivery_charge.setText(getResources().getString(R.string.delivery_charge) + deli_charge);
+        tv_discount_amount.setText(getString(R.string.saving_amount) + discount_amount);
 
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {

@@ -165,6 +165,49 @@ public class DatabaseHandler {
         return String.valueOf(qty);
     }
 
+    public String getSavedAmount() {
+        int totalAmount = 0;
+
+        try {
+            List<Product> products = Product.listAll(Product.class);
+
+            for (Product product : products) {
+
+                List<Stock> stocks = new Gson().fromJson(product.getStocks(), new TypeToken<List<Stock>>() {
+                }.getType());
+
+                for (Stock stock : stocks) {
+                    if (stock.getStockId() == product.getStockId()) {
+
+                        int price = 0;
+
+                        if (!TextUtils.isEmpty(stock.getStrikeprice())) {
+                            price = Integer.parseInt(stock.getPrice_val())-Integer.parseInt(stock.getStrikeprice());
+                        }
+
+                        totalAmount += price * product.getQuantity();
+                        break;
+                    }
+                }
+            }
+
+            List<Coupon> coupons = Coupon.listAll(Coupon.class);
+
+            if (coupons != null && coupons.size() > 0) {
+                Coupon coupon = coupons.get(0);
+
+                if (totalAmount >= Integer.parseInt(coupon.getCoupon_value())) {
+                    totalAmount = totalAmount + Integer.parseInt(coupon.getCoupon_value());
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return String.valueOf(totalAmount);
+    }
+
     public String getDiscountTotalAmount() {
         int totalAmount = 0;
 

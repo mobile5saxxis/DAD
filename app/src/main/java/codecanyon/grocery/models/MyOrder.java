@@ -22,6 +22,7 @@ public class MyOrder {
     String location_id;
     String delivery_charge;
     String product_image;
+    String discount_amount;
 
     public String getProduct_image() {
         return product_image;
@@ -91,4 +92,11 @@ public class MyOrder {
         return delivery_charge;
     }
 
+    public String getDiscount_amount() {
+        return discount_amount;
+    }
+
+    public void setDiscount_amount(String discount_amount) {
+        this.discount_amount = discount_amount;
+    }
 }

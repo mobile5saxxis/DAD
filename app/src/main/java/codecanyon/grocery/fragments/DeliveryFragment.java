@@ -58,18 +58,14 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
     private EditText et_address;
     private Button btn_checkout;
     private RecyclerView rv_address;
-
     private DeliveryAddressAdapter adapter;
     private List<DeliveryAddress> delivery_addressList = new ArrayList<>();
-
     private DatabaseHandler db_cart;
-
     private SessionManagement sessionManagement;
-
     private int mYear, mMonth, mDay, mHour, mMinute;
-
     private String gettime = "";
     private String getdate = "";
+    private String min_charge;
 
     private String deli_charges;
 
@@ -99,8 +95,19 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
         //tv_socity = (TextView) view.findViewById(R.id.tv_deli_socity);
         //et_address = (EditText) view.findViewById(R.id.et_deli_address);
 
+        deli_charges = getArguments().getString("charge");
+        min_charge = getArguments().getString("min_charge");
+
         db_cart = new DatabaseHandler();
-        tv_total.setText(String.format("%s", db_cart.getDiscountTotalAmount()));
+
+        if (Integer.parseInt(db_cart.getDiscountTotalAmount()) >= Integer.parseInt(min_charge)) {
+            tv_total.setText(String.format("%s", db_cart.getDiscountTotalAmount()));
+        } else {
+            int amount = Integer.parseInt(db_cart.getDiscountTotalAmount()) + Integer.parseInt(deli_charges);
+
+            tv_total.setText(String.format("%s + %s = %s", db_cart.getDiscountTotalAmount(), deli_charges, String.valueOf(amount)));
+        }
+
         tv_item.setText(String.format("%s", db_cart.getCartCount()));
 
         // get session user data
@@ -279,6 +286,7 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
             args.putString("location_id", location_id);
             args.putString("address", address);
             args.putString("deli_charges", deli_charges);
+            args.putString("min_charge",min_charge);
             fm.setArguments(args);
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
@@ -339,19 +347,15 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
 
             if (type.contentEquals("update")) {
                 //updateData();
-                deli_charges = intent.getStringExtra("charge");
                 //Toast.makeText(getActivity(), deli_charges, Toast.LENGTH_SHORT).show();
 
-                double totalAmount = Double.parseDouble(db_cart.getDiscountTotalAmount());
-
-                if (totalAmount >= 500) {
-                    tv_total.setText("" + totalAmount);
+                if (Integer.parseInt(db_cart.getDiscountTotalAmount()) >= Integer.parseInt(min_charge)) {
+                    tv_total.setText(String.format("%s", db_cart.getDiscountTotalAmount()));
                 } else {
-                    Double total = totalAmount + Integer.parseInt(deli_charges);
+                    int amount = Integer.parseInt(db_cart.getDiscountTotalAmount()) + Integer.parseInt(deli_charges);
 
-                    tv_total.setText("" + db_cart.getDiscountTotalAmount() + " + " + deli_charges + " = " + total);
+                    tv_total.setText(String.format("%s + %s = %s", db_cart.getDiscountTotalAmount(), deli_charges, String.valueOf(amount)));
                 }
-
             }
         }
     };

@@ -79,11 +79,13 @@ public class NewArrivalFragment extends Fragment {
         service.getNewArrivals().enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
-                ProductResponse pr = response.body();
+                if (response.isSuccessful() && response.body() != null) {
+                    ProductResponse pr = response.body();
 
-                newArrivalAdapter.addItems(pr.getData());
+                    newArrivalAdapter.addItems(pr.getData());
 
-                rl_progress.setVisibility(View.GONE);
+                    rl_progress.setVisibility(View.GONE);
+                }
             }
 
             @Override
