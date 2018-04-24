@@ -119,6 +119,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 if (fM != null) {
                     fM.beginTransaction()
                             .replace(R.id.frame_layout, adFragment, AdFragment.class.getSimpleName())
+                            .addToBackStack(AdFragment.class.getSimpleName())
                             .commit();
                 }
 
@@ -134,6 +135,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 if (fM != null) {
                     fM.beginTransaction()
                             .replace(R.id.frame_layout, adFragment, AdFragment.class.getSimpleName())
+                            .addToBackStack(AdFragment.class.getSimpleName())
                             .commit();
                 }
 
@@ -183,12 +185,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 .apply(requestOptions)
                 .into(iv_ad1);
 
-        if (ConnectivityReceiver.isConnected()) {
-            makeGetSliderRequest();
-            makeGetCategoryRequest();
-            makeGetPopularBrandRequest();
-            makeGetOfferRequest();
-        }
+        getProducts();
 
         tv_search_bar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,6 +196,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 if (fM != null) {
                     fM.beginTransaction()
                             .replace(R.id.frame_layout, searchFragment, SearchFragment.class.getSimpleName())
+                            .addToBackStack(SearchFragment.class.getSimpleName())
                             .commit();
                 }
 
@@ -218,6 +216,17 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
 
         return view;
+    }
+
+    public void getProducts() {
+        if (ConnectivityReceiver.isConnected()) {
+            makeGetSliderRequest();
+            makeGetCategoryRequest();
+            makeGetPopularBrandRequest();
+            makeGetOfferRequest();
+        } else {
+            Toast.makeText(getContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

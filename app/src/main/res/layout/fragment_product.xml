@@ -36,7 +36,8 @@
                 android:layout_marginRight="8dp"
                 android:background="@drawable/rounded_corner_textview"
                 android:paddingLeft="4dp"
-                android:paddingRight="4dp">
+                android:paddingRight="4dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="16dp"

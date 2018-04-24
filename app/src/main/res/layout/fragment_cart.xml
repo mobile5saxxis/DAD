@@ -50,7 +50,9 @@
                 android:id="@+id/et_coupon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="36dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginRight="36dp"
                 android:layout_marginStart="8dp"
                 android:layout_toLeftOf="@+id/tv_add_coupon"
                 android:layout_toStartOf="@+id/tv_add_coupon"
@@ -59,6 +61,15 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="@dimen/activity_horizontal_margin" />
+
+            <ImageView
+                android:id="@+id/iv_clear_coupon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/tv_add_coupon"
+                android:layout_toStartOf="@+id/tv_add_coupon"
+                android:src="@drawable/ic_delete" />
 
             <TextView
                 android:id="@+id/tv_add_coupon"

@@ -37,11 +37,11 @@
     <string name="tv_reg">Register</string>
     <string name="tv_reg_name_hint">Name (Required)</string>
     <string name="tv_reg_pincode">Pincode/Area Code/Zip (Required)</string>
-    <string name="tv_reg_socity">Society/Flat(Required)</string>
-    <string name="btn_reg_socity_choose">Choose Society…</string>
-    <string name="tv_reg_house">House Number(Required)</string>
+    <string name="tv_reg_socity">Area(Required)</string>
+    <string name="btn_reg_socity_choose">Choose area…</string>
+    <string name="tv_reg_house">Address (Required)</string>
     <string name="btn_reg_update">Update Profile</string>
-    <string name="et_reg_search">Search Society…</string>
+    <string name="et_reg_search">Search area…</string>
     <string name="tv_reg_note">Note : service available for RAJKOT only</string>
     <string name="tv_reg_address">Address(Required)</string>
     <string name="et_reg_address">Complete Address</string>
@@ -128,7 +128,7 @@
     <string name="cancle">Cancle</string>
     <string name="date">Date:</string>
     <string name="time">Time:</string>
-    <string name="search_msg">Search Vegetables, Fruit etc</string>
+    <string name="search_msg">Search for 1000+ products</string>
     <string name="change_password">Change Password</string>
     <string name="old_password">Old Password (Required)</string>
     <string name="new_password">New Password (Required)</string>
@@ -148,7 +148,7 @@
     <string name="how_to_use">How To Use</string>
 
     <!-- row_delivery_time.xml -->
-    <string name="tv_deli_socity">Society:</string>
+    <string name="tv_deli_socity">Area:</string>
     <string name="tv_deli_mobile">Mobile No :</string>
     <string name="tv_deli_pin">Pincode:</string>
 
@@ -161,7 +161,7 @@
     <string name="reciver_mobile">Receiver Mobile No :\u0020</string>
     <string name="pincode">Pincode :\u0020</string>
     <string name="house_no">House No :\u0020</string>
-    <string name="socity">Society :\u0020</string>
+    <string name="socity">Area :\u0020</string>
 
 
     <!-- Catrgory_details -->
@@ -225,5 +225,7 @@
     <string name="price_high">Price High</string>
     <string name="price_low">Price Low</string>
     <string name="a_to_z">A to Z</string>
+    <string name="no_internet_connection">No internet connection.</string>
+    <string name="coupon_invalid">Invalid Coupon</string>
 
 </resources>

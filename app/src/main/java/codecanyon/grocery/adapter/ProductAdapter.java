@@ -226,17 +226,20 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                             if (response.isSuccessful() && response.body() != null) {
                                 Quantity quantity = response.body();
 
+                                int qty = qty3;
 
-                                if (qty3 <= quantity.getQuantity_per_user()) {
-                                    product.setStockId(stock.getStockId());
-                                    product.setStocks(new Gson().toJson(product.getCustom_fields()));
-                                    product.setQuantity(qty3);
-
-                                    dbcart.setCart(product);
-                                    tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                                } else {
+                                if (qty3 > quantity.getQuantity_per_user()) {
                                     Toast.makeText(context, String.format("Only %s items allowed per user for this product", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                                    qty = quantity.getQuantity_per_user();
                                 }
+
+                                product.setStockId(stock.getStockId());
+                                product.setStocks(new Gson().toJson(product.getCustom_fields()));
+                                product.setQuantity(qty);
+
+                                tv_subcat_content.setText(String.valueOf(qty));
+                                dbcart.setCart(product);
+                                tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
 
                             } else {
                                 Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();

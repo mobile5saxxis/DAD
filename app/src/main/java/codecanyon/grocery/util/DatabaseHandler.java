@@ -182,7 +182,7 @@ public class DatabaseHandler {
                         int price = 0;
 
                         if (!TextUtils.isEmpty(stock.getStrikeprice())) {
-                            price = Integer.parseInt(stock.getPrice_val())-Integer.parseInt(stock.getStrikeprice());
+                            price = Integer.parseInt(stock.getPrice_val()) - Integer.parseInt(stock.getStrikeprice());
                         }
 
                         totalAmount += price * product.getQuantity();
@@ -297,6 +297,19 @@ public class DatabaseHandler {
         return amount;
     }
 
+    public String getCouponTitle() {
+        String title = null;
+        List<Coupon> coupons = Coupon.listAll(Coupon.class);
+
+        if (coupons != null && coupons.size() > 0) {
+            Coupon coupon = coupons.get(0);
+
+            title = coupon.getCoupon_title();
+        }
+
+        return title;
+    }
+
     public List<Product> getCartAll() {
         List<Product> products = new ArrayList<>();
 
@@ -349,6 +362,10 @@ public class DatabaseHandler {
     public void addCoupon(Coupon coupon) {
         Coupon.deleteAll(Coupon.class);
         Coupon.save(coupon);
+    }
+
+    public void deleteCoupon() {
+        Coupon.deleteAll(Coupon.class);
     }
 //
 //    @Override

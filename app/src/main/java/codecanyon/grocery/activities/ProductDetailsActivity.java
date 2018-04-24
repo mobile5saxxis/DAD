@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,9 +39,15 @@ import codecanyon.grocery.adapter.OfferAdapter;
 import codecanyon.grocery.adapter.PriceAdapter;
 import codecanyon.grocery.adapter.SectionPagerAdapter;
 import codecanyon.grocery.models.Product;
+import codecanyon.grocery.models.Quantity;
 import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.reterofit.APIUrls;
+import codecanyon.grocery.reterofit.RetrofitInstance;
+import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.DatabaseHandler;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static codecanyon.grocery.adapter.ProductAdapter.ProductViewHolder.ADD_CLICK_MSG;
 
@@ -52,10 +59,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private TextView tv_add, tv_content;
     private Product product;
     private Spinner spinner_stock;
-    private boolean isUpdated;
-    private LinearLayout ll_add_content;
     private AddProductHandler handler;
     private final static int DELAY_TIME = 500;
+    private RetrofitService service;
+    private boolean isUpdated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +75,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        service = RetrofitInstance.createService(RetrofitService.class);
         String value = getIntent().getStringExtra(PRODUCT);
         String content = getIntent().getStringExtra(CONTENT);
         product = new Gson().fromJson(value, Product.class);
@@ -76,7 +84,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         dbcart = new DatabaseHandler();
 
         final TextView tv_discount = findViewById(R.id.tv_discount);
-        ll_add_content = findViewById(R.id.ll_add_content);
         tv_content = findViewById(R.id.tv_content);
         tv_content.setText(content);
         tv_add = findViewById(R.id.tv_add);
@@ -215,28 +222,58 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private synchronized void addProduct() {
-        Stock stock = (Stock) spinner_stock.getSelectedItem();
-        int quantity = Integer.parseInt(tv_content.getText().toString().trim());
-        ll_add_content.setVisibility(View.VISIBLE);
+        final Stock stock = (Stock) spinner_stock.getSelectedItem();
+        final int qty3 = Integer.parseInt(tv_content.getText().toString().trim());
 
-        if (quantity > 0) {
-            product.setStockId(stock.getStockId());
-            product.setStocks(new Gson().toJson(product.getCustom_fields()));
-            product.setQuantity(quantity);
+        if (qty3 > 0) {
+            if (!TextUtils.isEmpty(stock.getStock()) && Integer.parseInt(stock.getStock()) >= qty3) {
 
-            dbcart.setCart(product);
-            tv_add.setText(R.string.tv_pro_update);
-            isUpdated = true;
+                service.getStockAvailability(product.getProduct_id()).enqueue(new Callback<Quantity>() {
+                    @Override
+                    public void onResponse(Call<Quantity> call, Response<Quantity> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            Quantity quantity = response.body();
+
+                            int qty = qty3;
+
+                            if (qty3 > quantity.getQuantity_per_user()) {
+                                Toast.makeText(ProductDetailsActivity.this, String.format("Only %s items allowed per user for this product", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                                qty = quantity.getQuantity_per_user();
+                            }
+
+                            product.setStockId(stock.getStockId());
+                            product.setStocks(new Gson().toJson(product.getCustom_fields()));
+                            product.setQuantity(qty);
+
+                            tv_content.setText(String.valueOf(qty));
+                            dbcart.setCart(product);
+                        } else {
+                            Toast.makeText(ProductDetailsActivity.this, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                        }
+
+                        isUpdated = true;
+                    }
+
+                    @Override
+                    public void onFailure(Call<Quantity> call, Throwable t) {
+                        Toast.makeText(ProductDetailsActivity.this, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                if (stock.getStock().equals("0")) {
+                    Toast.makeText(ProductDetailsActivity.this, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ProductDetailsActivity.this, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
+                }
+            }
         } else {
             Product p = dbcart.getProduct(product.getProduct_id());
 
             if (p != null) {
                 dbcart.removeItemFromCart(p.getId());
-                if (quantity == 0) {
-                    ll_add_content.setVisibility(View.INVISIBLE);
-                    tv_add.setText(R.string.tv_pro_add);
-                }
             }
+
+            isUpdated = true;
         }
     }
 

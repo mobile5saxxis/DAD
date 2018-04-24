@@ -445,7 +445,16 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        showSnack(isConnected);
+        if (isConnected) {
+            FragmentManager fM = getSupportFragmentManager();
+            Fragment fragment = fM.findFragmentByTag(HomeFragment.class.getSimpleName());
+
+            if (fragment != null && fragment instanceof HomeFragment) {
+                HomeFragment homeFragment = (HomeFragment) fragment;
+                homeFragment.getProducts();
+            }
+        }
+
     }
 
     // Showing the status in Snackbar

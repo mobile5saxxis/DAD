@@ -268,18 +268,20 @@ public class OfferAdapter extends CommonRecyclerAdapter<Product> {
                             if (response.isSuccessful() && response.body() != null) {
                                 Quantity quantity = response.body();
 
+                                int qty1 = qty;
 
-                                if (qty <= quantity.getQuantity_per_user()) {
-                                    product.setStockId(stock.getStockId());
-                                    product.setStocks(new Gson().toJson(product.getCustom_fields()));
-                                    product.setQuantity(qty);
-
-                                    dbcart.setCart(product);
-                                    tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                                } else {
+                                if (qty > quantity.getQuantity_per_user()) {
                                     Toast.makeText(context, String.format(context.getString(R.string.only_items_allowed), String.valueOf(quantity.getQuantity_per_user())), Toast.LENGTH_SHORT).show();
+                                    qty1 = quantity.getQuantity_per_user();
                                 }
 
+                                product.setStockId(stock.getStockId());
+                                product.setStocks(new Gson().toJson(product.getCustom_fields()));
+                                product.setQuantity(qty1);
+
+                                tv_content.setText(String.valueOf(qty1));
+                                dbcart.setCart(product);
+                                tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
                             } else {
                                 Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
                             }

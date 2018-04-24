@@ -17,11 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import codecanyon.grocery.activities.LoginActivity;
 import codecanyon.grocery.adapter.CartAdapter;
@@ -58,8 +62,8 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     private SessionManagement sessionManagement;
     private RetrofitService service;
     private EditText et_coupon;
-    private boolean isFound;
     private TextView tv_item, tv_total;
+    private ImageView iv_clear_coupon;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,6 +113,17 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
         tv_item = view.findViewById(R.id.tv_item);
         tv_total = view.findViewById(R.id.tv_total);
+        iv_clear_coupon = view.findViewById(R.id.iv_clear_coupon);
+        iv_clear_coupon.setOnClickListener(this);
+
+        String coupon = db.getCouponTitle();
+
+        if (coupon == null) {
+            iv_clear_coupon.setVisibility(View.GONE);
+        } else {
+            iv_clear_coupon.setVisibility(View.VISIBLE);
+            et_coupon.setText(coupon);
+        }
 
         updateData();
 
@@ -120,6 +135,29 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         int id = view.getId();
 
         switch (id) {
+            case R.id.iv_clear_coupon:
+                if (getContext() != null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("Clear Coupon?");
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            iv_clear_coupon.setVisibility(View.GONE);
+                            et_coupon.setText("");
+                            db.deleteCoupon();
+                            updateData();
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancal, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();
+                }
+                break;
             case R.id.tv_cart_clear:
                 showClearDialog();
                 break;
@@ -136,6 +174,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                 if (value.isEmpty()) {
                     Toast.makeText(getContext(), R.string.add_a_coupon_to_apply, Toast.LENGTH_SHORT).show();
                 } else {
+                    iv_clear_coupon.setVisibility(View.VISIBLE);
 
                     if (sessionManagement.isLoggedIn()) {
                         makeCouponRequest(value);
@@ -154,15 +193,13 @@ public class CartFragment extends Fragment implements View.OnClickListener {
             public void onResponse(Call<CouponResponse> call, Response<CouponResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     CouponResponse cR = response.body();
-
-                    isFound = false;
+                    boolean couponFound = false;
 
                     for (final Coupon coupon : cR.getData()) {
                         if (coupon.getCoupon_title().equals(value)) {
-
                             Date todayDate = new Date();
 
-                            if (todayDate.after(coupon.getFrom_Date()) && todayDate.before(coupon.getTo_Date()) && coupon.getStatus().equals("0")) {
+                            if (todayDate.after(coupon.getTo_Date()) || todayDate.before(coupon.getFrom_Date()) || coupon.getStatus().equals("0")) {
                                 Toast.makeText(getContext(), R.string.coupon_expired, Toast.LENGTH_SHORT).show();
                             } else if (Double.parseDouble(db.getDiscountTotalAmount()) < Double.parseDouble(coupon.getMinimum_order_Amount())) {
                                 Toast.makeText(getContext(), "Minimum order amount for coupon is " + coupon.getMinimum_order_Amount(), Toast.LENGTH_SHORT).show();
@@ -170,12 +207,11 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                                 service.getCouponAvailability(coupon.getCouponId(), sessionManagement.getUserDetails().get(APIUrls.KEY_ID)).enqueue(new Callback<CouponAvailableResponse>() {
                                     @Override
                                     public void onResponse(Call<CouponAvailableResponse> call, Response<CouponAvailableResponse> response) {
+
                                         if (response.isSuccessful() && response.body() != null) {
                                             CouponAvailableResponse car = response.body();
                                             if (car.isResponce() && car.getData().getCount() > 0) {
                                                 db.addCoupon(coupon);
-                                                isFound = true;
-                                                et_coupon.setText("");
                                                 Toast.makeText(getContext(), R.string.coupon_found, Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Toast.makeText(getContext(), String.format("Coupon allowed only %s time for user", car.getData().getTimes_Per_user()), Toast.LENGTH_SHORT).show();
@@ -184,9 +220,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                                             Toast.makeText(getContext(), R.string.unable_to_apply_coupon, Toast.LENGTH_SHORT).show();
                                         }
 
-                                        if (isFound) {
-                                            updateData();
-                                        }
+                                        updateData();
                                     }
 
                                     @Override
@@ -195,8 +229,16 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                                     }
                                 });
                             }
+
+                            couponFound = true;
                             break;
                         }
+                    }
+
+                    updateData();
+
+                    if (!couponFound) {
+                        Toast.makeText(getContext(), R.string.coupon_invalid, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
@@ -425,6 +467,15 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
             if (type.contentEquals("update")) {
                 updateData();
+                String value = et_coupon.getText().toString().trim();
+
+                if (sessionManagement.isLoggedIn()) {
+                    db.deleteCoupon();
+
+                    if (!value.isEmpty()) {
+                        makeCouponRequest(value);
+                    }
+                }
             }
         }
     };
