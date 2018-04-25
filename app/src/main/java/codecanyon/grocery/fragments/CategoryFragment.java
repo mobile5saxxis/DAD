@@ -98,6 +98,11 @@ public class CategoryFragment extends Fragment {
         });
     }
 
+    public void resetProducts() {
+        rl_loading.setVisibility(View.VISIBLE);
+        makeGetCategoryRequest();
+    }
+
 }
 
 

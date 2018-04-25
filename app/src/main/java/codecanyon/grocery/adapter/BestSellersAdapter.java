@@ -1,5 +1,6 @@
 package codecanyon.grocery.adapter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -137,8 +138,12 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                     }
 
                     if (stock.getStock().equals("0")) {
+                        iv_subcat_minus.setOnClickListener(null);
+                        iv_subcat_plus.setOnClickListener(null);
                         tv_out_of_stock.setVisibility(View.VISIBLE);
                     } else {
+                        iv_subcat_minus.setOnClickListener(BestProductViewHolder.this);
+                        iv_subcat_plus.setOnClickListener(BestProductViewHolder.this);
                         tv_out_of_stock.setVisibility(View.GONE);
                     }
                 }
@@ -211,7 +216,8 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                     Intent intent = new Intent(context, ProductDetailsActivity.class);
                     intent.putExtra(ProductDetailsActivity.PRODUCT, value);
                     intent.putExtra(ProductDetailsActivity.CONTENT, content);
-                    context.startActivity(intent);
+                    Activity activity = (Activity) context;
+                    activity.startActivityForResult(intent, ProductDetailsActivity.PRODUCT_DETAIL);
                     break;
                 case R.id.iv_image:
                     Product pro = getItem(position);

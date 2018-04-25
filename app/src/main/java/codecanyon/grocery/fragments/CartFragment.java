@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -197,7 +198,15 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
                     for (final Coupon coupon : cR.getData()) {
                         if (coupon.getCoupon_title().equals(value)) {
-                            Date todayDate = new Date();
+
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime(new Date());
+                            cal.set(Calendar.HOUR_OF_DAY, 0);
+                            cal.set(Calendar.MINUTE, 0);
+                            cal.set(Calendar.SECOND, 0);
+                            cal.set(Calendar.MILLISECOND, 0);
+
+                            Date todayDate = cal.getTime();
 
                             if (todayDate.after(coupon.getTo_Date()) || todayDate.before(coupon.getFrom_Date()) || coupon.getStatus().equals("0")) {
                                 Toast.makeText(getContext(), R.string.coupon_expired, Toast.LENGTH_SHORT).show();
@@ -235,12 +244,77 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                         }
                     }
 
-                    updateData();
-
                     if (!couponFound) {
+                        db.deleteCoupon();
                         Toast.makeText(getContext(), R.string.coupon_invalid, Toast.LENGTH_SHORT).show();
                     }
+
+                    updateData();
                 } else {
+                    Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CouponResponse> call, Throwable t) {
+                Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void makeCouponValidate(final String value) {
+        service.getCoupons().enqueue(new Callback<CouponResponse>() {
+            @Override
+            public void onResponse(Call<CouponResponse> call, Response<CouponResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    CouponResponse cR = response.body();
+
+                    for (final Coupon coupon : cR.getData()) {
+                        if (coupon.getCoupon_title().equals(value)) {
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime(new Date());
+                            cal.set(Calendar.HOUR_OF_DAY, 0);
+                            cal.set(Calendar.MINUTE, 0);
+                            cal.set(Calendar.SECOND, 0);
+                            cal.set(Calendar.MILLISECOND, 0);
+
+                            Date todayDate = cal.getTime();
+
+                            if (todayDate.after(coupon.getTo_Date()) || todayDate.before(coupon.getFrom_Date()) || coupon.getStatus().equals("0")) {
+                                Toast.makeText(getContext(), R.string.coupon_expired, Toast.LENGTH_SHORT).show();
+                            } else if (Double.parseDouble(db.getDiscountTotalAmount()) < Double.parseDouble(coupon.getMinimum_order_Amount())) {
+                                Toast.makeText(getContext(), "Minimum order amount for coupon is " + coupon.getMinimum_order_Amount(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                service.getCouponAvailability(coupon.getCouponId(), sessionManagement.getUserDetails().get(APIUrls.KEY_ID)).enqueue(new Callback<CouponAvailableResponse>() {
+                                    @Override
+                                    public void onResponse(Call<CouponAvailableResponse> call, Response<CouponAvailableResponse> response) {
+
+                                        if (response.isSuccessful() && response.body() != null) {
+                                            CouponAvailableResponse car = response.body();
+                                            if (car.isResponce() && car.getData().getCount() > 0) {
+                                                db.addCoupon(coupon);
+                                            } else {
+                                                Toast.makeText(getContext(), String.format("Coupon allowed only %s time for user", car.getData().getTimes_Per_user()), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        updateData();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<CouponAvailableResponse> call, Throwable t) {
+                                    }
+                                });
+                            }
+
+                            break;
+                        }
+                    }
+
+                    updateData();
+                } else {
+                    updateData();
                     Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -473,11 +547,27 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                     db.deleteCoupon();
 
                     if (!value.isEmpty()) {
-                        makeCouponRequest(value);
+                        makeCouponValidate(value);
                     }
                 }
             }
         }
     };
 
+    public void resetProducts() {
+        List<Product> products = db.getCartAll();
+        cartAdapter.resetItems();
+        cartAdapter.addItems(products);
+        updateData();
+
+        String value = et_coupon.getText().toString().trim();
+
+        if (!value.isEmpty()) {
+            iv_clear_coupon.setVisibility(View.VISIBLE);
+
+            if (sessionManagement.isLoggedIn()) {
+                makeCouponValidate(value);
+            }
+        }
+    }
 }

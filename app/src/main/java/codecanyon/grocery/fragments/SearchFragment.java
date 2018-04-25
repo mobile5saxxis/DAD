@@ -44,8 +44,8 @@ public class SearchFragment extends Fragment {
     private static String TAG = SearchFragment.class.getSimpleName();
 
     private EditText et_search;
-    private RecyclerView rv_search;
     private ProductAdapter adapter_product;
+    private String search_text;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class SearchFragment extends Fragment {
         imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
 
-        rv_search = view.findViewById(R.id.rv_search);
+        RecyclerView rv_search = view.findViewById(R.id.rv_search);
         rv_search.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         et_search.addTextChangedListener(new TextWatcher() {
@@ -115,6 +115,8 @@ public class SearchFragment extends Fragment {
      * Method to make json object request where json response starts wtih {
      */
     private void makeGetProductRequest(String search_text) {
+        this.search_text = search_text;
+
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
 
         service.search(search_text).enqueue(new Callback<ProductResponse>() {
@@ -125,7 +127,13 @@ public class SearchFragment extends Fragment {
 
                     ProductResponse pr = response.body();
 
-                    adapter_product.addItems(pr.getData());
+                    if (pr != null) {
+                        if (pr.getData().size() == 0) {
+                            Toast.makeText(getContext(), "No products found", Toast.LENGTH_SHORT).show();
+                        }
+
+                        adapter_product.addItems(pr.getData());
+                    }
                 }
             }
 
@@ -137,4 +145,9 @@ public class SearchFragment extends Fragment {
         });
     }
 
+    public void resetProducts() {
+        if (search_text != null) {
+            makeGetProductRequest(search_text);
+        }
+    }
 }

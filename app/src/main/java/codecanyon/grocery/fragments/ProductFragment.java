@@ -172,4 +172,9 @@ public class ProductFragment extends Fragment {
         });
     }
 
+    public void resetProducts() {
+        rl_progress.setVisibility(View.VISIBLE);
+        productAdapter.resetItems();
+        makeGetProductRequest("");
+    }
 }

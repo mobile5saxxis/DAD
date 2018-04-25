@@ -66,6 +66,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     private OfferAdapter offerAdapter;
     private RetrofitService service;
     private RelativeLayout rl_loading;
+    private ViewPager view_pager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -156,7 +157,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         rv_offers.setAdapter(offerAdapter);
 
         final TabLayout tab_layout = view.findViewById(R.id.tab_layout);
-        final ViewPager view_pager = view.findViewById(R.id.view_pager);
+        view_pager = view.findViewById(R.id.view_pager);
         view_pager.setOffscreenPageLimit(0);
         tab_layout.setupWithViewPager(view_pager);
         BestArrivalPager bestArrivalPager = new BestArrivalPager(getChildFragmentManager(), getContext());
@@ -221,6 +222,24 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     public void getProducts() {
         if (ConnectivityReceiver.isConnected()) {
             makeGetSliderRequest();
+            makeGetCategoryRequest();
+            makeGetPopularBrandRequest();
+            makeGetOfferRequest();
+        } else {
+            Toast.makeText(getContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void resetProducts() {
+        if (ConnectivityReceiver.isConnected()) {
+            rl_loading.setVisibility(View.VISIBLE);
+            categoryHomeAdapter.resetItems();
+            popularBrandsAdapter.resetItems();
+            offerAdapter.resetItems();
+
+            BestArrivalPager bestArrivalPager = new BestArrivalPager(getChildFragmentManager(), getContext());
+            view_pager.setAdapter(bestArrivalPager);
+
             makeGetCategoryRequest();
             makeGetPopularBrandRequest();
             makeGetOfferRequest();

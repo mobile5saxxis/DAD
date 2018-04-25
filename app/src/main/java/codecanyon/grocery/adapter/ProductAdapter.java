@@ -1,5 +1,6 @@
 package codecanyon.grocery.adapter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -209,7 +210,8 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                     Intent intent = new Intent(context, ProductDetailsActivity.class);
                     intent.putExtra(ProductDetailsActivity.PRODUCT, value);
                     intent.putExtra(ProductDetailsActivity.CONTENT, content);
-                    context.startActivity(intent);
+                    Activity activity = (Activity) context;
+                    activity.startActivityForResult(intent, ProductDetailsActivity.PRODUCT_DETAIL);
                     break;
             }
         }
@@ -300,8 +302,12 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                     }
 
                     if (stock.getStock().equals("0")) {
+                        iv_subcat_plus.setOnClickListener(null);
+                        iv_subcat_minus.setOnClickListener(null);
                         tv_out_of_stock.setVisibility(View.VISIBLE);
                     } else {
+                        iv_subcat_minus.setOnClickListener(ProductViewHolder.this);
+                        iv_subcat_plus.setOnClickListener(ProductViewHolder.this);
                         tv_out_of_stock.setVisibility(View.GONE);
                     }
                 }

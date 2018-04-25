@@ -88,6 +88,12 @@ public class OffersFragment extends Fragment {
     }
 
 
+    public void resetProducts() {
+        rl_progress.setVisibility(View.VISIBLE);
+        productAdapter.resetItems();
+        makeGetOfferRequest();
+    }
+
     /**
      * Method to make json object request where json response starts wtih
      */

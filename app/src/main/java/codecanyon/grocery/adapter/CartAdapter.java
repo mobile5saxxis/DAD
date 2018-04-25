@@ -1,5 +1,6 @@
 package codecanyon.grocery.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -161,7 +162,8 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                     String value = new Gson().toJson(product);
                     Intent intent = new Intent(context, ProductDetailsActivity.class);
                     intent.putExtra(ProductDetailsActivity.PRODUCT, value);
-                    context.startActivity(intent);
+                    Activity activity = (Activity) context;
+                    activity.startActivityForResult(intent,ProductDetailsActivity.PRODUCT_DETAIL);
                     break;
             }
         }
@@ -255,8 +257,12 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                     }
 
                     if (stock.getStock().equals("0")) {
+                        iv_subcat_minus.setOnClickListener(null);
+                        iv_subcat_plus.setOnClickListener(null);
                         tv_out_of_stock.setVisibility(View.VISIBLE);
                     } else {
+                        iv_subcat_minus.setOnClickListener(ProductHolder.this);
+                        iv_subcat_plus.setOnClickListener(ProductHolder.this);
                         tv_out_of_stock.setVisibility(View.GONE);
                     }
                 }

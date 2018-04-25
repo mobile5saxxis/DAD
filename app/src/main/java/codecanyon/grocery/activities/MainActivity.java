@@ -56,7 +56,9 @@ import codecanyon.grocery.fragments.EditProfileFragment;
 import codecanyon.grocery.fragments.HomeFragment;
 import codecanyon.grocery.fragments.MyOrderFragment;
 import codecanyon.grocery.fragments.OffersFragment;
+import codecanyon.grocery.fragments.ProductFragment;
 import codecanyon.grocery.fragments.SearchFragment;
+import codecanyon.grocery.fragments.SubCategoryFragment;
 import codecanyon.grocery.fragments.SupportInfoFragment;
 import codecanyon.grocery.fragments.ThanksFragment;
 import codecanyon.grocery.models.Category;
@@ -509,6 +511,50 @@ public class MainActivity extends AppCompatActivity
 
                         if (isUpdated) {
                             setCartCounter(String.valueOf(dbcart.getCartCount()));
+
+                            FragmentManager fM = getSupportFragmentManager();
+
+                            Fragment homeFragment = fM.findFragmentByTag(HomeFragment.class.getSimpleName());
+
+                            if (homeFragment != null && homeFragment instanceof HomeFragment) {
+                                HomeFragment hf = (HomeFragment) homeFragment;
+                                hf.resetProducts();
+                            }
+
+                            Fragment offerFragment = fM.findFragmentByTag(OffersFragment.class.getSimpleName());
+
+                            if (offerFragment != null && offerFragment instanceof OffersFragment) {
+                                OffersFragment of = (OffersFragment) offerFragment;
+                                of.resetProducts();
+                            }
+
+                            Fragment searchFragment = fM.findFragmentByTag(SearchFragment.class.getSimpleName());
+
+                            if (searchFragment != null && searchFragment instanceof SearchFragment) {
+                                SearchFragment sf = (SearchFragment) searchFragment;
+                                sf.resetProducts();
+                            }
+
+                            Fragment categoryFragment = fM.findFragmentByTag(SubCategoryFragment.class.getSimpleName());
+
+                            if (categoryFragment != null && categoryFragment instanceof SubCategoryFragment) {
+                                SubCategoryFragment cf = (SubCategoryFragment) categoryFragment;
+                                cf.resetProducts();
+                            }
+
+                            Fragment cartFragment = fM.findFragmentByTag(CartFragment.class.getSimpleName());
+
+                            if (cartFragment != null && cartFragment instanceof CartFragment) {
+                                CartFragment cf = (CartFragment) cartFragment;
+                                cf.resetProducts();
+                            }
+
+                            Fragment productFragment = fM.findFragmentByTag(ProductFragment.class.getSimpleName());
+
+                            if (productFragment != null && productFragment instanceof ProductFragment) {
+                                ProductFragment cf = (ProductFragment) productFragment;
+                                cf.resetProducts();
+                            }
                         }
                     }
             }
