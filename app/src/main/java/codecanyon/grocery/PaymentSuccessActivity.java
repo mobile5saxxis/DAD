@@ -91,7 +91,7 @@ public class PaymentSuccessActivity extends AppCompatActivity implements View.On
                 String secureHash = jObject.getString("SecureHash");
 
                 RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-                service.saveProductTransaction(paymentId, accountId, merchantRefNo, amount, secureHash, orderId).enqueue(new Callback<RequestResponse>() {
+                service.saveProductTransaction(paymentId, accountId, merchantRefNo, amount, secureHash, orderId, "1").enqueue(new Callback<RequestResponse>() {
                     @Override
                     public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
                         if (response.body() != null && response.isSuccessful()) {

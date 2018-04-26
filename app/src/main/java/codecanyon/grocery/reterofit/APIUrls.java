@@ -51,8 +51,6 @@ public class APIUrls {
 
     public static final String GET_COUPON_URL = BASE_URL + "index.php/api/get_all_Coupons";
 
-    public static final String GET_STOCK_AVAILABILITY = BASE_URL + "index.php/api/product_as_per_stock_available";
-
     public static final String GET_APPLY_COUPON = BASE_URL + "index.php/api/apply_coupon";
 
     public static final String GET_DELIVERY_CHARGE = BASE_URL + "index.php/api/delivery_charge";

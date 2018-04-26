@@ -24,7 +24,7 @@ public class Product extends SugarRecord {
     private String Specifications;
     private String best_seller;
     private String title;
-    private String quantity_per_user;
+    private int quantity_per_user;
     private String brand;
     private String product_image;
     private int quantity;
@@ -156,11 +156,11 @@ public class Product extends SugarRecord {
         this.title = title;
     }
 
-    public String getQuantity_per_user() {
+    public int getQuantity_per_user() {
         return quantity_per_user;
     }
 
-    public void setQuantity_per_user(String quantity_per_user) {
+    public void setQuantity_per_user(int quantity_per_user) {
         this.quantity_per_user = quantity_per_user;
     }
 

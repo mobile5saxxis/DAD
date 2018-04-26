@@ -259,7 +259,8 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                                     fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
                                             .addToBackStack(null).commit();
                                 } else {
-
+                                    SessionManagement sessionManagement = new SessionManagement(getContext());
+                                    HashMap<String, String> userDetails = sessionManagement.getUserDetails();
 
                                     PaymentRequest.getInstance().setTransactionAmount(
                                             String.format("%.2f", totalAmount));
@@ -270,13 +271,13 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                                     PaymentRequest.getInstance().setSecureKey(SECRET_KEY);
 
                                     // Reference No
-                                    PaymentRequest.getInstance().setReferenceNo("223");
+                                    PaymentRequest.getInstance().setReferenceNo(requestResponse.getOrder_id());
                                     /** Mandatory */
 
                                     // Email Id
                                     //PaymentRequest.getInstance().setBillingEmail("test_tag@testmail.com");
 
-                                    PaymentRequest.getInstance().setBillingEmail("test@testmail.com");
+                                    PaymentRequest.getInstance().setBillingEmail(userDetails.get(KEY_EMAIL));
                                     /** Mandatory */
 
                                     PaymentRequest.getInstance().setFailureid("1");
@@ -292,51 +293,41 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
                                     /** Optional */
                                     // Your Reference No or Order Id for this transaction
-                                    PaymentRequest.getInstance().setTransactionDescription(
-                                            "Test Transaction");
+                                    PaymentRequest.getInstance().setTransactionDescription(requestResponse.getOrder_id());
 
                                     /** Billing Details */
-                                    PaymentRequest.getInstance().setBillingName("Test_Name");
+                                    PaymentRequest.getInstance().setBillingName(userDetails.get(KEY_NAME));
                                     /** Optional */
-                                    PaymentRequest.getInstance().setBillingAddress("North Mada Street");
+                                    PaymentRequest.getInstance().setBillingAddress(address);
+
+                                    PaymentRequest.getInstance().setBillingEmail(userDetails.get(KEY_EMAIL));
+
+                                    PaymentRequest.getInstance().setBillingPhone(userDetails.get(KEY_MOBILE));
+
+                                    PaymentRequest.getInstance().setBillingCountry("IND");
                                     /** Optional */
                                     PaymentRequest.getInstance().setBillingCity("Chennai");
                                     /** Optional */
                                     PaymentRequest.getInstance().setBillingPostalCode("600019");
                                     /** Optional */
                                     PaymentRequest.getInstance().setBillingState("Tamilnadu");
-                                    /** Optional */
-                                    PaymentRequest.getInstance().setBillingCountry("IND");
-                                    /** Optional */
-                                    PaymentRequest.getInstance().setBillingPhone("01234567890");
-                                    /** Optional */
 
-                                    /** Shipping Details */
-                                    PaymentRequest.getInstance().setShippingName("Test_Name");
+                                    PaymentRequest.getInstance().setShippingName(userDetails.get(KEY_NAME));
                                     /** Optional */
-                                    PaymentRequest.getInstance().setShippingAddress("North Mada Street");
+                                    PaymentRequest.getInstance().setShippingAddress(address);
                                     /** Optional */
+                                    PaymentRequest.getInstance().setShippingCountry("IND");
                                     PaymentRequest.getInstance().setShippingCity("Chennai");
                                     /** Optional */
                                     PaymentRequest.getInstance().setShippingPostalCode("600019");
                                     /** Optional */
                                     PaymentRequest.getInstance().setShippingState("Tamilnadu");
-                                    /** Optional */
-                                    PaymentRequest.getInstance().setShippingCountry("IND");
-                                    /** Optional */
-                                    PaymentRequest.getInstance().setShippingEmail("test@testmail.com");
-                                    /** Optional */
-                                    PaymentRequest.getInstance().setShippingPhone("01234567890");
-                                    /** Optional */
+
+                                    PaymentRequest.getInstance().setShippingEmail(userDetails.get(KEY_EMAIL));
+                                    PaymentRequest.getInstance().setShippingPhone(userDetails.get(KEY_MOBILE));
 
                                     PaymentRequest.getInstance().setLogEnabled("1");
 
-
-                                    /**
-                                     * Payment option configuration
-                                     */
-
-                                    /** Optional */
                                     PaymentRequest.getInstance().setHidePaymentOption(false);
 
                                     /** Optional */

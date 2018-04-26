@@ -59,8 +59,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private TextView tv_add, tv_content;
     private Product product;
     private Spinner spinner_stock;
-    private AddProductHandler handler;
-    private final static int DELAY_TIME = 500;
     private RetrofitService service;
     private boolean isUpdated;
 
@@ -80,7 +78,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         String content = getIntent().getStringExtra(CONTENT);
         product = new Gson().fromJson(value, Product.class);
 
-        handler = new AddProductHandler(product);
         dbcart = new DatabaseHandler();
 
         final TextView tv_discount = findViewById(R.id.tv_discount);
@@ -202,63 +199,45 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     tv_content.setText(String.valueOf(qty2));
                 }
 
-                handler.removeMessages(ADD_CLICK_MSG);
-                handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
+                addProduct();
                 break;
             case R.id.iv_plus:
                 int qty = Integer.valueOf(tv_content.getText().toString());
                 qty = qty + 1;
 
-                tv_content.setText(String.valueOf(qty));
+                if (qty > product.getQuantity_per_user()) {
+                    Toast.makeText(this, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                } else {
+                    tv_content.setText(String.valueOf(qty));
+                }
 
-                handler.removeMessages(ADD_CLICK_MSG);
-                handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
+                addProduct();
                 break;
             case R.id.tv_add:
-                handler.removeMessages(ADD_CLICK_MSG);
-                handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
+                addProduct();
                 break;
         }
     }
 
     private synchronized void addProduct() {
         final Stock stock = (Stock) spinner_stock.getSelectedItem();
-        final int qty3 = Integer.parseInt(tv_content.getText().toString().trim());
+        final int qty = Integer.parseInt(tv_content.getText().toString().trim());
 
-        if (qty3 > 0) {
-            if (!TextUtils.isEmpty(stock.getStock()) && Integer.parseInt(stock.getStock()) >= qty3) {
+        if (qty > 0) {
+            if (!TextUtils.isEmpty(stock.getStock()) && Integer.parseInt(stock.getStock()) >= qty) {
 
-                service.getStockAvailability(product.getProduct_id()).enqueue(new Callback<Quantity>() {
-                    @Override
-                    public void onResponse(Call<Quantity> call, Response<Quantity> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            Quantity quantity = response.body();
+                if (qty > product.getQuantity_per_user()) {
+                    Toast.makeText(ProductDetailsActivity.this, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                } else {
 
-                            int qty = qty3;
+                    product.setStockId(stock.getStockId());
+                    product.setStocks(new Gson().toJson(product.getCustom_fields()));
+                    product.setQuantity(qty);
 
-                            if (qty3 > quantity.getQuantity_per_user()) {
-                                Toast.makeText(ProductDetailsActivity.this, String.format("Only %s items allowed per user for this product", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
-                                qty = quantity.getQuantity_per_user();
-                            }
-
-                            product.setStockId(stock.getStockId());
-                            product.setStocks(new Gson().toJson(product.getCustom_fields()));
-                            product.setQuantity(qty);
-
-                            tv_content.setText(String.valueOf(qty));
-                            dbcart.setCart(product);
-                        } else {
-                            Toast.makeText(ProductDetailsActivity.this, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-                        }
-
-                        isUpdated = true;
-                    }
-
-                    @Override
-                    public void onFailure(Call<Quantity> call, Throwable t) {
-                        Toast.makeText(ProductDetailsActivity.this, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    tv_content.setText(String.valueOf(qty));
+                    dbcart.setCart(product);
+                    isUpdated = true;
+                }
             } else {
                 if (stock.getStock().equals("0")) {
                     Toast.makeText(ProductDetailsActivity.this, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
@@ -330,29 +309,5 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     @Override
     public void onSliderClick(BaseSliderView slider) {
         showImage(slider.getUrl());
-    }
-
-    private class AddProductHandler extends Handler {
-
-        private Product product;
-
-        AddProductHandler(Product product) {
-            this.product = product;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-
-            super.handleMessage(msg);
-
-            switch (msg.what) {
-
-                case ADD_CLICK_MSG:
-
-                    addProduct();
-
-                    break;
-            }
-        }
     }
 }

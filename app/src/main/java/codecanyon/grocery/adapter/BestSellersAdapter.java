@@ -79,8 +79,6 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
         private ImageView iv_image, iv_subcat_plus, iv_subcat_minus;
         private Spinner spinner_quantity;
         private RelativeLayout rl_content;
-        private AddProductHandler handler;
-        private final static int DELAY_TIME = 1000;
 
         private BestProductViewHolder(View view) {
             super(view);
@@ -112,7 +110,6 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
         private void bind(int position) {
             Product product = getItem(position);
 
-            handler = new AddProductHandler(product);
             final PriceAdapter priceAdapter = new PriceAdapter(context, product.getCustom_fields());
             spinner_quantity.setAdapter(priceAdapter);
 
@@ -207,12 +204,12 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
         public void onClick(View view) {
             int id = view.getId();
             int position = getAdapterPosition();
+            Product product = getItem(position);
 
             switch (id) {
                 case R.id.tv_title:
                     String content = tv_subcat_content.getText().toString();
-                    Product product1 = getItem(position);
-                    String value = new Gson().toJson(product1);
+                    String value = new Gson().toJson(product);
                     Intent intent = new Intent(context, ProductDetailsActivity.class);
                     intent.putExtra(ProductDetailsActivity.PRODUCT, value);
                     intent.putExtra(ProductDetailsActivity.CONTENT, content);
@@ -243,70 +240,48 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                         tv_subcat_content.setText(String.valueOf(qty));
                     }
 
-                    handler.removeMessages(ADD_CLICK_MSG);
-                    handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
+                    addProduct(product);
                     break;
                 case R.id.iv_subcat_plus:
-                    int qty2 = Integer.valueOf(tv_subcat_content.getText().toString());
-                    qty2 = qty2 + 1;
+                    int qty1= Integer.valueOf(tv_subcat_content.getText().toString());
+                    qty1 = qty1 + 1;
 
-                    tv_subcat_content.setText(String.valueOf(qty2));
-
-                    if (qty2 == 0) {
-                        tv_add.setText(R.string.tv_pro_add);
+                    if (qty1 > product.getQuantity_per_user()) {
+                        Toast.makeText(context, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                    } else {
+                        tv_subcat_content.setText(String.valueOf(qty1));
+                        addProduct(product);
                     }
 
-                    handler.removeMessages(ADD_CLICK_MSG);
-                    handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
                     break;
                 case R.id.tv_add:
 //                    rl_content.setVisibility(View.VISIBLE);
 
-                    handler.removeMessages(ADD_CLICK_MSG);
-                    handler.sendEmptyMessageDelayed(ADD_CLICK_MSG, DELAY_TIME);
+                    addProduct(product);
                     break;
             }
         }
 
         private synchronized void addProduct(final Product product) {
             final Stock stock = (Stock) spinner_quantity.getSelectedItem();
-            final int qty3 = Integer.parseInt(tv_subcat_content.getText().toString().trim());
+            final int qty = Integer.parseInt(tv_subcat_content.getText().toString().trim());
 
-            if (qty3 > 0) {
-                if (Integer.parseInt(stock.getStock()) >= qty3) {
-                    service.getStockAvailability(product.getProduct_id()).enqueue(new Callback<Quantity>() {
-                        @Override
-                        public void onResponse(Call<Quantity> call, Response<Quantity> response) {
-                            if (response.isSuccessful() && response.body() != null) {
-                                Quantity quantity = response.body();
+            if (qty > 0) {
+                if (Integer.parseInt(stock.getStock()) >= qty) {
 
-                                int qty = qty3;
+                    if (qty > product.getQuantity_per_user()) {
+                        Toast.makeText(context, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                    } else {
+                        product.setStockId(stock.getStockId());
+                        product.setStocks(new Gson().toJson(product.getCustom_fields()));
+                        product.setQuantity(qty);
 
-                                if (qty3 > quantity.getQuantity_per_user()) {
-                                    Toast.makeText(context, String.format("Only %s items allowed per user for this product", quantity.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
-                                    qty = quantity.getQuantity_per_user();
-                                }
+                        tv_subcat_content.setText(String.valueOf(qty));
+                        dbcart.setCart(product);
+                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
 
-                                product.setStockId(stock.getStockId());
-                                product.setStocks(new Gson().toJson(product.getCustom_fields()));
-                                product.setQuantity(qty);
-
-                                tv_subcat_content.setText(String.valueOf(qty));
-                                dbcart.setCart(product);
-                                tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-
-                            } else {
-                                Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-                            }
-
-                            ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
-                        }
-
-                        @Override
-                        public void onFailure(Call<Quantity> call, Throwable t) {
-                            Toast.makeText(context, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                        ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
+                    }
                 } else {
                     if (stock.getStock().equals("0")) {
                         Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
@@ -322,30 +297,6 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                 }
 
                 ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
-            }
-        }
-
-        private class AddProductHandler extends Handler {
-
-            private Product product;
-
-            AddProductHandler(Product product) {
-                this.product = product;
-            }
-
-            @Override
-            public void handleMessage(Message msg) {
-
-                super.handleMessage(msg);
-
-                switch (msg.what) {
-
-                    case ADD_CLICK_MSG:
-
-                        addProduct(product);
-
-                        break;
-                }
             }
         }
     }

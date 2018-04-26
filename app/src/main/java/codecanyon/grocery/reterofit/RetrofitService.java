@@ -188,16 +188,13 @@ public interface RetrofitService {
     @FormUrlEncoded
     Call<RequestResponse> saveProductTransaction(@Field("PaymentId") String paymentId, @Field("AccountId") String accountId
             , @Field("MerchantRefNo") String merchantRefNo, @Field("Amount") String amount, @Field("SecureHash")
-                                                         String secureHash, @Field("order_id") String order_id);
+                                                         String secureHash, @Field("order_id") String order_id, @Field("status") String status);
 
     @GET(APIUrls.GET_SLIDER_URL)
     Call<List<SliderImage>> getSliderImages();
 
     @GET(APIUrls.GET_COUPON_URL)
     Call<CouponResponse> getCoupons();
-
-    @GET(APIUrls.GET_STOCK_AVAILABILITY)
-    Call<Quantity> getStockAvailability(@Query("pid") int pid);
 
     @GET(APIUrls.GET_APPLY_COUPON)
     Call<CouponAvailableResponse> getCouponAvailability(@Query("cid") String cid, @Query("uid") String uid);
