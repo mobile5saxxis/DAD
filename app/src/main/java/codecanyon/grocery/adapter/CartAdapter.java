@@ -104,67 +104,69 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
         public void onClick(View view) {
             int id = view.getId();
             int position = getAdapterPosition();
-            final Product product = getItem(position);
+            if (position != -1) {
+                final Product product = getItem(position);
 
-            switch (id) {
-                case R.id.iv_subcat_remove:
+                switch (id) {
+                    case R.id.iv_subcat_remove:
 
-                    if (product.getId() != null) {
-                        dbcart.removeItemFromCart(product.getId());
-                        removeItem(position);
-                        updateintent();
-                    }
+                        if (product.getId() != null) {
+                            dbcart.removeItemFromCart(product.getId());
+                            removeItem(position);
+                            updateintent();
+                        }
 
-                    break;
-                case R.id.iv_subcat_plus:
-                    int qty = Integer.valueOf(tv_subcat_content.getText().toString());
-                    qty = qty + 1;
+                        break;
+                    case R.id.iv_subcat_plus:
+                        int qty = Integer.valueOf(tv_subcat_content.getText().toString());
+                        qty = qty + 1;
 
-                    if (qty > product.getQuantity_per_user()) {
-                        Toast.makeText(context, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
-                    } else {
-                        tv_subcat_content.setText(String.valueOf(qty));
+                        if (qty > product.getQuantity_per_user()) {
+                            Toast.makeText(context, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                        } else {
+                            tv_subcat_content.setText(String.valueOf(qty));
+                            addProduct(product);
+                        }
+
+                        break;
+                    case R.id.spinner_subcat:
+                        int qty1 = Integer.valueOf(tv_subcat_content.getText().toString());
+                        qty1 = qty1 + 1;
+
+                        tv_subcat_content.setText(String.valueOf(qty1));
+                        break;
+                    case R.id.iv_subcat_minus:
+                        int qty2 = 0;
+                        if (!tv_subcat_content.getText().toString().equalsIgnoreCase(""))
+                            qty2 = Integer.valueOf(tv_subcat_content.getText().toString());
+
+                        if (qty2 > 0) {
+                            qty2 = qty2 - 1;
+                            tv_subcat_content.setText(String.valueOf(qty2));
+                        }
+
+                        if (qty2 == 0) {
+                            tv_subcat_add.setText(R.string.tv_pro_add);
+                        }
+
                         addProduct(product);
-                    }
+                        break;
+                    case R.id.tv_subcat_add:
 
-                    break;
-                case R.id.spinner_subcat:
-                    int qty1 = Integer.valueOf(tv_subcat_content.getText().toString());
-                    qty1 = qty1 + 1;
+                        addProduct(product);
+                        break;
 
-                    tv_subcat_content.setText(String.valueOf(qty1));
-                    break;
-                case R.id.iv_subcat_minus:
-                    int qty2 = 0;
-                    if (!tv_subcat_content.getText().toString().equalsIgnoreCase(""))
-                        qty2 = Integer.valueOf(tv_subcat_content.getText().toString());
-
-                    if (qty2 > 0) {
-                        qty2 = qty2 - 1;
-                        tv_subcat_content.setText(String.valueOf(qty2));
-                    }
-
-                    if (qty2 == 0) {
-                        tv_subcat_add.setText(R.string.tv_pro_add);
-                    }
-
-                    addProduct(product);
-                    break;
-                case R.id.tv_subcat_add:
-
-                    addProduct(product);
-                    break;
-
-                case R.id.tv_subcat_title:
-                    List<Stock> stocks = new Gson().fromJson(product.getStocks(), new TypeToken<List<Stock>>() {
-                    }.getType());
-                    product.setCustom_fields(stocks);
-                    String value = new Gson().toJson(product);
-                    Intent intent = new Intent(context, ProductDetailsActivity.class);
-                    intent.putExtra(ProductDetailsActivity.PRODUCT, value);
-                    Activity activity = (Activity) context;
-                    activity.startActivityForResult(intent, ProductDetailsActivity.PRODUCT_DETAIL);
-                    break;
+                    case R.id.tv_subcat_title:
+                        List<Stock> stocks = new Gson().fromJson(product.getStocks(), new TypeToken<List<Stock>>() {
+                        }.getType());
+                        product.setCustom_fields(stocks);
+                        String value = new Gson().toJson(product);
+                        Intent intent = new Intent(context, ProductDetailsActivity.class);
+                        intent.putExtra(ProductDetailsActivity.PRODUCT, value);
+                        Activity activity = (Activity) context;
+                        activity.startActivityForResult(intent, ProductDetailsActivity.PRODUCT_DETAIL);
+                        break;
+                }
             }
         }
 
@@ -202,6 +204,10 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                 if (p != null) {
                     dbcart.removeItemFromCart(p.getId());
                 }
+
+                removeItem(getAdapterPosition());
+
+                updateintent();
 
                 ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
             }
@@ -242,10 +248,13 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                         iv_subcat_plus.setOnClickListener(null);
                         tv_out_of_stock.setVisibility(View.VISIBLE);
                     } else {
+                        addProduct(product);
                         iv_subcat_minus.setOnClickListener(ProductHolder.this);
                         iv_subcat_plus.setOnClickListener(ProductHolder.this);
                         tv_out_of_stock.setVisibility(View.GONE);
                     }
+
+                    updateintent();
                 }
 
                 @Override

@@ -143,6 +143,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     tv_out_of_stock.setVisibility(View.VISIBLE);
                 } else {
                     tv_out_of_stock.setVisibility(View.GONE);
+                    addProduct();
+                    isUpdated = true;
                 }
             }
 

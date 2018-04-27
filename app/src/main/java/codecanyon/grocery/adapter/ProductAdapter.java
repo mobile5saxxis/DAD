@@ -289,6 +289,7 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                         iv_subcat_minus.setOnClickListener(ProductViewHolder.this);
                         iv_subcat_plus.setOnClickListener(ProductViewHolder.this);
                         tv_out_of_stock.setVisibility(View.GONE);
+                        addProduct(product);
                     }
                 }
 

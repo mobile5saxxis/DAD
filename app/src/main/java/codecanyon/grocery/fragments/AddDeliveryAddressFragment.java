@@ -191,7 +191,7 @@ public class AddDeliveryAddressFragment extends Fragment implements View.OnClick
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(getsocity) && getsocity == null) {
+        if (TextUtils.isEmpty(getsocity)) {
             tv_socity.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = btn_socity;
             cancel = true;
@@ -224,7 +224,7 @@ public class AddDeliveryAddressFragment extends Fragment implements View.OnClick
 
     private boolean isPhoneValid(String phoneno) {
         //TODO: Replace this with your own logic
-        return phoneno.length() > 9;
+        return phoneno.length() == 10;
     }
 
     /**

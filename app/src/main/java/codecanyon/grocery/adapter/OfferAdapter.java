@@ -110,7 +110,7 @@ public class OfferAdapter extends CommonRecyclerAdapter<Product> {
         }
 
         private void bind(int position) {
-            Product product = getItem(position);
+            final Product product = getItem(position);
             final PriceAdapter priceAdapter = new PriceAdapter(context, product.getCustom_fields());
             spinner_quantity.setAdapter(priceAdapter);
 
@@ -143,6 +143,7 @@ public class OfferAdapter extends CommonRecyclerAdapter<Product> {
                         iv_minus.setOnClickListener(OfferViewHolder.this);
                         iv_plus.setOnClickListener(OfferViewHolder.this);
                         tv_out_of_stock.setVisibility(View.GONE);
+                        addProduct(product);
                     }
                 }
 

@@ -108,7 +108,7 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
         }
 
         private void bind(int position) {
-            Product product = getItem(position);
+            final Product product = getItem(position);
 
             final PriceAdapter priceAdapter = new PriceAdapter(context, product.getCustom_fields());
             spinner_quantity.setAdapter(priceAdapter);
@@ -142,6 +142,7 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                         iv_subcat_minus.setOnClickListener(BestProductViewHolder.this);
                         iv_subcat_plus.setOnClickListener(BestProductViewHolder.this);
                         tv_out_of_stock.setVisibility(View.GONE);
+                        addProduct(product);
                     }
                 }
 
@@ -243,7 +244,7 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                     addProduct(product);
                     break;
                 case R.id.iv_subcat_plus:
-                    int qty1= Integer.valueOf(tv_subcat_content.getText().toString());
+                    int qty1 = Integer.valueOf(tv_subcat_content.getText().toString());
                     qty1 = qty1 + 1;
 
                     if (qty1 > product.getQuantity_per_user()) {
