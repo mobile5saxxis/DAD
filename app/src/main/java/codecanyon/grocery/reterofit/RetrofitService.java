@@ -156,7 +156,8 @@ public interface RetrofitService {
     Call<LoginResponse> login(@Field("user_email") String email, @Field("password") String password);
 
     @POST(APIUrls.FORGOT_URL)
-    Call<LoginResponse> forgotPassword(@Body ForgotPasswordRequest tr);
+    @FormUrlEncoded
+    Call<LoginResponse> forgotPassword(@Field("email") String email);
 
     @POST(APIUrls.REGISTER_URL)
     @FormUrlEncoded

@@ -154,8 +154,19 @@ public class ProductAdapter extends CommonRecyclerAdapter<Product> {
                     if (qty > product.getQuantity_per_user()) {
                         Toast.makeText(context, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
                     } else {
-                        tv_subcat_content.setText(String.valueOf(qty));
-                        addProduct(product);
+                        final Stock stock = (Stock) spinner_subcat.getSelectedItem();
+                        final int qty1 = Integer.parseInt(tv_subcat_content.getText().toString().trim());
+
+                        if (!TextUtils.isEmpty(stock.getStock()) && Integer.parseInt(stock.getStock()) > qty1) {
+                            tv_subcat_content.setText(String.valueOf(qty));
+                            addProduct(product);
+                        } else {
+                            if (stock.getStock().equals("0")) {
+                                Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
 
 

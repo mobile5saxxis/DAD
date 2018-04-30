@@ -79,27 +79,31 @@ public class RegisterActivity extends AppCompatActivity {
         View focusView = null;
 
         if (TextUtils.isEmpty(getphone)) {
+            Toast.makeText(this, R.string.invalid_phone_number, Toast.LENGTH_SHORT).show();
             tv_phone.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_phone;
             cancel = true;
         } else if (!isPhoneValid(getphone)) {
-            tv_phone.setText(getResources().getString(R.string.invalid_phone_number));
+            Toast.makeText(this, R.string.invalid_phone_number, Toast.LENGTH_SHORT).show();
             tv_phone.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_phone;
             cancel = true;
         }
 
         if (TextUtils.isEmpty(getname)) {
+            Toast.makeText(this, R.string.invalid_name, Toast.LENGTH_SHORT).show();
             tv_name.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_name;
             cancel = true;
         }
 
         if (TextUtils.isEmpty(getpassword)) {
+            Toast.makeText(this, R.string.password_too_short, Toast.LENGTH_SHORT).show();
             tv_password.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_password;
             cancel = true;
         } else if (!isPasswordValid(getpassword)) {
+            Toast.makeText(this, R.string.password_too_short, Toast.LENGTH_SHORT).show();
             tv_password.setText(getResources().getString(R.string.password_too_short));
             tv_password.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_password;
@@ -107,10 +111,12 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (TextUtils.isEmpty(getemail)) {
+            Toast.makeText(this, R.string.invalide_email_address, Toast.LENGTH_SHORT).show();
             tv_email.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_email;
             cancel = true;
         } else if (!isEmailValid(getemail)) {
+            Toast.makeText(this, R.string.invalide_email_address, Toast.LENGTH_SHORT).show();
             tv_email.setText(getResources().getString(R.string.invalide_email_address));
             tv_email.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_email;

@@ -95,10 +95,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         View focusView = null;
 
         if (TextUtils.isEmpty(getpassword)) {
+            Toast.makeText(this, R.string.password_too_short, Toast.LENGTH_SHORT).show();
             tv_password.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_password;
             cancel = true;
         } else if (!isPasswordValid(getpassword)) {
+            Toast.makeText(this, R.string.password_too_short, Toast.LENGTH_SHORT).show();
             tv_password.setText(getResources().getString(R.string.password_too_short));
             tv_password.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_password;
@@ -106,10 +108,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         if (TextUtils.isEmpty(getemail)) {
+            Toast.makeText(this, R.string.invalide_email_address, Toast.LENGTH_SHORT).show();
             tv_email.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_email;
             cancel = true;
         } else if (!isEmailValid(getemail)) {
+            Toast.makeText(this, R.string.invalide_email_address, Toast.LENGTH_SHORT).show();
             tv_email.setText(getResources().getString(R.string.invalide_email_address));
             tv_email.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_email;

@@ -244,14 +244,25 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                     addProduct(product);
                     break;
                 case R.id.iv_subcat_plus:
-                    int qty1 = Integer.valueOf(tv_subcat_content.getText().toString());
-                    qty1 = qty1 + 1;
+                    int qty2 = Integer.valueOf(tv_subcat_content.getText().toString());
+                    qty2 = qty2 + 1;
 
-                    if (qty1 > product.getQuantity_per_user()) {
+                    if (qty2 > product.getQuantity_per_user()) {
                         Toast.makeText(context, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
                     } else {
-                        tv_subcat_content.setText(String.valueOf(qty1));
-                        addProduct(product);
+                        final Stock stock = (Stock) spinner_quantity.getSelectedItem();
+                        final int qty1 = Integer.parseInt(tv_subcat_content.getText().toString().trim());
+
+                        if (!TextUtils.isEmpty(stock.getStock()) && Integer.parseInt(stock.getStock()) > qty1) {
+                            tv_subcat_content.setText(String.valueOf(qty2));
+                            addProduct(product);
+                        } else {
+                            if (stock.getStock().equals("0")) {
+                                Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
 
                     break;

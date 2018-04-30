@@ -210,10 +210,20 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 if (qty > product.getQuantity_per_user()) {
                     Toast.makeText(this, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
                 } else {
-                    tv_content.setText(String.valueOf(qty));
-                }
+                    final Stock stock = (Stock) spinner_stock.getSelectedItem();
+                    final int qty1 = Integer.parseInt(tv_content.getText().toString().trim());
 
-                addProduct();
+                    if (!TextUtils.isEmpty(stock.getStock()) && Integer.parseInt(stock.getStock()) > qty1) {
+                        tv_content.setText(String.valueOf(qty));
+                        addProduct();
+                    } else {
+                        if (stock.getStock().equals("0")) {
+                            Toast.makeText(this, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
                 break;
             case R.id.tv_add:
                 addProduct();

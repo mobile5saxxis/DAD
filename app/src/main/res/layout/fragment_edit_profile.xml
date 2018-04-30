@@ -24,8 +24,9 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/space_10"
-                android:layout_marginTop="@dimen/space_10"
+                android:layout_marginTop="16dp"
                 android:src="@drawable/ic_logonew"
+                android:visibility="gone"
                 app:civ_border_color="@color/gray"
                 app:civ_border_width="1dp" />
 
@@ -75,8 +76,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/space_5"
                 android:background="@drawable/xml_textbox_bg"
-                android:ems="10"
-                android:editable="false"/>
+                android:editable="false"
+                android:ems="10" />
 
             <!--<TextView
                             android:id="@+id/tv_pro_socity"

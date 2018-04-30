@@ -79,10 +79,12 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
         View focusView = null;
 
         if (TextUtils.isEmpty(getemail)) {
+            Toast.makeText(this, R.string.invalide_email_address, Toast.LENGTH_SHORT).show();
             tv_email.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_email;
             cancel = true;
         } else if (!isEmailValid(getemail)) {
+            Toast.makeText(this, R.string.invalide_email_address, Toast.LENGTH_SHORT).show();
             tv_email.setText(getResources().getString(R.string.invalide_email_address));
             tv_email.setTextColor(getResources().getColor(R.color.colorPrimary));
             focusView = et_email;
@@ -114,11 +116,8 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
      * Method to make json object request where json response starts wtih
      */
     private void makeForgotRequest(String email) {
-        ForgotPasswordRequest lr = new ForgotPasswordRequest();
-        lr.setEmail(email);
-
         RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
-        service.forgotPassword(lr).enqueue(new Callback<LoginResponse>() {
+        service.forgotPassword(email).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
