@@ -59,8 +59,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private TextView tv_add, tv_content;
     private Product product;
     private Spinner spinner_stock;
-    private RetrofitService service;
     private boolean isUpdated;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        service = RetrofitInstance.createService(RetrofitService.class);
         String value = getIntent().getStringExtra(PRODUCT);
         String content = getIntent().getStringExtra(CONTENT);
         product = new Gson().fromJson(value, Product.class);
@@ -208,7 +207,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 qty = qty + 1;
 
                 if (qty > product.getQuantity_per_user()) {
-                    Toast.makeText(this, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                    if (toast != null) {
+                        toast.cancel();
+                    }
+
+                    toast = Toast.makeText(this, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT);
+                    toast.show();
                 } else {
                     final Stock stock = (Stock) spinner_stock.getSelectedItem();
                     final int qty1 = Integer.parseInt(tv_content.getText().toString().trim());
@@ -217,10 +221,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         tv_content.setText(String.valueOf(qty));
                         addProduct();
                     } else {
+                        if (toast != null) {
+                            toast.cancel();
+                        }
+
                         if (stock.getStock().equals("0")) {
-                            Toast.makeText(this, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
+                            toast = Toast.makeText(this, R.string.product_out_of_stock, Toast.LENGTH_SHORT);
+                            toast.show();
                         } else {
-                            Toast.makeText(this, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
+                            toast = Toast.makeText(this, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT);
+                            toast.show();
                         }
                     }
                 }
@@ -239,7 +249,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             if (!TextUtils.isEmpty(stock.getStock()) && Integer.parseInt(stock.getStock()) >= qty) {
 
                 if (qty > product.getQuantity_per_user()) {
-                    Toast.makeText(ProductDetailsActivity.this, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                    if (toast != null) {
+                        toast.cancel();
+                    }
+
+                    toast = Toast.makeText(ProductDetailsActivity.this, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT);
+                    toast.show();
                 } else {
 
                     product.setStockId(stock.getStockId());
@@ -251,10 +266,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     isUpdated = true;
                 }
             } else {
+                if (toast != null) {
+                    toast.cancel();
+                }
+
                 if (stock.getStock().equals("0")) {
-                    Toast.makeText(ProductDetailsActivity.this, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
+                    toast = Toast.makeText(ProductDetailsActivity.this, R.string.product_out_of_stock, Toast.LENGTH_SHORT);
+                    toast.show();
                 } else {
-                    Toast.makeText(ProductDetailsActivity.this, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
+                    toast = Toast.makeText(ProductDetailsActivity.this, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT);
+                    toast.show();
                 }
             }
         } else {

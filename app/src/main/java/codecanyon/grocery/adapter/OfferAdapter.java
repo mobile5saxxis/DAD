@@ -53,12 +53,11 @@ import static codecanyon.grocery.adapter.ProductAdapter.ProductViewHolder.ADD_CL
 public class OfferAdapter extends CommonRecyclerAdapter<Product> {
     private Context context;
     private DatabaseHandler dbcart;
-    private RetrofitService service;
+    private Toast toast;
 
     public OfferAdapter(Context context) {
         this.context = context;
         dbcart = new DatabaseHandler();
-        service = RetrofitInstance.createService(RetrofitService.class);
     }
 
     @Override
@@ -252,7 +251,12 @@ public class OfferAdapter extends CommonRecyclerAdapter<Product> {
                 qty = qty + 1;
 
                 if (qty > product.getQuantity_per_user()) {
-                    Toast.makeText(context, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT).show();
+                    if (toast != null) {
+                        toast.cancel();
+                    }
+
+                    toast = Toast.makeText(context, String.format("Only %s items allowed per user for this product", product.getQuantity_per_user()), Toast.LENGTH_SHORT);
+                    toast.show();
                 } else {
                     final Stock stock = (Stock) spinner_quantity.getSelectedItem();
                     final int qty1 = Integer.parseInt(tv_content.getText().toString().trim());
@@ -261,10 +265,16 @@ public class OfferAdapter extends CommonRecyclerAdapter<Product> {
                         tv_content.setText(String.valueOf(qty));
                         addProduct(product);
                     } else {
+                        if (toast != null) {
+                            toast.cancel();
+                        }
+
                         if (stock.getStock().equals("0")) {
-                            Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
+                            toast = Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT);
+                            toast.show();
                         } else {
-                            Toast.makeText(context, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
+                            toast = Toast.makeText(context, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT);
+                            toast.show();
                         }
                     }
                 }
@@ -285,7 +295,12 @@ public class OfferAdapter extends CommonRecyclerAdapter<Product> {
                 if (Integer.parseInt(stock.getStock()) >= qty) {
 
                     if (qty > product.getQuantity_per_user()) {
-                        Toast.makeText(context, String.format(context.getString(R.string.only_items_allowed), String.valueOf(product.getQuantity_per_user())), Toast.LENGTH_SHORT).show();
+                        if (toast != null) {
+                            toast.cancel();
+                        }
+
+                        toast = Toast.makeText(context, String.format(context.getString(R.string.only_items_allowed), String.valueOf(product.getQuantity_per_user())), Toast.LENGTH_SHORT);
+                        toast.show();
                     } else {
 
                         product.setStockId(stock.getStockId());
@@ -300,9 +315,15 @@ public class OfferAdapter extends CommonRecyclerAdapter<Product> {
                     }
                 } else {
                     if (stock.getStock().equals("0")) {
-                        Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT).show();
+                        if (toast != null) {
+                            toast.cancel();
+                        }
+
+                        toast = Toast.makeText(context, R.string.product_out_of_stock, Toast.LENGTH_SHORT);
+                        toast.show();
                     } else {
-                        Toast.makeText(context, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
+                        toast = Toast.makeText(context, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT);
+                        toast.show();
                     }
                 }
             } else {
