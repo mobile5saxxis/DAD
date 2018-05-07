@@ -235,5 +235,8 @@
     <string name="name_is_empty">Please enter name</string>
     <string name="phone_number_is_empty">Please enter mobile number</string>
     <string name="enter_valid_phone_number">Please enter valid mobile number</string>
+    <string name="enable_auto_start">Enable AutoStart</string>
+    <string name="allow_dad_run_in_background">Please allow DAD to always run in the background. Our app runs in background else our services can\'t be accessed.</string>
+    <string name="allow">ALLOW</string>
 
 </resources>

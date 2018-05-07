@@ -99,7 +99,8 @@
                 android:layout_marginBottom="@dimen/space_5"
                 android:background="@drawable/xml_textbox_bg"
                 android:ems="10"
-                android:hint="12345" />
+                android:hint="12345"
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/btn_add_adres_edit"

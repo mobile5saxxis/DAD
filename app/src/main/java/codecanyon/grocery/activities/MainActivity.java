@@ -2,12 +2,17 @@ package codecanyon.grocery.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -23,6 +28,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -67,6 +73,7 @@ import codecanyon.grocery.reterofit.APIUrls;
 import codecanyon.grocery.util.BottomNavigationViewHelper;
 import codecanyon.grocery.util.ConnectivityReceiver;
 import codecanyon.grocery.util.DatabaseHandler;
+import codecanyon.grocery.util.PreferenceUtil;
 import codecanyon.grocery.util.SessionManagement;
 
 public class MainActivity extends AppCompatActivity
@@ -178,6 +185,13 @@ public class MainActivity extends AppCompatActivity
             FirebaseRegister fireReg = new FirebaseRegister(this);
             fireReg.RegisterUser(sessionManagement.getUserDetails().get(APIUrls.KEY_ID));
         }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                enableAutoStart();
+            }
+        }, 5000);
     }
 
     public void updateHeader() {
@@ -415,6 +429,50 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
     }
 
+    private void enableAutoStart() {
+        try {
+            boolean isEnabled = PreferenceUtil.getEnablePushNotification(this);
+
+            if (!isEnabled) {
+                final Intent[] POWERMANAGER_INTENTS = {
+                        new Intent().setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")),
+                        new Intent().setComponent(new ComponentName("com.letv.android.letvsafe", "com.letv.android.letvsafe.AutobootManageActivity")),
+                        new Intent().setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity")),
+                        new Intent().setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity")),
+                        new Intent().setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.startupapp.StartupAppListActivity")),
+                        new Intent().setComponent(new ComponentName("com.oppo.safe", "com.oppo.safe.permission.startup.StartupAppListActivity")),
+                        new Intent().setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.AddWhiteListActivity")),
+                        new Intent().setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.BgStartUpManager")),
+                        new Intent().setComponent(new ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.BgStartUpManagerActivity")),
+                        new Intent().setComponent(new ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.MainActivity"))
+                };
+
+                for (final Intent intent : POWERMANAGER_INTENTS)
+                    if (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                                .setTitle(R.string.enable_auto_start)
+                                .setMessage(R.string.allow_dad_run_in_background)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            PreferenceUtil.setEnablePushNotification(MainActivity.this);
+                                            startActivity(intent);
+                                            dialog.dismiss();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                        builder.create().show();
+                        break;
+                    }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onBackPressed() {

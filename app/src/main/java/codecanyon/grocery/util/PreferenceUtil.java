@@ -17,4 +17,12 @@ public class PreferenceUtil {
     public static void setCoupon(Context context, int coupon) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putInt("coupon", coupon).apply();
     }
+
+    public static boolean getEnablePushNotification(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("push_notification", false);
+    }
+
+    public static void setEnablePushNotification(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("push_notification", true).apply();
+    }
 }

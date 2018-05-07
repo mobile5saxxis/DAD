@@ -67,8 +67,8 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
     private DatabaseHandler db_cart;
     private SessionManagement sessionManagement;
-    private final int ACC_ID = 27920;
-    private final String SECRET_KEY = "db07fb92e05f6657b3e80e286fdba4a5";
+    private final int ACC_ID = 28139;
+    private final String SECRET_KEY = "e48ac35fa7b5890035aab853ec970a0c";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -362,7 +362,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                                     // PaymentRequest.getInstance().setFailuremessage(getResources().getString(R.string.payment_failure_message));
 
                                     EBSPayment.getInstance().init(getContext(), ACC_ID, SECRET_KEY,
-                                            Config.Mode.ENV_LIVE, Config.Encryption.ALGORITHM_SHA512, getString(R.string.host));
+                                            Config.Mode.ENV_TEST, Config.Encryption.ALGORITHM_SHA512, getString(R.string.host));
 
                                     Fragment fm = new HomeFragment();
                                     FragmentManager fragmentManager = getFragmentManager();
