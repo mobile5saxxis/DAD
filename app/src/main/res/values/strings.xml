@@ -203,7 +203,7 @@
     <string name="coupon_not_found">Unable to find the coupon</string>
     <string name="only_items_allowed">Only %s items allowed per user for this product</string>
     <string name="unable_to_apply_coupon">Unable to apply coupon</string>
-    <string name="host">mydad.in</string>
+    <string name="host">mydad.co.in</string>
     <string name="payment_failure_message">Unable to process the request</string>
     <string name="cash_on_delivery">Cash on Delivery</string>
     <string name="pay_online">Pay Online</string>
@@ -228,5 +228,12 @@
     <string name="no_internet_connection">No internet connection.</string>
     <string name="coupon_invalid">Invalid Coupon</string>
     <string name="invalid_name">Invalid Name</string>
+    <string name="email_empty">Please enter email address</string>
+    <string name="enter_valid_email_address">Please enter valid email address</string>
+    <string name="password_empty">Please enter password</string>
+    <string name="enter_valid_password">Please enter valid password</string>
+    <string name="name_is_empty">Please enter name</string>
+    <string name="phone_number_is_empty">Please enter mobile number</string>
+    <string name="enter_valid_phone_number">Please enter valid mobile number</string>
 
 </resources>

@@ -32,7 +32,7 @@ public class APIUrls {
     public static final String KEY_PASSWORD = "password";
 
 
-    public static final String BASE_URL = "http://saxxishrsolution.com.md-33.webhostbox.net/DAD/";
+    public static final String BASE_URL = "http://mydad.co.in/";
 
     public static final String IMG_SLIDER_URL = BASE_URL + "uploads/sliders/";
 

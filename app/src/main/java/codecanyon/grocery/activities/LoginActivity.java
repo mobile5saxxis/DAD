@@ -91,44 +91,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String getpassword = et_password.getText().toString();
         String getemail = et_email.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
-
-        if (TextUtils.isEmpty(getpassword)) {
-            Toast.makeText(this, R.string.password_too_short, Toast.LENGTH_SHORT).show();
-            tv_password.setTextColor(getResources().getColor(R.color.colorPrimary));
-            focusView = et_password;
-            cancel = true;
-        } else if (!isPasswordValid(getpassword)) {
-            Toast.makeText(this, R.string.password_too_short, Toast.LENGTH_SHORT).show();
-            tv_password.setText(getResources().getString(R.string.password_too_short));
-            tv_password.setTextColor(getResources().getColor(R.color.colorPrimary));
-            focusView = et_password;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(getemail)) {
-            Toast.makeText(this, R.string.invalide_email_address, Toast.LENGTH_SHORT).show();
+        if (getemail.isEmpty()) {
             tv_email.setTextColor(getResources().getColor(R.color.colorPrimary));
-            focusView = et_email;
-            cancel = true;
+            Toast.makeText(this, R.string.email_empty, Toast.LENGTH_SHORT).show();
         } else if (!isEmailValid(getemail)) {
-            Toast.makeText(this, R.string.invalide_email_address, Toast.LENGTH_SHORT).show();
-            tv_email.setText(getResources().getString(R.string.invalide_email_address));
             tv_email.setTextColor(getResources().getColor(R.color.colorPrimary));
-            focusView = et_email;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            if (focusView != null)
-                focusView.requestFocus();
+            Toast.makeText(this, R.string.enter_valid_email_address, Toast.LENGTH_SHORT).show();
+        } else if (getpassword.isEmpty()) {
+            tv_password.setTextColor(getResources().getColor(R.color.colorPrimary));
+            Toast.makeText(this, R.string.password_empty, Toast.LENGTH_SHORT).show();
+        } else if (!isPasswordValid(getpassword)) {
+            tv_password.setTextColor(getResources().getColor(R.color.colorPrimary));
+            Toast.makeText(this, R.string.enter_valid_password, Toast.LENGTH_SHORT).show();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-
             if (ConnectivityReceiver.isConnected()) {
                 makeLoginRequest(getemail, getpassword);
             }

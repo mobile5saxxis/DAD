@@ -362,7 +362,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                                     // PaymentRequest.getInstance().setFailuremessage(getResources().getString(R.string.payment_failure_message));
 
                                     EBSPayment.getInstance().init(getContext(), ACC_ID, SECRET_KEY,
-                                            Config.Mode.ENV_TEST, Config.Encryption.ALGORITHM_SHA512, getString(R.string.host));
+                                            Config.Mode.ENV_LIVE, Config.Encryption.ALGORITHM_SHA512, getString(R.string.host));
 
                                     Fragment fm = new HomeFragment();
                                     FragmentManager fragmentManager = getFragmentManager();

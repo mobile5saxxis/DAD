@@ -232,17 +232,20 @@ public class OfferAdapter extends CommonRecyclerAdapter<Product> {
                 showImage(image);
             } else if (id == R.id.iv_subcat_minus) {
 
-                int qty = 0;
+                int qty2 = 0;
                 if (!tv_content.getText().toString().equalsIgnoreCase(""))
-                    qty = Integer.valueOf(tv_content.getText().toString());
+                    qty2 = Integer.valueOf(tv_content.getText().toString());
 
-                if (qty > 0) {
-                    qty = qty - 1;
-                    tv_content.setText(String.valueOf(qty));
+                if (qty2 > 0) {
+                    qty2 = qty2 - 1;
+                    tv_content.setText(String.valueOf(qty2));
+                }
+
+                if (qty2 == 0) {
+                    tv_add.setText(R.string.tv_pro_add);
                 }
 
                 addProduct(product);
-
             } else if (id == R.id.iv_subcat_plus) {
 
                 int qty = Integer.valueOf(tv_content.getText().toString());
@@ -302,6 +305,14 @@ public class OfferAdapter extends CommonRecyclerAdapter<Product> {
                         Toast.makeText(context, String.format("Only %s products left", stock.getStock()), Toast.LENGTH_SHORT).show();
                     }
                 }
+            } else {
+                Product p = dbcart.getProduct(product.getProduct_id());
+
+                if (p != null) {
+                    dbcart.removeItemFromCart(p.getId());
+                }
+
+                ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
             }
         }
     }
