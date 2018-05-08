@@ -43,8 +43,8 @@ public class SplashActivity extends AppCompatActivity {
                     sleep(2 * 1000);
 
                     // After 5 seconds redirect to another intent
-                    checkAppPermissions();
-
+//                    checkAppPermissions();
+                    go_next();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -55,34 +55,34 @@ public class SplashActivity extends AppCompatActivity {
         background.start();
     }
 
-    public void checkAppPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                        android.Manifest.permission.INTERNET)
-                        != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        android.Manifest.permission.ACCESS_NETWORK_STATE)
-                        != PackageManager.PERMISSION_GRANTED
-                ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE) && ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    android.Manifest.permission.INTERNET) && ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    android.Manifest.permission.ACCESS_NETWORK_STATE)) {
-                go_next();
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{ android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                                android.Manifest.permission.INTERNET,
-                                android.Manifest.permission.ACCESS_NETWORK_STATE
-                        },
-                        MY_PERMISSIONS_REQUEST_WRITE_FIELS);
-            }
-        } else {
-            go_next();
-        }
-    }
+//    public void checkAppPermissions() {
+//        if (ContextCompat.checkSelfPermission(this,
+//                        android.Manifest.permission.INTERNET)
+//                        != PackageManager.PERMISSION_GRANTED ||
+//                ContextCompat.checkSelfPermission(this,
+//                        android.Manifest.permission.READ_EXTERNAL_STORAGE)
+//                        != PackageManager.PERMISSION_GRANTED ||
+//                ContextCompat.checkSelfPermission(this,
+//                        android.Manifest.permission.ACCESS_NETWORK_STATE)
+//                        != PackageManager.PERMISSION_GRANTED
+//                ) {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    android.Manifest.permission.READ_EXTERNAL_STORAGE) && ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    android.Manifest.permission.INTERNET) && ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    android.Manifest.permission.ACCESS_NETWORK_STATE)) {
+//                go_next();
+//            } else {
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{ android.Manifest.permission.READ_EXTERNAL_STORAGE,
+//                                android.Manifest.permission.INTERNET,
+//                                android.Manifest.permission.ACCESS_NETWORK_STATE
+//                        },
+//                        MY_PERMISSIONS_REQUEST_WRITE_FIELS);
+//            }
+//        } else {
+//            go_next();
+//        }
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,

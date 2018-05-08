@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
- 
-    <color name="a_color">#33b5e5</color>
+
+    <color name="colorAccent">#ec4e26</color>
+    <color name="a_color">#EF6947</color>
     <color name="genre">#666666</color>
     <color name="year">#888888</color>
     <color name="list_divider">#d9d9d9</color>
@@ -14,11 +15,11 @@
     <color name="sky_blue">#DDE8F3</color>
     <color name="white">#ffffff</color>
     <color name="table_bg">#DDE8F3</color>   
-    <color name="btn_shape_bg">#2E64FE</color> 
+    <color name="btn_shape_bg">@color/colorAccent</color>
     <color name="edittext_bg">#DFDFDF</color>
-    <color name="header_start_bg">#4587d1</color>
-    <color name="header_end_bg">#84bade</color>
-    <color name="blue_bg">#007CC1</color>
+    <color name="header_start_bg">@color/colorAccent</color>
+    <color name="header_end_bg">#F6A793</color>
+    <color name="blue_bg">@color/colorAccent</color>
     <color name="grey_bg">#cccccc</color>
     <color name="edittext_grey">#c8c8c8</color>         
 </resources>

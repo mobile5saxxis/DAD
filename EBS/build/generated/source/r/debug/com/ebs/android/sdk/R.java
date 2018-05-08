@@ -13,21 +13,22 @@ public final class R {
         public static int blue_bg = 0x7f060003;
         public static int btn_blue = 0x7f060004;
         public static int btn_shape_bg = 0x7f060005;
-        public static int edittext_bg = 0x7f060006;
-        public static int edittext_grey = 0x7f060007;
-        public static int genre = 0x7f060008;
-        public static int grey_bg = 0x7f060009;
-        public static int header_end_bg = 0x7f06000a;
-        public static int header_start_bg = 0x7f06000b;
-        public static int list_divider = 0x7f06000c;
-        public static int list_row_end_color = 0x7f06000d;
-        public static int list_row_hover_end_color = 0x7f06000e;
-        public static int list_row_hover_start_color = 0x7f06000f;
-        public static int list_row_start_color = 0x7f060010;
-        public static int sky_blue = 0x7f060011;
-        public static int table_bg = 0x7f060012;
-        public static int white = 0x7f060013;
-        public static int year = 0x7f060014;
+        public static int colorAccent = 0x7f060006;
+        public static int edittext_bg = 0x7f060007;
+        public static int edittext_grey = 0x7f060008;
+        public static int genre = 0x7f060009;
+        public static int grey_bg = 0x7f06000a;
+        public static int header_end_bg = 0x7f06000b;
+        public static int header_start_bg = 0x7f06000c;
+        public static int list_divider = 0x7f06000d;
+        public static int list_row_end_color = 0x7f06000e;
+        public static int list_row_hover_end_color = 0x7f06000f;
+        public static int list_row_hover_start_color = 0x7f060010;
+        public static int list_row_start_color = 0x7f060011;
+        public static int sky_blue = 0x7f060012;
+        public static int table_bg = 0x7f060013;
+        public static int white = 0x7f060014;
+        public static int year = 0x7f060015;
     }
     public static final class dimen {
         public static int activity_horizontal_margin = 0x7f080001;

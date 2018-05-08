@@ -50,7 +50,7 @@
                 android:id="@+id/ll_transtitle"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blue"
+                android:background="@color/colorAccent"
                 android:padding="10dp" >
 
                 <TextView
@@ -136,7 +136,7 @@
                 android:id="@+id/ll_billaddress_title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blue"
+                android:background="@color/colorAccent"
                 android:padding="10dp" >
 
                 <TextView
@@ -396,7 +396,7 @@
                 android:id="@+id/ll_deliveryadd"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blue"
+                android:background="@color/colorAccent"
                 android:padding="10dp" >
 
                 <TextView
