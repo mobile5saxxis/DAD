@@ -108,6 +108,22 @@ public class DatabaseHandler {
         return itemExist;
     }
 
+    public boolean isInCart(int id) {
+        boolean itemExist = false;
+
+        try {
+            List<Product> products = Product.find(Product.class, "productId=?", String.valueOf(id));
+
+            if (products != null && products.size() > 0) {
+                itemExist = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return itemExist;
+    }
+
     public Product getProduct(int id, int stockId) {
         Product product = null;
 
@@ -120,6 +136,22 @@ public class DatabaseHandler {
                 }
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return product;
+    }
+
+    public Product getProduct(int id) {
+        Product product = null;
+
+        try {
+            List<Product> products = Product.find(Product.class, "productId=?", String.valueOf(id));
+
+            if (products != null && products.size() > 0) {
+                product = products.get(0);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -140,6 +172,24 @@ public class DatabaseHandler {
                 }
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return qty;
+
+    }
+
+    public String getCartItemQty(int id) {
+
+        String qty = "0";
+
+        try {
+            List<Product> products = Product.find(Product.class, "productId=?", String.valueOf(id));
+
+            if (products != null && products.size() > 0) {
+                qty = String.valueOf(products.get(0).getQuantity());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

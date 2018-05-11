@@ -67,7 +67,11 @@
     <string name="trans_title">Transaction Details</string>
     <string name="tv_note">* denotes required field</string>
     <style name="AppBaseTheme" parent="android:Theme.Light">
-        
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
     </style>
     <style name="SpinnerDropDownItema" parent="android:Widget.DropDownItem.Spinner">
         <item name="android:checkMark">@drawable/btn_radio_holo_light</item>

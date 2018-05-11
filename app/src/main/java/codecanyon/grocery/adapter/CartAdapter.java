@@ -327,7 +327,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
             tv_subcat_title.setText(product.getProduct_name());
 
-            if (dbcart.isInCart(product.getProduct_id(), product.getStockId())) {
+            if (dbcart.isInCart(product.getProduct_id())) {
                 tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
                 tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id(), product.getStockId()));
             } else {

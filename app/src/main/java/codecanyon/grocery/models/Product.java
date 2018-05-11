@@ -28,7 +28,7 @@ public class Product extends SugarRecord {
     private String brand;
     private String product_image;
     private int quantity;
-    private int stockId = -1;
+    private int stockId;
     private String stocks;
     private List<Stock> custom_fields;
 

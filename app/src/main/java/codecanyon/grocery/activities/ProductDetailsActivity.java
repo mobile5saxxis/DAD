@@ -153,12 +153,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             }
         });
 
-        if (dbcart.isInCart(product.getProduct_id(), product.getStockId())) {
+        if (dbcart.isInCart(product.getProduct_id())) {
 //            ll_add_content.setVisibility(View.VISIBLE);
             tv_add.setText(R.string.tv_pro_update);
-            tv_content.setText(dbcart.getCartItemQty(product.getProduct_id(), product.getStockId()));
+            tv_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
 
-            Product p = dbcart.getProduct(product.getProduct_id(), product.getStockId());
+            Product p = dbcart.getProduct(product.getProduct_id());
 
             if (p.getStocks() != null) {
                 List<Stock> stocks = new Gson().fromJson(p.getStocks(), new TypeToken<List<Stock>>() {
