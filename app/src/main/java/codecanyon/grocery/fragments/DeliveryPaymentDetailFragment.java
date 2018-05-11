@@ -1,5 +1,6 @@
 package codecanyon.grocery.fragments;
 
+import android.app.ProgressDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -229,6 +230,11 @@ public class DeliveryPaymentDetailFragment extends Fragment {
      * Method to make json object request where json response starts wtih
      */
     private void makeAddOrderRequest(String date, String gettime, String userid, String location, int paymentMode, String value) {
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Placing your order...");
+        progressDialog.show();
+
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -243,6 +249,8 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                 enqueue(new Callback<RequestResponse>() {
                     @Override
                     public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
+                        progressDialog.dismiss();
+
                         if (response.body() != null & response.isSuccessful()) {
                             RequestResponse requestResponse = response.body();
 
@@ -362,7 +370,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                                     // PaymentRequest.getInstance().setFailuremessage(getResources().getString(R.string.payment_failure_message));
 
                                     EBSPayment.getInstance().init(getContext(), ACC_ID, SECRET_KEY,
-                                            Config.Mode.ENV_TEST, Config.Encryption.ALGORITHM_SHA512, getString(R.string.host));
+                                            Config.Mode.ENV_LIVE, Config.Encryption.ALGORITHM_SHA512, getString(R.string.host));
 
                                     Fragment fm = new HomeFragment();
                                     FragmentManager fragmentManager = getFragmentManager();
@@ -379,6 +387,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<RequestResponse> call, Throwable t) {
+                        progressDialog.dismiss();
                         Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
                     }
                 });

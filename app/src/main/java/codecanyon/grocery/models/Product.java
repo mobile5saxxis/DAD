@@ -1,5 +1,6 @@
 package codecanyon.grocery.models;
 
+import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
@@ -11,7 +12,6 @@ import java.util.List;
 
 public class Product extends SugarRecord {
 
-    @Unique
     private int product_id;
     private String in_stock;
     private String increament;
@@ -28,7 +28,7 @@ public class Product extends SugarRecord {
     private String brand;
     private String product_image;
     private int quantity;
-    private int stockId;
+    private int stockId = -1;
     private String stocks;
     private List<Stock> custom_fields;
 

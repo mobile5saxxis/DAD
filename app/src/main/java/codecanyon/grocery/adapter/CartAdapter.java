@@ -110,7 +110,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                     case R.id.iv_subcat_remove:
 
                         if (product.getId() != null) {
-                            dbcart.removeItemFromCart(product.getId());
+                            dbcart.removeItemFromCart(product.getProduct_id(), product.getStockId());
                             removeItem(position);
                             updateintent();
                         }
@@ -232,10 +232,10 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                     }
                 }
             } else {
-                Product p = dbcart.getProduct(product.getProduct_id());
+                Product p = dbcart.getProduct(product.getProduct_id(), product.getStockId());
 
                 if (p != null) {
-                    dbcart.removeItemFromCart(p.getId());
+                    dbcart.removeItemFromCart(p.getProduct_id(), product.getStockId());
                 }
 
                 removeItem(getAdapterPosition());
@@ -254,7 +254,8 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
             final PriceAdapter priceAdapter = new PriceAdapter(context, stocks);
             spinner_subcat.setAdapter(priceAdapter);
-
+            spinner_subcat.setEnabled(false);
+            spinner_subcat.setClickable(false);
             spinner_subcat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -281,7 +282,6 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                         iv_subcat_plus.setOnClickListener(null);
                         tv_out_of_stock.setVisibility(View.VISIBLE);
                     } else {
-                        addProduct(product);
                         iv_subcat_minus.setOnClickListener(ProductHolder.this);
                         iv_subcat_plus.setOnClickListener(ProductHolder.this);
                         tv_out_of_stock.setVisibility(View.GONE);
@@ -327,9 +327,9 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
             tv_subcat_title.setText(product.getProduct_name());
 
-            if (dbcart.isInCart(product.getProduct_id())) {
+            if (dbcart.isInCart(product.getProduct_id(), product.getStockId())) {
                 tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
+                tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id(), product.getStockId()));
             } else {
                 tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_add));
             }

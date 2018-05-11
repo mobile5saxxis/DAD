@@ -68,9 +68,16 @@ public class DatabaseHandler {
         boolean isUpdated = false;
 
         try {
-            if (isInCart(product.getProduct_id())) {
-                Product.update(product);
+            if (isInCart(product.getProduct_id(), product.getStockId())) {
+                Product p = getProduct(product.getProduct_id(), product.getStockId());
+
+                if (p != null) {
+                    p.delete();
+                    product.setId(System.currentTimeMillis());
+                    Product.save(product);
+                }
             } else {
+                product.setId(System.currentTimeMillis());
                 Product.save(product);
             }
 
@@ -82,14 +89,16 @@ public class DatabaseHandler {
         return isUpdated;
     }
 
-    public boolean isInCart(int id) {
+    public boolean isInCart(int id, int stockId) {
         boolean itemExist = false;
 
         try {
-            List<Product> products = Product.find(Product.class, "productId=?", String.valueOf(id));
+            if (stockId != -1) {
+                List<Product> products = Product.find(Product.class, "productId=? AND stock_id=?", String.valueOf(id), String.valueOf(stockId));
 
-            if (products != null && products.size() > 0) {
-                itemExist = true;
+                if (products != null && products.size() > 0) {
+                    itemExist = true;
+                }
             }
 
         } catch (Exception e) {
@@ -99,14 +108,16 @@ public class DatabaseHandler {
         return itemExist;
     }
 
-    public Product getProduct(int id) {
+    public Product getProduct(int id, int stockId) {
         Product product = null;
 
         try {
-            List<Product> products = Product.find(Product.class, "productId=?", String.valueOf(id));
+            if (stockId != -1) {
+                List<Product> products = Product.find(Product.class, "productId=? AND stock_id=?", String.valueOf(id), String.valueOf(stockId));
 
-            if (products != null && products.size() > 0) {
-                product = products.get(0);
+                if (products != null && products.size() > 0) {
+                    product = products.get(0);
+                }
             }
 
         } catch (Exception e) {
@@ -116,15 +127,17 @@ public class DatabaseHandler {
         return product;
     }
 
-    public String getCartItemQty(int id) {
+    public String getCartItemQty(int id, int stockId) {
 
         String qty = "0";
 
         try {
-            List<Product> products = Product.find(Product.class, "productId=?", String.valueOf(id));
+            if (stockId != -1) {
+                List<Product> products = Product.find(Product.class, "productId=? AND stock_id=?", String.valueOf(id), String.valueOf(stockId));
 
-            if (products != null && products.size() > 0) {
-                qty = String.valueOf(products.get(0).getQuantity());
+                if (products != null && products.size() > 0) {
+                    qty = String.valueOf(products.get(0).getQuantity());
+                }
             }
 
         } catch (Exception e) {
@@ -346,12 +359,12 @@ public class DatabaseHandler {
     }
 
     //
-    public void removeItemFromCart(long id) {
+    public void removeItemFromCart(int id, int stockId) {
         try {
-            Product p = Product.findById(Product.class, id);
+            Product product = getProduct(id, stockId);
 
-            if (p != null) {
-                p.delete();
+            if (product != null) {
+                product.delete();
             }
 
         } catch (Exception e) {

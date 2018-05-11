@@ -174,11 +174,11 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
 
             tv_title.setText(product.getProduct_name());
 
-            if (dbcart.isInCart(product.getProduct_id())) {
+            if (dbcart.isInCart(product.getProduct_id(), product.getStockId())) {
                 tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
+                tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id(), product.getStockId()));
 
-                Product p = dbcart.getProduct(product.getProduct_id());
+                Product p = dbcart.getProduct(product.getProduct_id(), product.getStockId());
 
                 if (p.getStocks() != null) {
                     List<Stock> stocks = new Gson().fromJson(p.getStocks(), new TypeToken<List<Stock>>() {
@@ -327,10 +327,10 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                     }
                 }
             } else {
-                Product p = dbcart.getProduct(product.getProduct_id());
+                Product p = dbcart.getProduct(product.getProduct_id(), product.getStockId());
 
                 if (p != null) {
-                    dbcart.removeItemFromCart(p.getId());
+                    dbcart.removeItemFromCart(p.getProduct_id(), product.getStockId());
                 }
 
                 ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
