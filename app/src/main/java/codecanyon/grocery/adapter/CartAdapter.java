@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -28,18 +26,10 @@ import java.util.List;
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.activities.ProductDetailsActivity;
-import codecanyon.grocery.models.Quantity;
 import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
-import codecanyon.grocery.reterofit.RetrofitInstance;
-import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.DatabaseHandler;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static codecanyon.grocery.adapter.ProductAdapter.ProductViewHolder.ADD_CLICK_MSG;
 
 /**
  * Created by Rajesh Dabhi on 26/6/2017.
@@ -59,31 +49,31 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
     public RecyclerView.ViewHolder onCreateBasicItemViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
 
-        return new ProductHolder(view);
+        return new CartHolder(view);
     }
 
     @Override
     public void onBindBasicItemView(RecyclerView.ViewHolder holder, int position) {
-        ProductHolder viewHolder = (ProductHolder) holder;
+        CartHolder viewHolder = (CartHolder) holder;
         viewHolder.bindData(position);
     }
 
-    class ProductHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tv_subcat_title, tv_subcat_price, tv_subcat_content, tv_subcat_add, tv_subcat_discount_price, tv_discount, tv_out_of_stock;
+    private class CartHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView tv_subcat_title, tv_subcat_price, tv_subcat_content, tv_subcat_discount_price, tv_discount, tv_out_of_stock;
         public ImageView iv_subcat, iv_subcat_plus, iv_subcat_minus, iv_subcat_remove;
         public Spinner spinner_subcat;
 
-        private ProductHolder(View view) {
+        private CartHolder(View view) {
             super(view);
 
             tv_out_of_stock = view.findViewById(R.id.tv_out_of_stock);
+            tv_out_of_stock.setVisibility(View.GONE);
             tv_discount = view.findViewById(R.id.tv_discount);
             tv_subcat_title = view.findViewById(R.id.tv_subcat_title);
             tv_subcat_discount_price = view.findViewById(R.id.tv_subcat_discount_price);
             tv_subcat_price = view.findViewById(R.id.tv_subcat_price);
             tv_subcat_price.setPaintFlags(tv_subcat_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             tv_subcat_content = view.findViewById(R.id.tv_subcat_content);
-            tv_subcat_add = view.findViewById(R.id.tv_subcat_add);
             iv_subcat = view.findViewById(R.id.iv_subcat);
             iv_subcat_plus = view.findViewById(R.id.iv_subcat_plus);
             iv_subcat_minus = view.findViewById(R.id.iv_subcat_minus);
@@ -93,7 +83,6 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
             iv_subcat_remove.setOnClickListener(this);
             iv_subcat_minus.setOnClickListener(this);
             iv_subcat_plus.setOnClickListener(this);
-            tv_subcat_add.setOnClickListener(this);
             iv_subcat.setOnClickListener(this);
 
             tv_subcat_title.setOnClickListener(this);
@@ -112,7 +101,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                         if (product.getId() != null) {
                             dbcart.removeItemFromCart(product.getProduct_id(), product.getStockId());
                             removeItem(position);
-                            updateintent();
+                            updateIntent();
                         }
 
                         break;
@@ -167,10 +156,6 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
                             tv_subcat_content.setText(String.valueOf(qty2));
                         }
 
-                        if (qty2 == 0) {
-                            tv_subcat_add.setText(R.string.tv_pro_add);
-                        }
-
                         addProduct(product);
                         break;
                     case R.id.tv_subcat_add:
@@ -213,8 +198,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
                         dbcart.setCart(product);
                         tv_subcat_content.setText(String.valueOf(qty));
-                        tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                        updateintent();
+                        updateIntent();
 
                         ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
                     }
@@ -240,7 +224,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
                 removeItem(getAdapterPosition());
 
-                updateintent();
+                updateIntent();
 
                 ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
             }
@@ -256,54 +240,6 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
             spinner_subcat.setAdapter(priceAdapter);
             spinner_subcat.setEnabled(false);
             spinner_subcat.setClickable(false);
-            spinner_subcat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Stock stock = priceAdapter.getItem(position);
-
-                    if (TextUtils.isEmpty(stock.getStrikeprice())) {
-                        tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
-                        tv_subcat_price.setVisibility(View.GONE);
-                        tv_discount.setVisibility(View.GONE);
-                    } else {
-                        float price = Integer.parseInt(stock.getPrice_val());
-                        float discountPrice = Integer.parseInt(stock.getStrikeprice());
-                        int result = (int) Math.ceil(((price - discountPrice) / price) * 100);
-
-                        tv_discount.setVisibility(View.VISIBLE);
-                        tv_discount.setText(result + "%" + "\noff");
-                        tv_subcat_price.setVisibility(View.VISIBLE);
-                        tv_subcat_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
-                        tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
-                    }
-
-                    if (stock.getStock().equals("0")) {
-                        iv_subcat_minus.setOnClickListener(null);
-                        iv_subcat_plus.setOnClickListener(null);
-                        tv_out_of_stock.setVisibility(View.VISIBLE);
-                    } else {
-                        iv_subcat_minus.setOnClickListener(ProductHolder.this);
-                        iv_subcat_plus.setOnClickListener(ProductHolder.this);
-                        tv_out_of_stock.setVisibility(View.GONE);
-                    }
-
-                    updateintent();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
-            for (int i = 0; i < stocks.size(); i++) {
-                Stock stock1 = stocks.get(i);
-
-                if (product.getStockId() == stock1.getStockId()) {
-                    spinner_subcat.setSelection(i);
-                    break;
-                }
-            }
 
             RequestOptions requestOptions = new RequestOptions()
                     .placeholder(R.drawable.ic_placeholder)
@@ -327,16 +263,46 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
             tv_subcat_title.setText(product.getProduct_name());
 
-            if (dbcart.isInCart(product.getProduct_id())) {
-                tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_update));
-                tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id(), product.getStockId()));
-            } else {
-                tv_subcat_add.setText(context.getResources().getString(R.string.tv_pro_add));
+            tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
+
+            for (int i = 0; i < stocks.size(); i++) {
+                Stock stock = stocks.get(i);
+
+                if (product.getStockId() == stock.getStockId()) {
+                    spinner_subcat.setSelection(i);
+
+                    if (TextUtils.isEmpty(stock.getStrikeprice())) {
+                        tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
+                        tv_subcat_price.setVisibility(View.GONE);
+                        tv_discount.setVisibility(View.GONE);
+                    } else {
+                        float price = Integer.parseInt(stock.getPrice_val());
+                        float discountPrice = Integer.parseInt(stock.getStrikeprice());
+                        int result = (int) Math.ceil(((price - discountPrice) / price) * 100);
+
+                        tv_discount.setVisibility(View.VISIBLE);
+                        tv_discount.setText(result + "%" + "\noff");
+                        tv_subcat_price.setVisibility(View.VISIBLE);
+                        tv_subcat_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
+                        tv_subcat_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                    }
+
+                    if (stock.getStock().equals("0")) {
+                        iv_subcat_plus.setOnClickListener(null);
+                        iv_subcat_minus.setOnClickListener(null);
+                        tv_out_of_stock.setVisibility(View.VISIBLE);
+                    } else {
+                        iv_subcat_minus.setOnClickListener(CartHolder.this);
+                        iv_subcat_plus.setOnClickListener(CartHolder.this);
+                        tv_out_of_stock.setVisibility(View.GONE);
+                    }
+                    break;
+                }
             }
         }
     }
 
-    private void updateintent() {
+    private void updateIntent() {
         Intent updates = new Intent("Grocery_cart");
         updates.putExtra("type", "update");
         context.sendBroadcast(updates);

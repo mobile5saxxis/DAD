@@ -49,14 +49,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static codecanyon.grocery.adapter.ProductAdapter.ProductViewHolder.ADD_CLICK_MSG;
-
 public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener, BaseSliderView.OnSliderClickListener {
     public static final String PRODUCT = "PRODUCT";
     public static final String CONTENT = "CONTENT";
     public static final int PRODUCT_DETAIL = 5241;
     private DatabaseHandler dbcart;
-    private TextView tv_add, tv_content;
+    private TextView tv_content;
     private Product product;
     private Spinner spinner_stock;
     private boolean isUpdated;
@@ -82,13 +80,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         final TextView tv_discount = findViewById(R.id.tv_discount);
         tv_content = findViewById(R.id.tv_content);
         tv_content.setText(content);
-        tv_add = findViewById(R.id.tv_add);
-        tv_add.setOnClickListener(this);
-        findViewById(R.id.iv_plus).setOnClickListener(this);
-        findViewById(R.id.iv_minus).setOnClickListener(this);
+
+        final ImageView iv_plus = findViewById(R.id.iv_plus);
+        iv_plus.setOnClickListener(this);
+
+        final ImageView iv_minus = findViewById(R.id.iv_minus);
+        iv_minus.setOnClickListener(this);
 
         final TextView tv_out_of_stock = findViewById(R.id.tv_out_of_stock);
         TextView tv_title = findViewById(R.id.tv_title);
+
         final TextView tv_discount_price = findViewById(R.id.tv_discount_price);
         final TextView tv_price = findViewById(R.id.tv_price);
         spinner_stock = findViewById(R.id.spinner_stock);
@@ -114,48 +115,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
         tv_title.setText(product.getProduct_name());
         tv_price.setPaintFlags(tv_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
         final PriceAdapter priceAdapter = new PriceAdapter(this, product.getCustom_fields());
         spinner_stock.setAdapter(priceAdapter);
 
-        spinner_stock.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Stock stock = priceAdapter.getItem(position);
-
-                if (TextUtils.isEmpty(stock.getStrikeprice())) {
-                    tv_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
-                    tv_price.setVisibility(View.GONE);
-                    tv_discount.setVisibility(View.GONE);
-                } else {
-                    float price = Integer.parseInt(stock.getPrice_val());
-                    float discountPrice = Integer.parseInt(stock.getStrikeprice());
-                    int result = (int) Math.ceil(((price - discountPrice) / price) * 100);
-
-                    tv_discount.setVisibility(View.VISIBLE);
-                    tv_discount.setText(result + "%" + "\noff");
-                    tv_price.setVisibility(View.VISIBLE);
-                    tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
-                    tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
-                }
-
-                if (stock.getStock().equals("0")) {
-                    tv_out_of_stock.setVisibility(View.VISIBLE);
-                } else {
-                    tv_out_of_stock.setVisibility(View.GONE);
-                    addProduct();
-                    isUpdated = true;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         if (dbcart.isInCart(product.getProduct_id())) {
-//            ll_add_content.setVisibility(View.VISIBLE);
-            tv_add.setText(R.string.tv_pro_update);
             tv_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
 
             Product p = dbcart.getProduct(product.getProduct_id());
@@ -174,9 +138,54 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 }
             }
         } else {
-//            ll_add_content.setVisibility(View.INVISIBLE);
-            tv_add.setText(R.string.tv_pro_add);
+            tv_content.setText("0");
         }
+
+        spinner_stock.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Stock stock = priceAdapter.getItem(position);
+                Product p = dbcart.getProduct(product.getProduct_id(), stock.getStockId());
+
+                if (TextUtils.isEmpty(stock.getStrikeprice())) {
+                    tv_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
+                    tv_price.setVisibility(View.GONE);
+                    tv_discount.setVisibility(View.GONE);
+                } else {
+                    float price = Integer.parseInt(stock.getPrice_val());
+                    float discountPrice = Integer.parseInt(stock.getStrikeprice());
+                    int result = (int) Math.ceil(((price - discountPrice) / price) * 100);
+
+                    tv_discount.setVisibility(View.VISIBLE);
+                    tv_discount.setText(result + "%" + "\noff");
+                    tv_price.setVisibility(View.VISIBLE);
+                    tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
+                    tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                }
+
+                if (stock.getStock().equals("0")) {
+                    iv_plus.setOnClickListener(null);
+                    iv_minus.setOnClickListener(null);
+                    tv_out_of_stock.setVisibility(View.VISIBLE);
+                } else {
+                    iv_minus.setOnClickListener(ProductDetailsActivity.this);
+                    iv_plus.setOnClickListener(ProductDetailsActivity.this);
+                    tv_out_of_stock.setVisibility(View.GONE);
+                }
+
+                if (p == null) {
+                    tv_content.setText("0");
+                } else {
+                    tv_content.setText(String.valueOf(p.getQuantity()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         TabLayout tab_layout = findViewById(R.id.tab_layout);
         ViewPager view_pager = findViewById(R.id.view_pager);
@@ -234,9 +243,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         }
                     }
                 }
-                break;
-            case R.id.tv_add:
-                addProduct();
                 break;
         }
     }

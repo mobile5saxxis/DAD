@@ -53,7 +53,7 @@ public class SocityAdapter extends RecyclerView.Adapter<SocityAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(SocityAdapter.MyViewHolder holder, int position) {
-        SoCity mList = modelList.get(position);
+        SoCity mList = mFilteredList.get(position);
 
         holder.title.setText(mList.getSocity_name());
     }
@@ -98,6 +98,7 @@ public class SocityAdapter extends RecyclerView.Adapter<SocityAdapter.MyViewHold
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 mFilteredList = (ArrayList<SoCity>) filterResults.values;
+
                 notifyDataSetChanged();
 
             }

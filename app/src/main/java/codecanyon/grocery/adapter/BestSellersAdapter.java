@@ -5,9 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,7 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,19 +29,10 @@ import java.util.List;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.ProductDetailsActivity;
-import codecanyon.grocery.models.Quantity;
 import codecanyon.grocery.models.Stock;
 import codecanyon.grocery.models.Product;
 import codecanyon.grocery.reterofit.APIUrls;
-import codecanyon.grocery.reterofit.RetrofitInstance;
-import codecanyon.grocery.reterofit.RetrofitService;
 import codecanyon.grocery.util.DatabaseHandler;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static codecanyon.grocery.adapter.ProductAdapter.ProductViewHolder.ADD_CLICK_MSG;
-
 
 public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
 
@@ -64,29 +51,27 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_best_product, parent, false);
 
-        return new BestProductViewHolder(itemView);
+        return new BestSellerViewHolder(itemView);
     }
 
     @Override
     public void onBindBasicItemView(RecyclerView.ViewHolder holder, int position) {
-        BestProductViewHolder viewHolder = (BestProductViewHolder) holder;
-        viewHolder.bind(position);
+        BestSellerViewHolder viewHolder = (BestSellerViewHolder) holder;
+        viewHolder.bindData(position);
     }
 
-    public class BestProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView tv_title, tv_add, tv_subcat_content, tv_discount_price, tv_price, tv_discount, tv_out_of_stock;
+    public class BestSellerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView tv_title, tv_subcat_content, tv_discount_price, tv_price, tv_discount, tv_out_of_stock;
         private ImageView iv_image, iv_subcat_plus, iv_subcat_minus;
         private Spinner spinner_quantity;
-        private RelativeLayout rl_content;
 
-        private BestProductViewHolder(View view) {
+        private BestSellerViewHolder(View view) {
             super(view);
 
             tv_out_of_stock = view.findViewById(R.id.tv_out_of_stock);
-            rl_content = view.findViewById(R.id.rl_content);
+            tv_out_of_stock.setVisibility(View.GONE);
             tv_title = view.findViewById(R.id.tv_title);
             iv_image = view.findViewById(R.id.iv_image);
-            tv_add = view.findViewById(R.id.tv_add);
             iv_subcat_plus = view.findViewById(R.id.iv_subcat_plus);
             iv_subcat_minus = view.findViewById(R.id.iv_subcat_minus);
             tv_subcat_content = view.findViewById(R.id.tv_subcat_content);
@@ -94,7 +79,6 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
 
             iv_subcat_minus.setOnClickListener(this);
             iv_subcat_plus.setOnClickListener(this);
-            tv_add.setOnClickListener(this);
             iv_image.setOnClickListener(this);
 
             spinner_quantity = view.findViewById(R.id.spinner_qantity);
@@ -106,55 +90,15 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
 
         }
 
-        private void bind(int position) {
+        private void bindData(int position) {
             final Product product = getItem(position);
 
             final PriceAdapter priceAdapter = new PriceAdapter(context, product.getCustom_fields());
             spinner_quantity.setAdapter(priceAdapter);
 
-            spinner_quantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Stock stock = priceAdapter.getItem(position);
-
-                    if (TextUtils.isEmpty(stock.getStrikeprice())) {
-                        tv_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
-                        tv_price.setVisibility(View.GONE);
-                        tv_discount.setVisibility(View.GONE);
-                    } else {
-                        float price = Integer.parseInt(stock.getPrice_val());
-                        float discountPrice = Integer.parseInt(stock.getStrikeprice());
-                        int result = (int) Math.ceil(((price - discountPrice) / price) * 100);
-
-                        tv_discount.setVisibility(View.VISIBLE);
-                        tv_discount.setText(result + "%" + "\noff");
-                        tv_price.setVisibility(View.VISIBLE);
-                        tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
-                        tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
-                    }
-
-                    if (stock.getStock().equals("0")) {
-                        iv_subcat_minus.setOnClickListener(null);
-                        iv_subcat_plus.setOnClickListener(null);
-                        tv_out_of_stock.setVisibility(View.VISIBLE);
-                    } else {
-                        iv_subcat_minus.setOnClickListener(BestProductViewHolder.this);
-                        iv_subcat_plus.setOnClickListener(BestProductViewHolder.this);
-                        tv_out_of_stock.setVisibility(View.GONE);
-                        addProduct(product);
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
             RequestOptions requestOptions = new RequestOptions()
                     .placeholder(R.drawable.ic_placeholder)
                     .error(R.drawable.ic_placeholder)
-                    .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
 
             String image = product.getProduct_image();
@@ -175,7 +119,6 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
             tv_title.setText(product.getProduct_name());
 
             if (dbcart.isInCart(product.getProduct_id())) {
-                tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
                 tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
 
                 Product p = dbcart.getProduct(product.getProduct_id());
@@ -185,19 +128,63 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                     }.getType());
 
                     for (int i = 0; i < stocks.size(); i++) {
-                        Stock stock1 = stocks.get(i);
+                        Stock stock = stocks.get(i);
 
-                        if (p.getStockId() == stock1.getStockId()) {
+                        if (p.getStockId() == stock.getStockId()) {
                             spinner_quantity.setSelection(i);
                             break;
                         }
                     }
                 }
-//                rl_content.setVisibility(View.VISIBLE);
             } else {
-//                rl_content.setVisibility(View.INVISIBLE);
-                tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
+                tv_subcat_content.setText("0");
             }
+
+            spinner_quantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Stock stock = priceAdapter.getItem(position);
+                    Product p = dbcart.getProduct(product.getProduct_id(), stock.getStockId());
+
+                    if (TextUtils.isEmpty(stock.getStrikeprice())) {
+                        tv_discount_price.setText(String.format("\u20B9 %s", stock.getPrice_val()));
+                        tv_price.setVisibility(View.GONE);
+                        tv_discount.setVisibility(View.GONE);
+                    } else {
+                        float price = Integer.parseInt(stock.getPrice_val());
+                        float discountPrice = Integer.parseInt(stock.getStrikeprice());
+                        int result = (int) Math.ceil(((price - discountPrice) / price) * 100);
+
+                        tv_discount.setVisibility(View.VISIBLE);
+                        tv_discount.setText(result + "%" + "\noff");
+                        tv_price.setVisibility(View.VISIBLE);
+                        tv_price.setText(String.format("(\u20B9 %s)", stock.getPrice_val()));
+                        tv_discount_price.setText(String.format("\u20B9 %s", stock.getStrikeprice()));
+                    }
+
+                    if (stock.getStock().equals("0")) {
+                        iv_subcat_plus.setOnClickListener(null);
+                        iv_subcat_minus.setOnClickListener(null);
+                        tv_out_of_stock.setVisibility(View.VISIBLE);
+                    } else {
+                        iv_subcat_minus.setOnClickListener(BestSellerViewHolder.this);
+                        iv_subcat_plus.setOnClickListener(BestSellerViewHolder.this);
+                        tv_out_of_stock.setVisibility(View.GONE);
+                    }
+
+                    if (p == null) {
+                        tv_subcat_content.setText("0");
+                    } else {
+                        tv_subcat_content.setText(String.valueOf(p.getQuantity()));
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
         }
 
         @Override
@@ -276,11 +263,6 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
                     }
 
                     break;
-                case R.id.tv_add:
-//                    rl_content.setVisibility(View.VISIBLE);
-
-                    addProduct(product);
-                    break;
             }
         }
 
@@ -305,7 +287,6 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
 
                         tv_subcat_content.setText(String.valueOf(qty));
                         dbcart.setCart(product);
-                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
 
                         ((MainActivity) context).setCartCounter(String.valueOf(dbcart.getCartCount()));
                     }
@@ -338,7 +319,6 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
         }
     }
 
-
     private void showImage(String image) {
 
         final Dialog dialog = new Dialog(context);
@@ -368,5 +348,4 @@ public class BestSellersAdapter extends CommonRecyclerAdapter<Product> {
             }
         });
     }
-
 }

@@ -1,6 +1,7 @@
 package codecanyon.grocery.adapter;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -85,5 +86,10 @@ public class SectionPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return titles.get(position);
+    }
+
+    @Override
+    public Parcelable saveState() {
+        return null;
     }
 }

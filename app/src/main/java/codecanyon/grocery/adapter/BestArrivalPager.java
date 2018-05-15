@@ -1,6 +1,7 @@
 package codecanyon.grocery.adapter;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -53,5 +54,10 @@ public class BestArrivalPager extends FragmentStatePagerAdapter {
         String title = titles.get(position);
 
         return title;
+    }
+
+    @Override
+    public Parcelable saveState() {
+        return null;
     }
 }
