@@ -158,10 +158,6 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
                         addProduct(product);
                         break;
-                    case R.id.tv_subcat_add:
-
-                        addProduct(product);
-                        break;
 
                     case R.id.tv_subcat_title:
                         List<Stock> stocks = new Gson().fromJson(product.getStocks(), new TypeToken<List<Stock>>() {
@@ -263,7 +259,7 @@ public class CartAdapter extends CommonRecyclerAdapter<Product> {
 
             tv_subcat_title.setText(product.getProduct_name());
 
-            tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id()));
+            tv_subcat_content.setText(dbcart.getCartItemQty(product.getProduct_id(), product.getStockId()));
 
             for (int i = 0; i < stocks.size(); i++) {
                 Stock stock = stocks.get(i);
