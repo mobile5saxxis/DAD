@@ -435,7 +435,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailure(Call<List<LimitCheck>> call, Throwable t) {
-                Toast.makeText(getContext(), R.string.connection_time_out, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
