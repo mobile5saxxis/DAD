@@ -329,17 +329,29 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
     // update UI
     private void updateData() {
-        tv_checkout.setText(String.format("PAY \u20B9 %s", db.getDiscountTotalAmount()));
-        tv_cart_count.setText(String.format("%s (%s)", getString(R.string.checkout), db.getCartCount()));
-        ((MainActivity) getActivity()).setCartCounter("" + db.getCartCount());
-
-        if (db.getCouponAmount().equals("0")) {
-            tv_total.setText(String.format("Total: %s", db.getDiscountTotalAmount()));
-        } else {
-            tv_total.setText(String.format("Total: %s - %s = %s", db.getTotalAmount(), db.getCouponAmount(), db.getDiscountTotalAmount()));
+        if (tv_checkout != null) {
+            tv_checkout.setText(String.format("PAY \u20B9 %s", db.getDiscountTotalAmount()));
         }
 
-        tv_item.setText(String.format("items: %s", db.getCartCount()));
+        if (tv_cart_count != null) {
+            tv_cart_count.setText(String.format("%s (%s)", getString(R.string.checkout), db.getCartCount()));
+        }
+
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            ((MainActivity) getActivity()).setCartCounter("" + db.getCartCount());
+        }
+
+        if (tv_total != null) {
+            if (db.getCouponAmount().equals("0")) {
+                tv_total.setText(String.format("Total: %s", db.getDiscountTotalAmount()));
+            } else {
+                tv_total.setText(String.format("Total: %s - %s = %s", db.getTotalAmount(), db.getCouponAmount(), db.getDiscountTotalAmount()));
+            }
+        }
+
+        if (tv_item != null) {
+            tv_item.setText(String.format("items: %s", db.getCartCount()));
+        }
     }
 
     private void showClearDialog() {
@@ -451,6 +463,8 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+
+        updateData();
         // register reciver
         getActivity().registerReceiver(mCart, new IntentFilter("Grocery_cart"));
     }
