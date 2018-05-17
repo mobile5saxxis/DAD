@@ -29,6 +29,7 @@ import codecanyon.grocery.models.MyOrderResponse;
 import codecanyon.grocery.models.OffersResponse;
 import codecanyon.grocery.models.OrderRequest;
 import codecanyon.grocery.models.PopularBrandsResponse;
+import codecanyon.grocery.models.ProductDetailResponse;
 import codecanyon.grocery.models.ProductRequest;
 import codecanyon.grocery.models.ProductResponse;
 import codecanyon.grocery.models.Quantity;
@@ -202,4 +203,7 @@ public interface RetrofitService {
 
     @GET(APIUrls.GET_DELIVERY_CHARGE)
     Call<DeliveryCharge> getDeliveryCharge();
+
+    @GET(APIUrls.PRODUCT_DETAILS_URL)
+    Call<ProductDetailResponse> getProductDetails(@Query("pid") String pid);
 }

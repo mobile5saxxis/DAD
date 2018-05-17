@@ -117,6 +117,8 @@ public class APIUrls {
 
     public static final String EDIT_ADDRESS_URL = BASE_URL + "index.php/api/edit_address";
 
+    public static final String PRODUCT_DETAILS_URL = BASE_URL + "index.php/api/get_product_details";
+
 
     // global topic to receive app wide push notifications
 

@@ -4,6 +4,7 @@ package codecanyon.grocery.fcm;
  * Created by subhashsanghani on 12/21/16.
  */
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -24,6 +25,7 @@ import android.util.Patterns;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 
 
 import org.json.JSONException;
@@ -38,7 +40,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import codecanyon.grocery.R;
+import codecanyon.grocery.activities.ProductDetailsActivity;
 import codecanyon.grocery.activities.SplashActivity;
+import codecanyon.grocery.models.Product;
+import codecanyon.grocery.models.ProductDetailResponse;
+import codecanyon.grocery.reterofit.RetrofitInstance;
+import codecanyon.grocery.reterofit.RetrofitService;
+import codecanyon.grocery.util.DatabaseHandler;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -70,7 +81,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             JSONObject object = new JSONObject(remoteMessage.getData());
             try {
-                sendNotification(object.getString("message"), object.getString("title"), object.getString("image"), object.getString("created_at"));
+                String pid = null;
+
+                try {
+                    pid = object.getString("pid");
+                } catch (Exception ignore) {
+                }
+
+                sendNotification(pid, object.getString("message"), object.getString("title"), object.getString("image"), object.getString("created_at"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -112,22 +130,55 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
     */
 
-    private void sendNotification(String message, String title, String imageUrl, String created_at) {
-        Intent intent = new Intent(this, SplashActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-        if (imageUrl != null && imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
+    private void sendNotification(final String pid, final String message, final String title, final String imageUrl, final String created_at) {
+        if (pid == null) {
+            Intent intent = new Intent(this, SplashActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                    PendingIntent.FLAG_ONE_SHOT);
+            if (imageUrl != null && imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
 
-            Bitmap bitmap = getBitmapfromUrl(imageUrl);
+                Bitmap bitmap = getBitmapfromUrl(imageUrl);
 
 
-            showBigNotification(bitmap, title, message, created_at, pendingIntent);
+                showBigNotification(bitmap, title, message, created_at, pendingIntent);
+            } else {
+                simpleteNotification(title, message, created_at, pendingIntent);
+            }
         } else {
-            simpleteNotification(title, message, created_at, pendingIntent);
+            RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
+            service.getProductDetails(pid).enqueue(new Callback<ProductDetailResponse>() {
+                @Override
+                public void onResponse(Call<ProductDetailResponse> call, Response<ProductDetailResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        ProductDetailResponse productDetailResponse = response.body();
+
+                        String value = new Gson().toJson(productDetailResponse.getData());
+                        Intent intent = new Intent(MyFirebaseMessagingService.this, ProductDetailsActivity.class);
+                        intent.putExtra(ProductDetailsActivity.PRODUCT, value);
+                        intent.putExtra(ProductDetailsActivity.CONTENT, "0");
+                        PendingIntent pendingIntent = PendingIntent.getActivity(MyFirebaseMessagingService.this, 0 /* Request code */, intent,
+                                PendingIntent.FLAG_ONE_SHOT);
+                        if (imageUrl != null && imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
+
+                            Bitmap bitmap = getBitmapfromUrl(imageUrl);
+
+
+                            showBigNotification(bitmap, title, message, created_at, pendingIntent);
+                        } else {
+                            simpleteNotification(title, message, created_at, pendingIntent);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProductDetailResponse> call, Throwable t) {
+
+                }
+            });
+
+
         }
-
-
     }
 
     private void simpleteNotification(String title, String message, String timeStamp, PendingIntent pendingIntent) {
