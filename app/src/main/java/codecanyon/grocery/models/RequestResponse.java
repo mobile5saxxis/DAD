@@ -6,6 +6,15 @@ public class RequestResponse {
     private String message;
     private String error;
     private String order_id;
+    private String required_otp;
+
+    public String getRequired_otp() {
+        return required_otp;
+    }
+
+    public void setRequired_otp(String required_otp) {
+        this.required_otp = required_otp;
+    }
 
     public boolean isResponce() {
         return responce;

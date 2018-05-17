@@ -238,5 +238,9 @@
     <string name="enable_auto_start">Enable AutoStart</string>
     <string name="allow_dad_run_in_background">Please allow DAD to always run in the background. Our app runs in background else our services can\'t be accessed.</string>
     <string name="allow">ALLOW</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="submit">Submit</string>
+    <string name="phone_number_verified">Phone number verified</string>
+    <string name="enter_valid_otp">Enter valid otp</string>
 
 </resources>

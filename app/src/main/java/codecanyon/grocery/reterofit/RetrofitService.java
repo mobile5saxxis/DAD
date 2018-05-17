@@ -89,7 +89,7 @@ public interface RetrofitService {
     Call<RequestResponse> addOrder(@Field("date") String date,
                                    @Field("time") String time,
                                    @Field("user_id") String user_id,
-                                   @Field("location") String location, @Field("data") String data, @Field("coupon_id") String coupon_id, @Field("payment_mode") int payment_mode);
+                                   @Field("location") String location, @Field("data") String data, @Field("coupon_id") String coupon_id, @Field("payment_mode") int payment_mode, @Field("otp") String otp);
 
     @POST(APIUrls.GET_CATEGORY_URL)
     Call<CategoryResponse> getCategory();

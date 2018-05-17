@@ -65,6 +65,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
     private Double totalAmount;
     private String coupon = "0";
     private String couponValue;
+    private String mOTP;
 
     private DatabaseHandler db_cart;
     private SessionManagement sessionManagement;
@@ -229,7 +230,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
     /**
      * Method to make json object request where json response starts wtih
      */
-    private void makeAddOrderRequest(String date, String gettime, String userid, String location, int paymentMode, String value) {
+    private void makeAddOrderRequest(final String date, final String gettime, final String userid, final String location, final int paymentMode, final String value) {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Placing your order...");
@@ -245,7 +246,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
 
         builder.build().
                 create(RetrofitService.class).
-                addOrder(date, gettime, userid, location, value, coupon, paymentMode).
+                addOrder(date, gettime, userid, location, value, coupon, paymentMode, mOTP).
                 enqueue(new Callback<RequestResponse>() {
                     @Override
                     public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
@@ -255,17 +256,32 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                             RequestResponse requestResponse = response.body();
 
                             if (requestResponse.isResponce()) {
-                                if (requestResponse.getOrder_id() == null) {
-                                    db_cart.clearCart();
-                                    ((MainActivity) getActivity()).setCartCounter(db_cart.getCartCount());
 
-                                    Bundle args = new Bundle();
-                                    Fragment fm = new ThanksFragment();
-                                    args.putString("msg", requestResponse.getData());
-                                    fm.setArguments(args);
-                                    FragmentManager fragmentManager = getFragmentManager();
-                                    fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
-                                            .addToBackStack(null).commit();
+                                if (requestResponse.getOrder_id() == null) {
+                                    if (requestResponse.getRequired_otp() != null && requestResponse.getMessage().equalsIgnoreCase("Please Verify Mobile Number With OTP")) {
+                                        OTPFragment fragment = new OTPFragment();
+
+                                        fragment.setISetPhoneVerification(new OTPFragment.ISetPhoneVerification() {
+                                            @Override
+                                            public void onPhoneVerified(String otp) {
+                                                mOTP = otp;
+                                                makeAddOrderRequest(date, gettime, userid, location, paymentMode, value);
+                                            }
+                                        });
+                                        fragment.show(getChildFragmentManager(), fragment.getTag());
+                                    } else {
+                                        db_cart.clearCart();
+                                        ((MainActivity) getActivity()).setCartCounter(db_cart.getCartCount());
+                                        mOTP = null;
+
+                                        Bundle args = new Bundle();
+                                        Fragment fm = new ThanksFragment();
+                                        args.putString("msg", requestResponse.getData());
+                                        fm.setArguments(args);
+                                        FragmentManager fragmentManager = getFragmentManager();
+                                        fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)
+                                                .addToBackStack(null).commit();
+                                    }
                                 } else {
                                     SessionManagement sessionManagement = new SessionManagement(getContext());
                                     HashMap<String, String> userDetails = sessionManagement.getUserDetails();
