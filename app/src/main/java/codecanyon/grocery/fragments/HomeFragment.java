@@ -39,6 +39,8 @@ import codecanyon.grocery.adapter.OfferAdapter;
 import codecanyon.grocery.adapter.PopularBrandsAdapter;
 import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.R;
+import codecanyon.grocery.models.Ad;
+import codecanyon.grocery.models.AdImageResponse;
 import codecanyon.grocery.models.BestProductResponse;
 import codecanyon.grocery.models.CategoryResponse;
 import codecanyon.grocery.models.OffersResponse;
@@ -108,38 +110,20 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         rv_offers.setNestedScrollingEnabled(false);
 
         TextView tv_search_bar = view.findViewById(R.id.tv_search_bar);
-        ImageView iv_ad1 = view.findViewById(R.id.iv_ad1);
-        ImageView iv_ad2 = view.findViewById(R.id.iv_ad2);
+        final ImageView iv_ad1 = view.findViewById(R.id.iv_ad1);
+        final ImageView iv_ad2 = view.findViewById(R.id.iv_ad2);
 
         iv_ad1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment adFragment = AdFragment.newInstance("5");
-                FragmentManager fM = getFragmentManager();
-
-                if (fM != null) {
-                    fM.beginTransaction()
-                            .replace(R.id.frame_layout, adFragment, AdFragment.class.getSimpleName())
-                            .addToBackStack(AdFragment.class.getSimpleName())
-                            .commit();
-                }
-
+                offersFragment();
             }
         });
 
         iv_ad2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment adFragment = AdFragment.newInstance("4");
-                FragmentManager fM = getFragmentManager();
-
-                if (fM != null) {
-                    fM.beginTransaction()
-                            .replace(R.id.frame_layout, adFragment, AdFragment.class.getSimpleName())
-                            .addToBackStack(AdFragment.class.getSimpleName())
-                            .commit();
-                }
-
+                offersFragment();
             }
         });
 
@@ -168,23 +152,42 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         sliderLayout.setCustomAnimation(new DescriptionAnimation());
         sliderLayout.setDuration(4000);
 
-        RequestOptions requestOptions = new RequestOptions()
+        final RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.ic_placeholder)
                 .error(R.drawable.ic_placeholder)
                 .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true);
 
+        service.getAds().enqueue(new Callback<AdImageResponse>() {
+            @Override
+            public void onResponse(Call<AdImageResponse> call, Response<AdImageResponse> response) {
+                if (response.body() != null && response.isSuccessful()) {
+                    AdImageResponse adImageResponse = response.body();
 
-        Glide.with(this)
-                .load(APIUrls.ADD_IMAGE_URL1 + "011.png")
-                .apply(requestOptions)
-                .into(iv_ad2);
+                    if (adImageResponse.getData().size() > 0) {
 
-        Glide.with(this)
-                .load(APIUrls.ADD_IMAGE_URL1 + "imgpsh_fullsize.png")
-                .apply(requestOptions)
-                .into(iv_ad1);
+                        List<Ad> ads = adImageResponse.getData();
+
+                        Glide.with(getContext())
+                                .load(APIUrls.ADD_IMAGE_URL1 + ads.get(0).getAdd_img())
+                                .apply(requestOptions)
+                                .into(iv_ad2);
+
+                        Glide.with(getContext())
+                                .load(APIUrls.ADD_IMAGE_URL1 + ads.get(1).getAdd_img())
+                                .apply(requestOptions)
+                                .into(iv_ad1);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AdImageResponse> call, Throwable t) {
+
+            }
+        });
 
         getProducts();
 
@@ -217,6 +220,28 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
 
         return view;
+    }
+
+    private void offersFragment() {
+        FragmentManager fM = getFragmentManager();
+        FragmentTransaction fT = fM.beginTransaction();
+
+        if (fM.findFragmentByTag(OffersFragment.class.getSimpleName()) == null) {
+            Fragment offersFragment = new OffersFragment();
+            fT.add(R.id.frame_layout, offersFragment, OffersFragment.class.getSimpleName())
+                    .addToBackStack(OffersFragment.class.getSimpleName())
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .commit();
+        } else {
+            Fragment offerFragment = fM.findFragmentByTag(OffersFragment.class.getSimpleName());
+
+            if (offerFragment != null && offerFragment instanceof OffersFragment) {
+                fT.replace(R.id.frame_layout, offerFragment, OffersFragment.class.getSimpleName())
+                        .addToBackStack(OffersFragment.class.getSimpleName())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+            }
+        }
     }
 
     public void getProducts() {

@@ -181,10 +181,13 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         }
 
+        FirebaseRegister fireReg = new FirebaseRegister(this);
+
         if (sessionManagement.getUserDetails().get(APIUrls.KEY_ID) != null && !sessionManagement.getUserDetails().get(APIUrls.KEY_ID).equalsIgnoreCase("")) {
-            FirebaseRegister fireReg = new FirebaseRegister(this);
             fireReg.RegisterUser(sessionManagement.getUserDetails().get(APIUrls.KEY_ID));
         }
+
+        fireReg.addNotificationToken();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -721,13 +724,18 @@ public class MainActivity extends AppCompatActivity
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
                     } else {
-                        Fragment cartFragment = fM.findFragmentByTag(CartFragment.class.getSimpleName());
+                        try {
+                            Fragment cartFragment = fM.findFragmentByTag(CartFragment.class.getSimpleName());
 
-                        if (cartFragment != null && cartFragment instanceof CartFragment) {
-                            fT.replace(R.id.frame_layout, cartFragment, CartFragment.class.getSimpleName())
+                            fT.remove(cartFragment);
+                            fM.popBackStack();
+
+                            fT.add(R.id.frame_layout, cartFragment, CartFragment.class.getSimpleName())
                                     .addToBackStack(CartFragment.class.getSimpleName())
                                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                     .commit();
+                        } catch (Exception e) {
+                            Toast.makeText(MainActivity.this, R.string.connection_time_out, Toast.LENGTH_SHORT).show();
                         }
                     }
 

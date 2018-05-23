@@ -2,6 +2,7 @@ package codecanyon.grocery.reterofit;
 
 import java.util.List;
 
+import codecanyon.grocery.models.AdImageResponse;
 import codecanyon.grocery.models.AdResponse;
 import codecanyon.grocery.models.AddDeliveryRequest;
 import codecanyon.grocery.models.AddOrderRequest;
@@ -186,6 +187,10 @@ public interface RetrofitService {
                                       @Field("token") String token,
                                       @Field("device") String device);
 
+    @POST(APIUrls.ADD_TOKEN)
+    @FormUrlEncoded
+    Call<RequestResponse> addToken(@Field("token") String token);
+
     @POST(APIUrls.ONLINE_TRANSACTION)
     @FormUrlEncoded
     Call<RequestResponse> saveProductTransaction(@Field("PaymentId") String paymentId, @Field("AccountId") String accountId
@@ -206,4 +211,7 @@ public interface RetrofitService {
 
     @GET(APIUrls.PRODUCT_DETAILS_URL)
     Call<ProductDetailResponse> getProductDetails(@Query("pid") String pid);
+
+    @GET(APIUrls.ADS_URL)
+    Call<AdImageResponse> getAds();
 }

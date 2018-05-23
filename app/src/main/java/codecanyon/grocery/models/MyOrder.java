@@ -23,6 +23,15 @@ public class MyOrder {
     private String delivery_charge;
     private String product_image;
     private String discount_amount;
+    private String delivery_amount;
+
+    public String getDelivery_amount() {
+        return delivery_amount;
+    }
+
+    public void setDelivery_amount(String delivery_amount) {
+        this.delivery_amount = delivery_amount;
+    }
 
     public String getProduct_image() {
         return product_image;

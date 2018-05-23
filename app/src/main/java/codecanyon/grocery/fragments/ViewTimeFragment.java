@@ -7,9 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import codecanyon.grocery.R;
 import codecanyon.grocery.activities.MainActivity;
@@ -90,6 +95,20 @@ public class ViewTimeFragment extends Fragment {
 
             }
         }));
+
+        try {
+            if (getdate != null) {
+                Date date = new Date();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+                dateFormat.format(date);
+
+                if (dateFormat.parse(dateFormat.format(date)).after(dateFormat.parse(getdate + " 20:30"))) {
+                    Toast.makeText(getContext(), "Select next day for delivery", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } catch (ParseException ignore) {
+
+        }
 
         return view;
     }

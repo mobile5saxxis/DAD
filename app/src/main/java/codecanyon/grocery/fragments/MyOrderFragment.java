@@ -101,7 +101,7 @@ public class MyOrderFragment extends Fragment {
                         myOrder.getDelivery_time_to();
                 String total = myOrder.getTotal_amount();
                 String status = myOrder.getStatus();
-                String deli_charge = myOrder.getDelivery_charge();
+                String deli_charge = myOrder.getDelivery_amount();
                 String discount_amount = myOrder.getDiscount_amount();
 
                 Bundle args = new Bundle();

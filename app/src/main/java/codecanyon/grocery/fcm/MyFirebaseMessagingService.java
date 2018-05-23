@@ -4,7 +4,6 @@ package codecanyon.grocery.fcm;
  * Created by subhashsanghani on 12/21/16.
  */
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,6 +14,8 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -23,6 +24,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
@@ -31,7 +35,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -40,13 +43,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import codecanyon.grocery.R;
+import codecanyon.grocery.activities.MainActivity;
 import codecanyon.grocery.activities.ProductDetailsActivity;
 import codecanyon.grocery.activities.SplashActivity;
-import codecanyon.grocery.models.Product;
 import codecanyon.grocery.models.ProductDetailResponse;
 import codecanyon.grocery.reterofit.RetrofitInstance;
 import codecanyon.grocery.reterofit.RetrofitService;
-import codecanyon.grocery.util.DatabaseHandler;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -131,17 +133,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     */
 
     private void sendNotification(final String pid, final String message, final String title, final String imageUrl, final String created_at) {
-        if (pid == null) {
+        if (pid == null || pid.equals("0")) {
             Intent intent = new Intent(this, SplashActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                     PendingIntent.FLAG_ONE_SHOT);
             if (imageUrl != null && imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
-
-                Bitmap bitmap = getBitmapfromUrl(imageUrl);
-
-
-                showBigNotification(bitmap, title, message, created_at, pendingIntent);
+                showImageNotification(imageUrl, title, message, created_at, pendingIntent);
             } else {
                 simpleteNotification(title, message, created_at, pendingIntent);
             }
@@ -153,18 +151,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     if (response.isSuccessful() && response.body() != null) {
                         ProductDetailResponse productDetailResponse = response.body();
 
+                        Intent backIntent = new Intent(MyFirebaseMessagingService.this, MainActivity.class);
+                        backIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                         String value = new Gson().toJson(productDetailResponse.getData());
                         Intent intent = new Intent(MyFirebaseMessagingService.this, ProductDetailsActivity.class);
                         intent.putExtra(ProductDetailsActivity.PRODUCT, value);
                         intent.putExtra(ProductDetailsActivity.CONTENT, "0");
-                        PendingIntent pendingIntent = PendingIntent.getActivity(MyFirebaseMessagingService.this, 0 /* Request code */, intent,
-                                PendingIntent.FLAG_ONE_SHOT);
+                        final PendingIntent pendingIntent = PendingIntent.getActivities(MyFirebaseMessagingService.this, 0, new Intent[]{backIntent, intent}, PendingIntent.FLAG_ONE_SHOT);
+
                         if (imageUrl != null && imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
-
-                            Bitmap bitmap = getBitmapfromUrl(imageUrl);
-
-
-                            showBigNotification(bitmap, title, message, created_at, pendingIntent);
+                            showImageNotification(imageUrl, title, message, created_at, pendingIntent);
                         } else {
                             simpleteNotification(title, message, created_at, pendingIntent);
                         }
@@ -221,6 +218,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentTitle(message)
                 .setContentText(title)
                 .setLargeIcon(bitmap)
+                .setAutoCancel(true)
                 .setStyle(new Notification.BigPictureStyle()
                         .bigPicture(bitmap))
                 .setContentIntent(resultPendingIntent)
@@ -244,33 +242,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * Downloading push notification iv_category before displaying it in
      * the notification tray
      */
-    public Bitmap getBitmapfromUrl(String imageUrl) {
-        if (TextUtils.isEmpty(imageUrl)) {
-            return null;
-        } else {
-            try {
-                URL url = new URL(imageUrl);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                return BitmapFactory.decodeStream(input);
-
-            } catch (Exception e) {
-                return null;
-            }
+    public void showImageNotification(final String imageUrl, final String title, final String message, final String created_at, final PendingIntent pendingIntent) {
+        if (!TextUtils.isEmpty(imageUrl)) {
+            Glide.with(this).asBitmap()
+                    .load(imageUrl)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            showBigNotification(resource, title, message, created_at, pendingIntent);
+                        }
+                    });
         }
-    }
-
-
-    public static long getTimeMilliSec(String timeStamp) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            Date date = format.parse(timeStamp);
-            return date.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 }

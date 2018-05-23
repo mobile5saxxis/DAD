@@ -109,6 +109,8 @@ public class APIUrls {
 
     public static final String JSON_RIGISTER_FCM = BASE_URL + "index.php/api/register_fcm";
 
+    public static final String ADD_TOKEN = BASE_URL + "index.php/api/get_token";
+
     public static final String ONLINE_TRANSACTION = BASE_URL + "index.php/api/response_online_transcation";
 
     public static final String CHANGE_PASSWORD_URL = BASE_URL + "index.php/api/change_password";
@@ -118,6 +120,8 @@ public class APIUrls {
     public static final String EDIT_ADDRESS_URL = BASE_URL + "index.php/api/edit_address";
 
     public static final String PRODUCT_DETAILS_URL = BASE_URL + "index.php/api/get_product_details";
+
+    public static final String ADS_URL = BASE_URL + "index.php/api/adds";
 
 
     // global topic to receive app wide push notifications

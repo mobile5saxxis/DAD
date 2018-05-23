@@ -67,5 +67,29 @@ public class FirebaseRegister {
         });
     }
 
+    public void addNotificationToken() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        FirebaseMessaging.getInstance().subscribeToTopic("grocery");
+
+        RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
+        service.addToken(token).enqueue(new Callback<RequestResponse>() {
+            @Override
+            public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    RequestResponse rr = response.body();
+
+                    if (!rr.isResponce()) {
+                        Toast.makeText(_context, rr.getError(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RequestResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
 
 }
