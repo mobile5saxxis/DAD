@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="The order has been cancelled"
+                android:text="Your order has been cancelled successfully"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
             

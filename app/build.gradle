@@ -6,7 +6,7 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        applicationId "codecanyon.grocery"
+        applicationId "mydad.saxxis"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1

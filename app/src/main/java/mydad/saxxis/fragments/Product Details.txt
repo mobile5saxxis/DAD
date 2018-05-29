@@ -1,0 +1,174 @@
+package Fragment;
+
+
+import android.app.Dialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import java.codecanyon.grocery.util.HashMap;
+import java.codecanyon.grocery.util.List;
+
+import Config.BaseURL;
+import codecanyon.grocery.Model.Product;
+import codecanyon.grocery.activities.MainActivity;
+import codecanyon.grocery.R;
+import codecanyon.grocery.util.DatabaseHandler;
+
+/**
+ * Created by srikarn on 23-03-2018.
+ */
+
+public class ProductDetails_fragment extends Fragment {
+
+    Context context;
+    private DatabaseHandler dbcart;
+    private List<Product_model> products;
+    private List<Product_model> mFilteredList;
+
+    private String image;
+    private String title;
+    private String description;
+    private String detail;
+    private String qty;
+    private String stock;
+    private String quantity;
+    int position;
+
+    public ProductDetails_fragment() {
+
+    }
+
+    public static ProductDetails_fragment createInstance(String image, String title, String description, String detail, final int position, String qty, String stock, String quantity) {
+        ProductDetails_fragment fragment = new ProductDetails_fragment();
+        fragment.image = image;
+        fragment.title = title;
+        fragment.description = description;
+        fragment.detail = detail;
+        fragment.qty = qty;
+        fragment.stock = stock;
+        fragment.quantity = quantity;
+        fragment.position = position;
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.dialog_product_detail, container, false);
+        ImageView iv_image = (ImageView) view.findViewById(R.id.iv_product_detail_img);
+        ImageView iv_minus = (ImageView) view.findViewById(R.id.iv_subcat_minus);
+        ImageView iv_plus = (ImageView) view.findViewById(R.id.iv_subcat_plus);
+        TextView tv_title = (TextView) view.findViewById(R.id.tv_product_detail_title);
+        TextView tv_detail = (TextView) view.findViewById(R.id.tv_product_detail);
+        final TextView tv_contetiy = (TextView) view.findViewById(R.id.tv_subcat_contetiy);
+        final TextView tv_add = (TextView) view.findViewById(R.id.tv_subcat_add);
+        final TextView tv_price = (TextView) view.findViewById(R.id.stock);
+
+        tv_title.setText(title);
+        tv_detail.setText(detail);
+        tv_contetiy.setText(qty);
+        tv_detail.setText(detail);
+        tv_contetiy.setText(quantity);
+        tv_detail.setText(description);
+        tv_price.setText(stock);
+
+        Glide.with(context)
+                .load(APIUrls.IMG_PRODUCT_URL + image.replace(" ","%20"))
+                .centerCrop()
+                .placeholder(R.drawable.logonew)
+                .crossFade()
+                .into(iv_image);
+
+        if (dbcart.isInCart(products.get(position).getProduct_id())) {
+            tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
+            tv_contetiy.setText(dbcart.getCartItemQty(products.get(position).getProduct_id()));
+        } else {
+            tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
+        }
+
+        tv_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                HashMap<String, String> map = new HashMap<>();
+
+                map.put("product_id", products.get(position).getProduct_id());
+                map.put("category_id", products.get(position).getCategory_id());
+                map.put("product_image", products.get(position).getProduct_image());
+                map.put("increament", products.get(position).getIncreament());
+                map.put("product_name", products.get(position).getProduct_name());
+
+                map.put("stock", products.get(position).getPrice());
+                map.put("stock", products.get(position).getIn_stock());
+                map.put("title", products.get(position).getTitle());
+                map.put("unit", products.get(position).getUnit());
+
+                map.put("unit_value", products.get(position).getUnit_value());
+
+                if (!tv_contetiy.getText().toString().equalsIgnoreCase("0")) {
+
+                    if (dbcart.isInCart(map.get("product_id"))) {
+                        dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
+                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                    } else {
+                        dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
+                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
+                    }
+                } else {
+                    dbcart.removeItemFromCart(map.get("product_id"));
+                    tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
+                }
+
+                Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
+                Double stock = Double.parseDouble(map.get("stock"));
+
+                ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
+                
+
+            }
+        });
+
+        iv_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int qty = Integer.valueOf(tv_contetiy.getText().toString());
+                qty = qty + 1;
+
+                tv_contetiy.setText(String.valueOf(qty));
+            }
+        });
+
+        iv_minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int qty = 0;
+                if (!tv_contetiy.getText().toString().equalsIgnoreCase(""))
+                    qty = Integer.valueOf(tv_contetiy.getText().toString());
+
+                if (qty > 0) {
+                    qty = qty - 1;
+                    tv_contetiy.setText(String.valueOf(qty));
+                }
+            }
+        });
+return view;
+    }
+}
+
+
