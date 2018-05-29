@@ -54,9 +54,18 @@ public class MyOrderDetailAdapter extends CommonRecyclerAdapter<MyOrderDetail> {
 
         public void bind(int position) {
             MyOrderDetail myOrderDetail = getItem(position);
+            String imageUrl = "";
+
+            if (myOrderDetail.getProduct_image() != null) {
+                String[] value = myOrderDetail.getProduct_image().split(",");
+
+                if (value.length > 0) {
+                    imageUrl = APIUrls.IMG_PRODUCT_URL + value[0].replace(" ", "%20");
+                }
+            }
 
             Glide.with(context)
-                    .load(APIUrls.IMG_PRODUCT_URL + myOrderDetail.getProduct_image().split(",")[0].replace(" ", "%20"))
+                    .load(imageUrl)
                     .apply(RequestOptions.placeholderOf(R.drawable.ic_placeholder).diskCacheStrategy(DiskCacheStrategy.ALL))
                     .into(iv_img);
 
