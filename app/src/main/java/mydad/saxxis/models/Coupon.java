@@ -13,14 +13,12 @@ public class Coupon extends SugarRecord {
     private Date From_Date;
     private String Coupon_title;
     private String Minimum_order_Amount;
-    @Unique
-    @SerializedName("Id")
-    @Expose
     private String couponId;
     private Date To_Date;
     private String Times_Per_user;
 
     public Coupon() {
+        super();
     }
 
     public String getCoupon_value() {

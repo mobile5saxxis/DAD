@@ -13,7 +13,6 @@ public class Stock extends SugarRecord {
     private String price_val;
 
     public Stock() {
-
     }
 
 

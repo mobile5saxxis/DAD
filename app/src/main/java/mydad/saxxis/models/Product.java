@@ -33,7 +33,6 @@ public class Product extends SugarRecord {
     private List<Stock> custom_fields;
 
     public Product() {
-
     }
 
     public String getStocks() {

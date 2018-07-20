@@ -45,7 +45,7 @@ import mydad.saxxis.models.BestProductResponse;
 import mydad.saxxis.models.CategoryResponse;
 import mydad.saxxis.models.OffersResponse;
 import mydad.saxxis.models.PopularBrandsResponse;
-import mydad.saxxis.models.SliderImage;
+import mydad.saxxis.models. SliderImage;
 import mydad.saxxis.reterofit.APIUrls;
 import mydad.saxxis.reterofit.RetrofitInstance;
 import mydad.saxxis.reterofit.RetrofitService;
