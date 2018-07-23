@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Delivery At Door</string>
+    <string name="app_name">Apsara Office World</string>
     <string name="currency">Rs</string>
     <string name="title_activity_main">MainActivity</string>
 
@@ -68,7 +68,7 @@
     <!-- fragment_home.xml -->
     <string name="tv_home_cat">Products</string>
     <string name="tv_home_view">View all </string>
-    <string name="tv_home_appname"> DAD </string>
+    <string name="tv_home_appname"> AOW </string>
 
     <!-- row_product_rv.xml -->
     <string name="tv_pro_add">Add</string>
@@ -236,7 +236,7 @@
     <string name="phone_number_is_empty">Please enter mobile number</string>
     <string name="enter_valid_phone_number">Please enter valid mobile number</string>
     <string name="enable_auto_start">Enable AutoStart</string>
-    <string name="allow_dad_run_in_background">Please allow DAD to always run in the background. Our app runs in background else our services can\'t be accessed.</string>
+    <string name="allow_dad_run_in_background">Please allow Apsara to always run in the background. Our app runs in background else our services can\'t be accessed.</string>
     <string name="allow">ALLOW</string>
     <string name="enter_otp">Enter OTP</string>
     <string name="submit">Submit</string>

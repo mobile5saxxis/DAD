@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_edittext"
+                android:backgroundTint="@color/colorPrimaryDark"
                 android:drawableLeft="@drawable/ic_search"
                 android:drawablePadding="@dimen/activity_horizontal_margin"
                 android:drawableStart="@drawable/ic_search"
@@ -35,8 +36,8 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:padding="8dp"
-                android:textColor="@android:color/black"
-                android:textColorHint="@color/dark_gray"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/white"
                 android:textSize="16sp" />
 
 

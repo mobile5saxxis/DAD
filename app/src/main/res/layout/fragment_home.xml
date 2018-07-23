@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="@drawable/login_edittext"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="@dimen/activity_horizontal_margin"
             android:drawableStart="@drawable/ic_search"
@@ -26,8 +27,8 @@
             android:hint="@string/search_msg"
             android:maxLines="1"
             android:padding="8dp"
-            android:textColor="@android:color/black"
-            android:textColorHint="@color/dark_gray"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/white"
             android:textSize="16sp" />
 
         <android.support.v4.widget.NestedScrollView
@@ -91,7 +92,7 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/view_pager"
                     android:layout_width="match_parent"
-                    android:layout_height="270dp"
+                    android:layout_height="220dp"
                     android:background="@color/lite_gray" />
 
                 <ImageView

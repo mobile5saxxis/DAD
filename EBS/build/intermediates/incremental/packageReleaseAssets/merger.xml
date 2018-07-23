@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="G:\saxxis\DAD\EBS\assets"/><source path="G:\saxxis\DAD\EBS\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="G:\saxxis\DAD\EBS\build-types\release\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\Apsara\EBS\assets"/><source path="D:\Apsara\EBS\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="D:\Apsara\EBS\build-types\release\assets"/></dataSet></merger>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorPrimaryDark"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="0dp"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorPrimaryDark"
                 android:scaleType="centerInside"
                 android:src="@drawable/navlogin" />
 
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorPrimaryDark"
                 android:scaleType="centerInside"
                 android:src="@drawable/signin" />
         </LinearLayout>

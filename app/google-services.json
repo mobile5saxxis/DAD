@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:997121879741:android:876aba23f2a176c0",
         "android_client_info": {
-          "package_name": "com.saxxis.dad"
+          "package_name": "com.saxxis.apsara"
         }
       },
       "oauth_client": [
@@ -45,7 +45,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:997121879741:android:f25579252c0d4bf1",
         "android_client_info": {
-          "package_name": "mydad.saxxis"
+          "package_name": "apsara.saxxis"
         }
       },
       "oauth_client": [
@@ -53,7 +53,7 @@
           "client_id": "997121879741-n3rl1dq4vpthdnt7djo5n0gtjosnhcu8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "mydad.saxxis",
+            "package_name": "apsara.saxxis",
             "certificate_hash": "6af432a4dcc01bc309af253590b907603045fbce"
           }
         },
