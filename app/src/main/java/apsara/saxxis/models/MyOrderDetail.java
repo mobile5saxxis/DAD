@@ -16,6 +16,16 @@ public class MyOrderDetail {
     String price;
     String qty_in_kg;
     String product_image;
+    private String final_amount;
+    public String getFinal_amount ()
+    {
+        return final_amount;
+    }
+
+    public void setFinal_amount (String final_amount)
+    {
+        this.final_amount = final_amount;
+    }
 
     public String getSale_item_id(){
         return sale_item_id;

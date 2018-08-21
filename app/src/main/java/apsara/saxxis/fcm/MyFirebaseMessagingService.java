@@ -144,7 +144,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 simpleteNotification(title, message, created_at, pendingIntent);
             }
         } else {
-            RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
+         /*   RetrofitService service = RetrofitInstance.createService(RetrofitService.class);
             service.getProductDetails(pid).enqueue(new Callback<ProductDetailResponse>() {
                 @Override
                 public void onResponse(Call<ProductDetailResponse> call, Response<ProductDetailResponse> response) {
@@ -172,7 +172,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 public void onFailure(Call<ProductDetailResponse> call, Throwable t) {
 
                 }
-            });
+            });*/
 
 
         }

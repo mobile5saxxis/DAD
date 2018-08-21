@@ -59,8 +59,10 @@ public class SubCategoryFragment extends Fragment {
 
         rl_loading = view.findViewById(R.id.rl_loading);
         tab_layout = view.findViewById(R.id.tab_layout);
+       // tab_layout.getTabAt(0).setCustomView(R.layout.custom_tab_all);
         view_pager = view.findViewById(R.id.view_pager);
         view_pager.setOffscreenPageLimit(0);
+
 
         getProducts();
 

@@ -30,6 +30,8 @@ public class Product extends SugarRecord {
     private int quantity;
     private int stockId;
     private String stocks;
+    private String tax_id;
+
     private List<Stock> custom_fields;
 
     public Product() {
@@ -185,6 +187,15 @@ public class Product extends SugarRecord {
 
     public void setCustom_fields(List<Stock> custom_fields) {
         this.custom_fields = custom_fields;
+    }
+    public String getTax_id ()
+    {
+        return tax_id;
+    }
+
+    public void setTax_id (String tax_id)
+    {
+        this.tax_id = tax_id;
     }
 
     //    protected Product(Parcel in) {

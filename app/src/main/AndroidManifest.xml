@@ -33,7 +33,8 @@
 
         <activity
             android:name=".activities.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,14 +45,17 @@
             android:name=".activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <!-- Firebase Notifications -->
         <service android:name=".fcm.MyFirebaseMessagingService">
@@ -68,9 +72,11 @@
 
         <activity
             android:name=".activities.ForgotActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.ProductDetailsActivity" />
+        <activity android:name=".activities.ProductDetailsActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".PaymentSuccessActivity"

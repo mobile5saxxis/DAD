@@ -99,10 +99,12 @@ public class MyOrderFragment extends Fragment {
                 String date = myOrder.getOn_date();
                 String time = myOrder.getDelivery_time_from() + "-" +
                         myOrder.getDelivery_time_to();
-                String total = myOrder.getTotal_amount();
+                String total = myOrder.getFinal_amount();
                 String status = myOrder.getStatus();
                 String deli_charge = myOrder.getDelivery_amount();
-                String discount_amount = myOrder.getDiscount_amount();
+                String saved_amount = myOrder.getSaved_amount();
+                String gst_amount = myOrder.getGst_amount();
+                String delivery_amount_text = myOrder.getDelivery_amount_text();
 
                 Bundle args = new Bundle();
                 Fragment fm = new MyOrderDetaiFragment();
@@ -112,7 +114,9 @@ public class MyOrderFragment extends Fragment {
                 args.putString("total", total);
                 args.putString("status", status);
                 args.putString("deli_charge", deli_charge);
-                args.putString("discount_amount", discount_amount);
+                args.putString("saved_amount", saved_amount);
+                args.putString("gst_amount", gst_amount);
+                args.putString("delivery_amount_text", delivery_amount_text);
                 fm.setArguments(args);
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.frame_layout, fm)

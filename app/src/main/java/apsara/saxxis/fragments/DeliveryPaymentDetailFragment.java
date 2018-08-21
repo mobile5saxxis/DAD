@@ -66,6 +66,8 @@ public class DeliveryPaymentDetailFragment extends Fragment {
     private String coupon = "0";
     private String couponValue;
     private String mOTP;
+    private String deliveryprice = "";
+    //private String Gst = "";
 
     private DatabaseHandler db_cart;
     private SessionManagement sessionManagement;
@@ -102,6 +104,9 @@ public class DeliveryPaymentDetailFragment extends Fragment {
         address = getArguments().getString("address");
         String min_charge = getArguments().getString("min_charge");
 
+
+
+
         tv_timeslot.setText(String.format("%s %s", date, time));
         tv_address.setText(address);
 
@@ -118,9 +123,13 @@ public class DeliveryPaymentDetailFragment extends Fragment {
         if (amount >= Integer.parseInt(min_charge)) {
             totalAmount = amount;
 
+
+
+
             if (couponValue == null) {
                 tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
                         getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
+                        getResources().getString(R.string.delivery_charge) + charges + "\n" +
                         getResources().getString(R.string.total_amount) +
                         db_cart.getDiscountTotalAmount() + " " + getResources().getString(R.string.currency) + "\n" +
                         getResources().getString(R.string.saving_amount) + db_cart.getSavedAmount());
@@ -137,17 +146,15 @@ public class DeliveryPaymentDetailFragment extends Fragment {
             if (couponValue == null) {
                 tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
                         getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
-                        getResources().getString(R.string.delivery_charge) + charges + "\n" +
                         getResources().getString(R.string.total_amount) +
-                        db_cart.getDiscountTotalAmount() + " + " + charges + " = " + totalAmount + " " + getResources().getString(R.string.currency) + "\n" +
+                        db_cart.getDiscountTotalAmount() + " + " + deliveryprice + " = " + totalAmount + " " + getResources().getString(R.string.currency) + "\n" +
                         getResources().getString(R.string.saving_amount) + db_cart.getSavedAmount());
             } else {
                 tv_total.setText(getResources().getString(R.string.tv_cart_item) + db_cart.getCartCount() + "\n" +
                         getResources().getString(R.string.amount) + db_cart.getDiscountTotalAmount() + "\n" +
                         getResources().getString(R.string.coupon_amount) + couponValue + "\n" +
-                        getResources().getString(R.string.delivery_charge) + charges + "\n" +
                         getResources().getString(R.string.total_amount) +
-                        db_cart.getDiscountTotalAmount() + " + " + charges + " = " + totalAmount + " " + getResources().getString(R.string.currency) + "\n" +
+                        db_cart.getDiscountTotalAmount() + " + " + deliveryprice + " = " + totalAmount + " " + getResources().getString(R.string.currency) + "\n" +
                         getResources().getString(R.string.saving_amount) + db_cart.getSavedAmount());
             }
         }
@@ -222,7 +229,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
             String user_id = sessionManagement.getUserDetails().get(APIUrls.KEY_ID);
 
             if (ConnectivityReceiver.isConnected()) {
-                makeAddOrderRequest(date, time, user_id, location_id, paymentMode, passArray.toString());
+                makeAddOrderRequest(date, time, user_id, location_id, deliveryprice, paymentMode,  passArray.toString());
             }
         }
     }
@@ -230,7 +237,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
     /**
      * Method to make json object request where json response starts wtih
      */
-    private void makeAddOrderRequest(final String date, final String gettime, final String userid, final String location, final int paymentMode, final String value) {
+    private void makeAddOrderRequest(final String date, final String gettime, final String userid, final String location, final String deliveryprice, final int paymentMode, final String value) {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Placing your order...");
@@ -265,7 +272,7 @@ public class DeliveryPaymentDetailFragment extends Fragment {
                                             @Override
                                             public void onPhoneVerified(String otp) {
                                                 mOTP = otp;
-                                                makeAddOrderRequest(date, gettime, userid, location, paymentMode, value);
+                                                makeAddOrderRequest(date, gettime, userid, location, deliveryprice, paymentMode, value);
                                             }
                                         });
                                         fragment.show(getChildFragmentManager(), fragment.getTag());

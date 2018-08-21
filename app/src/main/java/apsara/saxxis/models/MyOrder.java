@@ -15,15 +15,31 @@ public class MyOrder {
     private String note;
     private String is_paid;
     private String total_amount;
+
     private String total_kg;
     private String total_items;
     private String socity_id;
     private String delivery_address;
     private String location_id;
     private String delivery_charge;
+    private String final_amount;
+    private String gst_amount;
     private String product_image;
     private String discount_amount;
     private String delivery_amount;
+    private String delivery_amount_text;
+    private String saved_amount;
+
+    public String getSaved_amount ()
+    {
+        return saved_amount;
+    }
+
+    public void setSaved_amount (String saved_amount)
+    {
+        this.saved_amount = saved_amount;
+    }
+
 
     public String getDelivery_amount() {
         return delivery_amount;
@@ -77,6 +93,15 @@ public class MyOrder {
         return total_amount;
     }
 
+    public String getFinal_amount ()
+    {
+        return final_amount;
+    }
+
+    public void setFinal_amount (String final_amount)
+    {
+        this.final_amount = final_amount;
+    }
     public String getTotal_kg() {
         return total_kg;
     }
@@ -84,6 +109,7 @@ public class MyOrder {
     public String getTotal_items() {
         return total_items;
     }
+
 
     public String getSocity_id() {
         return socity_id;
@@ -105,7 +131,27 @@ public class MyOrder {
         return discount_amount;
     }
 
+    public String getGst_amount ()
+    {
+        return gst_amount;
+    }
+
+    public void setGst_amount (String gst_amount)
+    {
+        this.gst_amount = gst_amount;
+    }
+
     public void setDiscount_amount(String discount_amount) {
         this.discount_amount = discount_amount;
     }
+    public String getDelivery_amount_text ()
+    {
+        return delivery_amount_text;
+    }
+
+    public void setDelivery_amount_text (String delivery_amount_text)
+    {
+        this.delivery_amount_text = delivery_amount_text;
+    }
+
 }

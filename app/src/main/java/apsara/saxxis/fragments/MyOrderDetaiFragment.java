@@ -62,6 +62,8 @@ public class MyOrderDetaiFragment extends Fragment {
         TextView tv_total = view.findViewById(R.id.tv_order_Detail_total);
         Button btn_cancel = view.findViewById(R.id.btn_order_detail_cancle);
         TextView tv_discount_amount = view.findViewById(R.id.tv_discount_amount);
+        TextView tv_gst = view.findViewById(R.id.tv_gst);
+        TextView tv_delivery_txt = view.findViewById(R.id.tv_delivery_txt);
 
         RecyclerView rv_detail_order = view.findViewById(R.id.rv_order_detail);
         rv_detail_order.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -74,7 +76,9 @@ public class MyOrderDetaiFragment extends Fragment {
         String time = getArguments().getString("time");
         String status = getArguments().getString("status");
         String deli_charge = getArguments().getString("deli_charge");
-        String discount_amount = getArguments().getString("discount_amount");
+        String saved_amount = getArguments().getString("saved_amount");
+        String gst_amount = getArguments().getString("gst_amount");
+        String delivery_text = getArguments().getString("delivery_amount_text");
 
         if (status.equals("0")) {
             btn_cancel.setVisibility(View.VISIBLE);
@@ -86,8 +90,13 @@ public class MyOrderDetaiFragment extends Fragment {
         tv_date.setText(getResources().getString(R.string.date) + date);
         tv_time.setText(getResources().getString(R.string.time) + time);
         tv_delivery_charge.setText(getResources().getString(R.string.delivery_charge) + deli_charge);
-        tv_discount_amount.setText(getString(R.string.saving_amount) + discount_amount);
-        tv_discount_amount.setVisibility(View.GONE);
+        tv_delivery_txt.setText(getString(R.string.delivery_text) + delivery_text);
+        tv_discount_amount.setText(getString(R.string.saving_amount) + saved_amount);
+        tv_gst.setText(getString(R.string.gst_charge) + gst_amount);
+
+
+
+       // tv_discount_amount.setVisibility(View.GONE);
 
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {
